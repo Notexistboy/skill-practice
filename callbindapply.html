@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+  Function.prototype.mycall = function(obj, ...args) {
+    // 如果obj为null/undefined,this指向为window(node下=globalThis(全局对象))
+    if (obj === null || obj === undefined) {
+      obj = window || globalThis
+    }
+    // console.log(this)// add方法
+    // 1.给对象添加add方法
+    obj.temp = this
+    // 2.调用对象的该方法（隐式改变函数this指向）,获得返回值
+    const res = obj.temp(...args)
+    // 3.删除对象上的该方法
+    delete obj.temp
+    // 4. 返回函数的返回值
+    return res 
+  }
+  Function.prototype.myapply = function(obj,args) {
+    // console.log(this)//add方法
+    // console.log(args)//[10,20]--Array
+    if (obj === null || obj === undefined) {
+      obj = window || globalThis
+    }
+  
+    let res
+    
+    // 1.给obj对象添加方法
+    obj.temp = this
+    // 2.执行该方法，获得函数返回值
+    // 注意如果args参数存在,传参调用；如果不存在，直接调用
+    if (!args) {
+      res = obj.temp()
+    } else {
+      res = obj.temp(...args)
+    }
+    // 3. 删除对象上的该方法
+    delete obj.temp
+    // 4. 返回函数的返回值 
+    return res
+  }
+  // 通过调用call+this指向问题，实现bind
+  Function.prototype.mybind = function(obj, ...args1) {
+    // console.log(this) // add
+    // 实现1：保存此处this，在function(){}中调用
+    let that = this
+    return function(...args2) {
+      // console.log(this) // window
+      // 新函数执行call函数返回结果
+      return that.call(obj, ...args1, ...args2)
+    }
+  
+    // 实现2：返回一个箭头函数，其内部this指向外层的this，即add方法
+    // 不合适,箭头函数不能new....这里只是做个思考记录
+    // console.log(this) // add
+    // return (...args2) => {
+    //   // console.log(this)
+    //   // function(){}时：this 指向 window
+    //   // ()=>{}时，this为add方法
+  
+    //   // 新函数执行call函数返回结果
+    //   return this.call(obj,...args1,...args2)
+    // }
+  }
+  // newO1实例与add的原型对象没有关系，使用new+bind会使this失效
+  // 对于this的处理有两种情况：不用new，this效果依旧；用new， this失效
+  // 如果使用了new来调用函数，即发生了构造函数，那么实例（新对象）会绑定到函数调用的this(new的规则)
+  // bind的复杂实现
+  // 复杂版实现：添加继承，使得可以读取add原型上的属性和方法
+  Function.prototype.myHardBind = function(obj, ...args1) {
+    let that = this // this => add函数
+    // console.log(args1)// [10,20]
+    let mHB = function(...args2) {
+      // console.log(this)// mHB函数
+      // console.log(args2)// []
+      // console.log(this instanceof mHB)// true
+      // return that.call(obj,...args1,...args2)
+      if (this instanceof mHB) { // 如果this 是 mHB函数的实例，则this指向mHB函数构造的新实例上
+        return that.apply(this, [...args1, ...args2])
+      } else {                   // 否则this需要指向的实例obj上
+        return that.apply(obj, [...args1, ...args2])
+      }
+    }
+    // 实现继承（寄生式继承）
+    let fun = function() { }//创建一个空函数
+    fun.prototype = that.prototype
+    mHB.prototype = new fun() // mHB的原型为add原型的实例
+    return mHB
+  }
+  </script>
+</body>
+</html>

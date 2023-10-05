@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        Function.prototype.myApply = function (target, args) {
+            if(target === null || target === undefined){
+                target = window || globalThis
+            }
+
+            target.temp = this
+            let res = target.temp(args)
+
+            return res;
+        }
+
+
+
+        Function.prototype.myBind = function(target, ...args){
+            let that = this;
+
+            let mybind = function (...args1) {
+                if(this instanceof target){
+                    that.apply(this, [...args, ...args1])
+                } else {
+                    that.apply(obj, [...args, ...args1])
+                }
+            }
+
+            function instance () {}
+
+            mybind.prototype = new instance();
+
+            instance.prototype = mybind();
+
+
+            return mybind
+        }
+    </script>
+</body>
+</html>
