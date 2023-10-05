@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var Singleton = function (params) {
+            let instance = null
+            function single (params) {
+                this.params = params
+            }
+            debugger;
+            if(instance) return instance;
+            else {
+                return instance = new single(params)
+            }
+        };
+        let singleOne = Singleton();
+        let singleTwo = Singleton();
+        console.log(singleOne === singleTwo);
+        var Singleton = (function () {
+            let instance = null
+            function single (params) {
+                this.params = params
+            }
+            return function(params) {
+                if(!instance) instance = new single(params)
+                return instance
+            }
+        })();
+        let lazyOne = Singleton({});
+        let lazyTwo = Singleton({});
+        console.log(lazyOne === lazyTwo);
+    </script>
+</body>
+</html>

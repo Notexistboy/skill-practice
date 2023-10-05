@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /**
+       * @param {TreeNode} root
+       * @return {boolean}
+       */
+      /* 
+        给定一个二叉树，判断它是否是高度平衡的二叉树。
+        本题中，一棵高度平衡二叉树定义为：
+        一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1 。
+      */
+      var isBalanced = function(root) {
+        maxDepth(root);
+        return result;
+      };
+      let result = true
+      var maxDepth = function(root) {
+        if(root === null) return null;
+        let leftHigh = maxDepth(root.left);
+        let rightHigh = maxDepth(root.right);
+        if (Math.abs(leftHigh - rightHigh) > 1) result = false;
+        return 1+ Math.max(leftHigh, rightHigh);
+      }
+    </script>
+  </body>
+</html>

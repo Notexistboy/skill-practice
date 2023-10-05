@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+  </head>
+  <body>
+    
+  </body>
+  <script type="text/javascript">
+    /*
+    给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。
+    */
+    var reverse = function(x) {
+      if(x==0) return 0
+      debugger
+      if(x<(Math.pow(-2, 31)) || x>(Math.pow(2, 31)-1)) return 0;
+      debugger
+      let flag = true
+      if(x<0) {
+          x * -1
+          flag = false
+      }
+      let result = parseInt(x.toString().split("").reverse().join(""))
+      if(rev > ( Math.pow(2,31)-1 ) || rev <  Math.pow(-2,31)) return 0
+      if(flag === false) return result*-1
+      return result
+    }
+    /* var reverse = function(x) {
+      let rev = 0
+      while(x != 0){
+        let pop = x%10 //取余
+        x= (x-pop)/10
+        rev = rev*10+pop
+        if(rev > ( Math.pow(2,31)-1 ) || rev <  Math.pow(-2,31)) return 0
+        
+      }
+      return rev
+    }; */
+    console.log(reverse(1534236469))
+  </script>
+</html>

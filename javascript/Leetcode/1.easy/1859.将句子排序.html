@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * @param {string} s
+         * @return {string}
+         */
+        var sortSentence = function (s) {
+            return s.split(' ').sort((a, b) => +a.replace(/\D/g, '') - +b.replace(/\D/g, '')).join(' ').replace(
+                /\d/g, '')
+        };
+
+        var sortSentence1 = function (s) {
+            return s.split(' ').sort((a, b) => a[a.length - 1] - b[b.length - 1]).map(v => v.substr(0, v.length -
+                1)).join(' ')
+        };
+
+        var sortSentence2 = function (s) {
+            let obj = {}
+            s.split(' ').forEach(v => obj[v[v.length - 1]] = v.substr(0, v.length - 1))
+            return Object.values(obj).reduce((pre, item, index) => pre + (index === 0 ? '' : ' ') + item, '')
+        };
+
+        var sortSentence = function (s) {
+            let arr = [];
+            s.split(' ').map((item) => {
+                arr[item.slice(item.length - 1) - 1] = item.slice(0, item.length - 1);
+            })
+            return arr.join(' ')
+        };
+
+        sortSentence("is2 sentence4 This1 a3");
+        sortSentence("Myself2 Me1 I4 and3");
+    </script>
+</body>
+
+</html>

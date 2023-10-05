@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /**
+       * @param {TreeNode} root
+       * @return {number}
+       */
+      /* 
+        给定一个二叉树，找到最长的路径，这个路径中的每个节点具有相同值。 
+        这条路径可以经过也可以不经过根节点。
+        注意：两个节点之间的路径长度由它们之间的边数表示。
+      */
+      /* 
+        我们可以将任何路径（具有相同值的节点）看作是最多两个从其根延伸出的箭头。
+        具体地说，路径的根将是唯一节点，因此该节点的父节点不会出现在该路径中，
+        而箭头将是根在该路径中只有一个子节点的路径。
+        然后，对于每个节点，我们想知道向左延伸的最长箭头和向右延伸的最长箭头是什么？
+        我们可以用递归来解决这个问题。
+      */
+      /* 
+        令 arrow_length(node) 为从节点 node 延伸出的最长箭头的长度。
+        如果 node.Left 存在且与节点 node 具有相同的值，则该值就会是 1 + arrow_length(node.left)。
+        在 node.right 存在的情况下也是一样。
+        当我们计算箭头长度时，候选答案将是该节点在两个方向上的箭头之和。
+        我们将这些候选答案记录下来，并返回最佳答案.
+      */
+      /* dfs cn-note */
+      let path = 0;
+      var longestUnivaluePath = function(root) {
+        dfs(root);
+        return path;
+      };
+      var dfs = function(root) {
+        if (root == null) return 0;
+        let left = dfs(root.left);
+        let right = dfs(root.right);
+
+        let leftPath = root.left != null && root.left.val === root.val ? left + 1 : 0;
+        let rightPath = root.right != null && root.right.val === root.val ? right + 1 : 0;
+        path = Math.max(path, leftPath + rightPath);
+        return Math.max(leftPath, rightPath);
+      };
+
+      let path = 0;
+      var longestUnivaluePath = function(root) {
+        dfs(root);
+        return path;
+      };
+      var dfs = function(root) {
+        if (root == null) return 0;
+        let left = dfs(root.left);
+        let right = dfs(root.right);
+        let arrowLeft = 0, arrowRight = 0;
+        if (root.left != null && root.left.val == root.val) {
+            arrowLeft += left + 1;
+        }
+        if (root.right != null && root.right.val == root.val) {
+            arrowRight += right + 1;
+        }
+        path = Math.max(path, leftPath + rightPath);
+        return Math.max(leftPath, rightPath);
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    PENDING = 'pending'
+    FULFILLED = 'resolved'
+    REJECTED = 'rejected'
+    class MyPeomise {
+      #status = PENDING
+      #reason = ''
+      #value = ''
+      constructor(ext) {
+        this.onFulfilledCallback = []
+        this.onRejectedCallback = []
+        ext(this.#resolve.bind(this), this.#reject.bind(this))
+      }
+      
+      #resolve(value) {
+        if (this.#status !== PENDING) return
+        this.value = value
+        this.#status = FULFILLED
+        queueMicrotask(() => {
+          this.onFulfilledCallback.forEach((fn) => {
+            fn()
+          })
+        })
+      }
+
+      #reject(reason) {
+        if (this.#status !== PENDING) return
+        this.#reason = reason
+        this.#status = REJECTED
+        queueMicrotask(() => {
+          this.onRejectedCallback.forEach(fn => {
+            fn()
+          })
+        })
+      }
+
+      #then(onResolve, onReject) {
+        return new MyPeomise((resolve, reject) => {
+          if (typeof onResolve !== 'function') {
+            onResolve = () => this.value
+          }
+          if (typeof onReject !== 'function') {
+            onReject = () => this.reason
+          }
+          if (this.#status === PENDING) {
+            this.onFulfilledCallback.push(() => resolve(onResolve(this.value)))
+            this.onRejectedCallback.push(() => reject(onReject(this.reason)))
+          }
+          if (this.#status === FULFILLED) queueMicrotask(() => resolve(onResolve(this.value)))
+          if (this.#status === REJECTED) queueMicrotask(() => reject(onReject(this.reason)))
+        })
+      }
+    }
+  </script>
+</body>
+
+</html>

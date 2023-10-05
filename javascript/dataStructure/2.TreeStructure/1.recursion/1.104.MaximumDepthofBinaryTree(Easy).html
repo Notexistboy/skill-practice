@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      
+      /**
+       * Definition for a binary tree node.
+       * function TreeNode(val) {
+       *     this.val = val;
+       *     this.left = this.right = null;
+       * }
+       */
+      /**
+       * @param {TreeNode} root
+       * @return {number}
+       */
+      /* DFS */
+      var maxDepth = function(root) {
+        if(root == null) return 0
+        return Math.max(null,maxDepth(root.left), maxDepth(root.right)) + 1
+      }
+      /* BFC */
+      var maxDepth = function(root) {
+        if(root == null) return 0
+        let level = 0
+        let queue = [root]
+        while(queue.length > 0){
+          let len = queue.length
+          while(len--){
+            let first = queue.shift() // 左出
+            if( first.left) queue.push(first.left) // 左子节点入队列
+            if( first.right) queue.push(first.right) //右子节点入队列
+          }
+          level++
+        }
+        return level
+      }
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+  class Animal {
+    constructor(name,male) {
+      this.name = name
+      this.male = male
+      this.belly = []
+    }
+
+    eat(food) {
+      this.belly.push(food)
+    }
+
+    speak() {
+      return `Hi~ I'm ${this.name}`
+    }
+  }
+  /* es5 是如何实现类的继承的 */
+  /* 
+  首先在Dog的构造函数中调用基类的构造函数
+
+  function Animal(name,age) {
+    this.name = name
+    this.age = age
+  }
+
+  function Dog(name, age){
+    Animal.call(this, name, age)
+    this.name = name
+    this.age = age
+  }
+
+  Dog.prototype = new Animal()
+  由于此时把dog的原型对象指向Animal对象的实例
+  
+  此时原型对象的constructor发生改变
+
+  所以要重新指定原型对象上的constructor仍然是Dog构造函数
+
+  如果不更改prototype指向 
+  Dog.prototype 会指向{constructor: ƒ Dog(name, male, age),__proto__: Object} 而不是Animal
+
+  如果不更改构造器指向 lucky实例的构造器指向就是Dog()构造函数 而不是undefined 
+  不更改构造器指向 不会影响Dog()的指向
+
+  Dog.prototype.constructor = Dog()
+  
+  es5的写法中子类首先会调用基类的构造函数
+  es6中通过super这个方法在子类的构造函数中调用父类的构造函数
+
+  super会在子类中自动完成以上的方法
+   1.调用基类的构造函数，
+   2.重新指定原型对象上的constructor是子类构造函数
+
+  
+  
+  */
+  /* 通过 extends 关键字 来实现类的继承 */
+  class Dog extends Animal {
+    constructor(name, male, age) {
+      super(name, male)
+      /* 继承的属性会在前面 */
+      this.age = age
+    }
+
+    bark() {
+      return 'bark! bark!'
+    }
+    /* 继承类可以替换基类的同名方法 */
+    speak() {
+      return `bark! bark! Hi~ I'm ${this.name}`
+    }
+  }
+  const lucky = new Dog('lucky', true ,2)
+  //lucky.bark()
+  //lucky.eat('meat')
+  //lucky.belly
+</script>
+</html>

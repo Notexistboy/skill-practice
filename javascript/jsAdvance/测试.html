@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+  <html >
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script> -->
+  </head>
+  <body>
+   
+    <script>
+      /* function Animal(name,age) {
+        const p = new Object
+        p.name = name
+        p.age = age
+        return p
+      } */
+
+      function Animal(name,age) {
+        this.name = name
+        this.age = age
+        // this.info = function () {
+        //   return `I'm ${this.name}, I'm ${this.age} years old`
+        // }
+      }
+      Animal.prototype.info = function () {
+        return `I'm ${this.name}, I'm ${this.age} years old`
+      }
+
+      let dog = new Animal('papi', 6)
+      
+      /* es6 class */
+
+
+      /* const Animal = class {
+
+      } */
+
+      /* class Animal {
+        constructor(name, age){
+          this.name = name
+          this.age = age
+        }
+        info() {
+          return `I'm ${this.name}, I'm ${this.age} years old`
+        }
+        static introduce() {
+          return `I'm a little dog` 
+        }
+      } */
+      /* 
+      // es5 实现继承的机制
+      function Animal(name,age) {
+        this.name = name
+        this.age = age
+        this.info = function () {
+          return `I'm ${this.name}, I'm ${this.age} years old`
+        }
+      }
+
+      function Dog(name, male, age){
+        Animal.call(this, name, age)
+        this.male = male
+      }
+
+      Dog.prototype = new Animal()
+      Dog.prototype.constructor = Dog() */
+      /* class Dog extends Animal {
+        constructor(name, male, age){
+          super(name,age)
+          this.male = male
+        }
+      }
+      const papi = new Dog('papi', 'male', 5)
+      const gigi = new Dog('gigi', 'female', 3)
+
+      let dogs = {
+        papi: {name:'papi', age:5},
+        gigi: {name:'gigi', age:5}
+      }
+      for (const [key,value] in Object.entries(dogs)) {
+        debugger
+      } */
+
+    </script>
+  </body>
+</html>

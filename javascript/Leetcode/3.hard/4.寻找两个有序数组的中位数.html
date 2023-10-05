@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /* 
+      给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
+
+      算法的时间复杂度应该为 O(log (m+n)) 。(二分查找)
+      */
+      /**
+      * @param {number[]} nums1
+      * @param {number[]} nums2
+      * @return {number}
+      */
+      var findMedianSortedArrays1 = function(nums1, nums2) {
+        let composeList = [];
+        let nums1Len = nums1.length;
+        let nums2Len = nums2.length;
+        let i = 0;
+        let j = 0;
+        while(i < nums1Len || j < nums2Len){
+          if((nums1[i] ?? Infinity) < (nums2[j] ?? Infinity)){
+            composeList.push(nums1[i])
+            i++;
+          }else{
+            composeList.push(nums2[j])
+            j++;
+          }
+        }
+        const length = composeList.length;
+        const centrePos = (length - 1)/2;
+        var rep=/[\.]/;
+        if(rep.test(centrePos)){
+          const centreLeft = composeList[Math.floor(centrePos)]
+          const centreRight = composeList[Math.ceil(centrePos)]
+          return (centreLeft+centreRight)/2;
+        }else{
+          return composeList[centrePos];
+        };
+      };
+      /* 
+      二分查找要求 
+      第一个数组分割线左侧最大值小于第二个数组分割线右侧最小值
+      第二个数组分割线左侧最小值小于第一个数组分割线右侧最小值
+
+      */
+      var findMedianSortedArrays = function(nums1, nums2) {
+        // 把短的数组放在前面
+        if(nums1.length > nums2.length){
+          let temp = nums1;
+          nums1 = nums2;
+          nums2 = temp;
+        }
+        let m = nums1.length;
+        let n = nums2.length;
+
+        // 分割线左边的所有元素需要满足的个数 m+(n-m+1)/2
+        let totalLeft = parseInt((m+n+1)/2);
+        // 在num1 区间内[0,m]里查找恰当的分割线
+        // 使得num1[i-1] <= num2[j] && num2[j-1] <= num1[i]
+
+        let left = 0;
+        let right = m;
+
+        while (left < right){
+          let i = parseInt(left + ((right - left + 1) / 2));
+          let j = totalLeft - i;
+
+          // let i = (left + right) / 2;
+          // let j = (m + n + 1) / 2 - i;
+          
+          if(nums1[i-1] > nums2[j]){
+            // 下一轮搜索区间 [left, i-1]
+            right = i-1;
+          }else{
+            // 下一轮搜索区间 [i, right]
+            // 在区间只有两个元素的时候 [left, right] 边界就不会再缩小了 不然会陷入死循环 需要在最开始取中位数时＋1
+            left = i;
+          }
+        }
+        let i = left;
+        let j = totalLeft - i;
+        let nums1LeftMax = i === 0 ? Number.MIN_SAFE_INTEGER : nums1[i-1];
+        let nums1RightMin = i === m ? Number.MAX_SAFE_INTEGER : nums1[i];
+        let nums2LeftMax = j === 0 ? Number.MIN_SAFE_INTEGER : nums2[j-1];
+        let nums2RightMin = j === n ? Number.MAX_SAFE_INTEGER :nums2[j];
+        debugger;
+        if((m+n)%2 === 1){
+          return Math.max(nums1LeftMax, nums2LeftMax);
+        }else{
+          return (Math.max(nums1LeftMax, nums2LeftMax)+Math.min(nums1RightMin, nums2RightMin))/2;
+        }
+      }
+
+
+      // findMedianSortedArrays([1,3], [2]);
+      findMedianSortedArrays([1,3], [2,4]);
+      findMedianSortedArrays([1,2], [3,4]);
+      // findMedianSortedArrays([0,0], [0,0]);
+    </script>
+  </body>
+</html>

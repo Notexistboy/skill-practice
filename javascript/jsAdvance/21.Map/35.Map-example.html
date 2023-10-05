@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    button{
+      padding:  10px 15px;
+      font-size: 18px;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+  <button>Fire 🔥</button>
+  <button>Drancer 💃</button>
+  <button>Ice Cream 🍦</button>
+  <button>Hamburger 🍔</button>
+  <button>Fish 🐠</button>
+  <script>
+    /* map属性可以是任意类型的数据 */
+    /* 想记录按钮被点击的次数 可以给按钮一个id用来记录 
+    但是如果id被移除了 或者是相应的dom被移除了 就找不到他的典型信息了
+    通过元数据来存储button的信息 */
+    const clickCounts = new Map()
+    const buttons = document.querySelectorAll('button')
+    /* 使用场景
+        想要存储这一个关于对象的信息 而不是把信息存储在对象上的时候 就可以使用map操作
+    */
+    buttons.forEach(button => {
+      /* 此时button就是一个dom元素 */
+      clickCounts.set(button, 0)
+      button.addEventListener('click', function () {
+        /* this指向button元素 */
+        /* 点击一次改变一次对应的map元素 */
+        clickCounts.set(this. val+1)
+      })
+    })
+  </script>  
+</body>
+</html>

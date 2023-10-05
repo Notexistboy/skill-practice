@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    /* 反射机制指的是程序在运行时能够获取自身的信息 */
+    /* 那么在ES6中JS提供了一个叫做Reflect的对象。
+      Reflect是一个内建的对象，用来提供方法去拦截JavaScript的操作。
+      Reflect不是一个函数对象，所以它是不可构造的，也就是说它不是一个构造器，你不能通过`new`操作符去新建或者将其作为一个函数去调用Reflect对象。
+      Reflect的所有属性和方法都是静态的。 */
+    /* 利用JS的for..in可以实现，
+      还有比如Array.isArray/Object.getOwnPropertyDescriptor，
+      或者甚至Object.keys都是可以归类到反射这一类中。ECMA需要这个是为了让JS更加强大了，
+      相当于说提供Reflect对象将这些能够实现反射机制的方法都归结于一个地方并且做了简化，保持JS的简单。
+      于是我们再也不需要调用Object对象，然后写上很多的代码。 */
+
+
+      //Reflect.apply(target, thisArg, args)方法等同于Function.prototype.apply.call(func, thisArg, args)，用于绑定this对象后执行给定函数。
+      //Reflect.construct(target, args)方法等同于new target(...args)，这提供了一种不使用new，来调用构造函数的方法。
+      //Reflect.get(target, name, receiver)方法查找并返回target对象的name属性，如果没有该属性，则返回undefined。
+      //Reflect.set(target, name, value, receiver)方法设置target对象的name属性等于value。
+
+      //Reflect.defineProperty(target, name, desc)方法基本等同于Object.defineProperty，用来为对象定义属性。未来，后者会被逐渐废除，请从现在开始就使用Reflect.defineProperty代替它。
+      //Reflect.deleteProperty(target, name)方法等同于delete obj[name]，用于删除对象的属性。
+      //Reflect.has(target, name)方法对应name in obj里面的in运算符。
+      //Reflect.ownKeys(target)方法用于返回对象的所有属性，基本等同于Object.getOwnPropertyNames与Object.getOwnPropertySymbols之和。
+      //Reflect.isExtensible(target)方法对应Object.isExtensible，返回一个布尔值，表示当前对象是否可扩展。
+
+      //Reflect.preventExtensions(target)对应Object.preventExtensions方法，用于让一个对象变为不可扩展。它返回一个布尔值，表示是否操作成功。
+      //Reflect.getOwnPropertyDescriptor(target, name)基本等同于Object.getOwnPropertyDescriptor，用于得到指定属性的描述对象，将来会替代掉后者。
+      //Reflect.getPrototypeOf(target)方法用于读取对象的__proto__属性，对应Object.getPrototypeOf(obj)。
+      //Reflect.setPrototypeOf(target, prototype)方法用于设置目标对象的原型（prototype），对应Object.setPrototypeOf(obj, newProto)方法。它返回一个布尔值，表示是否设置成功。
+
+      /* object原型对象上的方法 */
+
+      //Object.assign(target, source) 方法用于将所有可枚举属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。浅拷贝
+      //Object.create(proto, [propertiesObject]) 方法创建一个新对象，使用现有的对象来提供新创建的对象的__proto__。
+      //Object.freeze(obj) 方法可以冻结一个对象。一个被冻结的对象再也不能被修改；冻结了一个对象则不能向这个对象添加新的属性，不能删除已有属性，不能修改该对象已有属性的可枚举性、可配置性、可写性，以及不能修改已有属性的值。此外，冻结一个对象后该对象的原型也不能被修改。freeze() 返回和传入的参数相同的对象。
+      //Object.isFrozen(obj)方法判断一个对象是否被冻结。
+	    //Object.entries(obj)返回一个数组，其元素是与直接在object上找到的可枚举属性键值对相对应的数组。属性的顺序与通过手动循环对象的属性值所给出的顺序相同。
+      //Object.fromEntries(obj) 方法把键值对列表转换为一个对象。map对象
+      //Object.is(value1, value2) 判断两个值是否相同。如果下列任何一项成立，则两个值相同：
+      
+      //Object.defineProperty(obj, prop, descriptor) 方法会直接在一个对象上定义一个新属性，或者修改一个对象的现有属性， 并返回这个对象。
+	    //Object.defineProperties(obj, props) 方法会直接在一个对象上定义一个新属性，或者修改一个对象的现有属性， 并返回这个对象。
+      //Object.getOwnPropertyDescriptor(obj, prop)方法返回指定对象上一个自有属性对应的属性描述符。（自有属性指的是直接赋予该对象的属性，不需要从原型链上进行查找的属性）
+      //Object.getOwnPropertyDescriptors(obj)方法用来获取一个对象的所有自身属性的描述符。
+
+      //Object.getOwnPropertyNames(obj)方法返回一个由指定对象的所有自身属性的（属性名 important）
+      //（包括不可枚举属性但不包括Symbol值作为名称的属性）组成的数组。
+      //Object.getOwnPropertySymbols(obj) 您可以将给定对象的所有符号属性作为 Symbol 数组获取。
+      //Object.getPrototypeOf(obj) 方法返回指定对象的原型（内部[[Prototype]]属性的值）。
+      //Object.setPrototypeOf(obj, prototype)方法设置一个指定的对象的原型 ( 即, 内部[[Prototype]]属性）到另一个对象或  null。
+      //Object.keys(obj) 方法会返回一个由一个给定对象的自身可枚举 属性组成的数组，
+
+      //Object.preventExtensions()方法让一个对象变的不可扩展，也就是永远不能再添加新的属性。
+      //Object.seal()方法封闭一个对象，阻止添加新属性并将所有现有属性标记为不可配置。当前属性的值只要可写就可以改变。
+      //Object.isExtensible() 方法判断一个对象是否是可扩展的（是否可以在它上面添加新的属性）。
+      //Object.isSealed() 方法判断一个对象是否被密封。密封对象是指那些不可扩展的，且所有自身属性都不可配置且因此不可删除（但不一定是不可写）的对象。
+      //Object.prototype.isPrototypeOf() 方法用于测试一个对象是否存在于另一个对象的原型链上。
+      //Object.hasOwnProperty() 方法会返回一个布尔值，指示对象自身属性中是否具有指定的属性（也就是，是否有指定的键）。
+      //Object.prototype.propertyIsEnumerable() 方法返回一个布尔值，表示指定的属性是否可枚举。
+      //Object.toLocaleString() 方法返回一个该对象的字符串表示。此方法被用于派生对象为了特定语言环境的目的（locale-specific purposes）而重载使用。
+      //Object.toSource()方法返回一个表示对象源代码的字符串。
+      //Object.toString() 方法返回一个表示该对象的字符串。
+
+      //数组中属性名的排列顺序和使用 for…in 循环遍历该对象时返回的顺序一致 。
+      //Object.seal()方法封闭一个对象，阻止添加新属性并将所有现有属性标记为不可配置。当前属性的值只要原来是可写的就可以改变。
+      //Object.valueOf() 方法返回指定对象的原始值。
+
+      //Object.values()方法返回一个给定对象自身的所有可枚举属性值的数组，
+      //返回值的顺序与使用for…in循环的顺序相同 ( 区别在于 for-in 循环枚举原型链中的属性 )。
+      
+      //const obj = { foo: ‘bar’, baz: 42 };
+      //console.log(Object.entries(obj)); // [ [‘foo’, ‘bar’], [‘baz’, 42] ]
+      //Object.fromEntries() 函数传入一个键值对的列表，并返回一个带有这些键值对的新对象。
+
+
+      var myObject = Object.create(null)
+      // 此时myObject并没有继承Object这个原型的任何方法,因此有：
+      myObject.hasOwnProperty === undefined
+      // 此时myObject是没有hasOwnProperty这个方法，那么我们要如何使用呢？如下：
+
+      /* 方法会返回一个布尔值，指示对象自身属性中是否具有指定的属性（也就是，是否有指定的键）。 */
+
+      //Object.prototype.hasOwnProperty.call(obj, key) 而不是 myObj.hasOwnProperty(prop)
+      Object.prototype.hasOwnProperty.call(myObject, 'foo')
+
+      //而如果使用Reflect
+
+      var myObject = Object.create(null)  
+      Reflect.ownKeys(myObject)  
+      //foo , bar , baz 和 qux 
+      //当你对象里有Symbol的时候，如何遍历对象的keys？
+      const foo = Symbol('foo')
+      const bar = Symbol('bar')
+      const baz = 'baz'
+      let obj = {[foo]: 1,[bar]: 1,[baz]: 1}
+
+      var key = Object.getOwnPropertyNames(obj).concat(Object.getOwnPropertySymbols(obj))
+      //["baz", Symbol(foo), Symbol(bar)]
+      //而如果使用Reflect
+
+      //ownKeys的方法(并不会去获取那些继承的key)
+      var keyR = Reflect.ownKeys(obj)
+      //["baz", Symbol(foo), Symbol(bar)]
+
+      /* Reflect.apply(target, thisArgument [, argumentsList])
+      该方法类同于Function.prototype.apply(),二者的对比如下： */
+
+      var ages = [11, 33, 12, 54, 18, 96];
+
+      // Function.prototype style:
+      var youngest1 = Math.min.apply(Math, ages);  
+      var oldest1 = Math.max.apply(Math, ages);  
+      var type1 = Object.prototype.toString.call(youngest1);
+
+      // Reflect style:
+      var youngest2 = Reflect.apply(Math.min, Math, ages);  
+      var oldest2 = Reflect.apply(Math.max, Math, ages);
+      //第三个参数是Object类型的就好，因为调用的是Object的原型方法toString
+      var type2 = Reflect.apply(Object.prototype.toString, youngest2, ages);  
+
+      /* Reflect提供这个方法的最大好处可以避免别人也写了一个同名的apply函数的时候，我们不会需要去写一大长串的代码，比如：
+      Function.prototype.apply.call(context, ...args)/Function.apply.call(context, ...args)
+      而是依然是简单的：
+      Reflect.apply() */
+
+      /* Reflect.construct(target, argumentsList [, constructorToCreateThis])
+      这个方法等价于调用new target(...args)。
+      二者的对比实现如下：*/
+      class Greeting {  
+        constructor(name) {
+          this.name = name;
+        }
+        greet() {
+          return `Hello ${name}`;
+        }
+      }
+      // ES5 style factory:
+      function greetingES5(name) {  
+        var instance = Object.create(Greeting.prototype);
+        Greeting.call(instance, name);
+        return instance;
+      }
+      //var es5 = greetingES5('es5')
+
+      // ES6 style factory
+      function greetingES6(name) {  
+        return Reflect.construct(Greeting, [name], Greeting);
+      }
+      var es6 = greetingES6('es6')
+      // Or, omit the third argument, and it will default to the first argument.
+      /* function greetingFactory(name) {  
+        return Reflect.construct(Greeting, [name]);
+      }
+
+      // Super slick ES6 one liner factory function!
+      const greetingFactory = (name) => Reflect.construct(Greeting, [name]); */
+      /* Reflect.defineProperty ( target, propertyKey, attributes )
+      类同于Object.defineProperty()，不同的是该方法返回的是布尔值，
+      而不需要你像以前那样去捕捉异常(因为Object.defineProperty是在执行出错的时候直接抛错的) */
+
+      /* Reflect.getOwnPropertyDescriptor ( target, propertyKey )
+      类同于Object.getOwnPropertyDescriptor(),
+      如果对应的属性存在则返回给定属性的属性描述符，否则返回未定义。比如： */
+      var myObject = {};  
+      Object.defineProperty(myObject, 'hidden', {  
+        value: true,
+        enumerable: false,
+      })
+      var theDescriptor = Reflect.getOwnPropertyDescriptor(myObject, 'hidden');  
+      //{value: true, writable: false, enumerable: false, configurable: false}
+      /* Reflect.getOwnPropertyDescriptor(1, 'foo')   */
+  
+      //Reflect.deleteProperty ( target, propertyKey )
+      //等同于调用delete target[name]
+
+
+      /* Reflect.getPrototypeOf ( target )
+      等同于Object.getPrototypeOf(),
+      唯一不同的是当传参target不是一个对象的时候：前者会强制将target转为一个对象。 */
+
+      // Number {constructor: function, toExponential: function, toFixed: function, toPrecision: function,
+      // toString: function…}
+      Object.getPrototypeOf(1);
+
+      // Uncaught TypeError: Reflect.getPrototypeOf called on non-object
+      // at Object.getPrototypeOf (<anonymous>)
+      //  at <anonymous>:1:9
+      //Reflect.getPrototypeOf(1); // TypeError  
+
+      /* Reflect.setPrototypeOf ( target, proto )
+      等同于Object.setPrototypeOf,差别的地方和刚才的getPrototypeOf是一样的。
+      如果传参没有错，那么Reflect是直接返回布尔值来标识是否成功，而后者则直接抛错来表明失败。 */
+
+      /* Reflect.isExtensible (target)
+      等同于Object.isExtensible(),区别也是在于返回值。 */
+
+      /* Reflect.preventExtensions ( target )
+      类同于Object.preventExtensions()。区别也是在于返回值。 */
+
+      /* Reflect.get ( target, propertyKey [ , receiver ])
+      该方法用来获取对象中某个属性的方法。这是一个全新的方法，不过该方法也是很简单的，如下： */
+
+      const testObject = {  
+        a: 'you',
+        b: 'like'
+      }
+      Reflect.get(testObject, 'a') === 'you' // true  
+      Reflect.get(testObject, 'b') === 'like' // true  
+
+      /* Reflect.set ( target, propertyKey, V [ , receiver ] )
+      类同于上面的get方法。比如： */
+
+      const testObject = {  
+        a: 'you',
+        b: 'like'
+      }
+      Reflect.set(testObject, 'c', 'javascript') // true  
+      Reflect.get(testObject, 'c') === 'javascript' // true  
+
+      /* Reflect.has ( target, propertyKey )
+      该方法类似于in操作符，返回布尔值来表明该属性是否存在该对象上或者其原型链上。比如： */
+
+      let testObject = {  
+        foo: 1,
+      };
+      Object.setPrototypeOf(testObject, {  
+        get bar() {
+          return 2;
+        },
+        baz: 3,
+      });
+
+      Reflect.has(myObject, 'foo') === true  
+      Reflect.has(myObject, 'baz') === true  
+
+      /* Reflect.ownKeys ( target )
+      该方法在之前说过了，它返回了目标对象已有的所有属性(不包括原型链)的一个数组。 */
+
+      /* JS反射机制在Nodejs中的运用
+      说了反射机制和反射对象这么多，我们会如何应用反射机制？
+
+      假设有这么一个场景：
+      你需要在一个从一个类中获取额外的元信息，或者希望给类中的一些方法加入注解(Annotation)，
+      然后在实时的运行中获取到对应的元数据信息，那么这种场合就适合使用反射机制(配合修饰器的使用)，
+      下面我们介绍关于这方面应用的一个开源包---reflect-metadata，
+      以及对应的一个小demo js-reflect-demo */
+
+      /* 按照作者的思路，命名为元数据反射API是因为他的目的是：
+      1. 绝大部分的场景(组合/依赖注入，实时类型断言，反射/镜像，测试)都会希望能够添加额外的元数据到一个类中。
+      2. 各种工具和库都需要一种一致的方法来推理元数据
+      3. 元数据修饰器(也就是注解)通常需要和变化的修饰器组合
+      4. 元数据不仅仅在一个对象上生效，而且在Proxy以及对应的traps上也应该有效
+      5. 定义新的元数据修饰器对于开发者来说不应该过于复杂和麻烦
+      6. 元数据应该与ECMAScript的运行时特性以及其他语言一致 */
+
+      /* 更多关于该软件的说明参考： README.md
+
+      使用该软件时注意只需要Require一次该包，
+      然后就可以在之前说的Reflect对象上使用这些元数据操作方法。具体代码如下：
+      */
+      // patch global Reflect
+      /* (function (__global) {
+          if (typeof __global.Reflect !== "undefined") {
+              if (__global.Reflect !== Reflect) {
+                  for (var p in Reflect) {
+                      if (hasOwn.call(Reflect, p)) {
+                          __global.Reflect[p] = Reflect[p];
+                      }
+                  }
+              }
+          }
+          else {
+              __global.Reflect = Reflect;
+          }
+      })(typeof global !== "undefined" ? global :
+          typeof self !== "undefined" ? self :
+              Function("return this;")());
+      可以看到该包将所有的方法挂载到了全局的Reflect对象上了。
+
+      在demo中我们在reflect.js中使用修饰器往类中定义一个元数据：attr，然后在内部的方法中注解对应的方法参数的更多基本信息，
+      于是在index.js中，我们便可以通过Reflect-metadata提供的API去获取这些元数据。 */
+  </script>
+</body>
+</html>

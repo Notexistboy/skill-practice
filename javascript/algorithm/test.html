@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      let findKthLargest = function(nums, k) {
+          let right = nums.length - 1
+          let index = nums.length - k
+          return quickSelect(nums, 0, right, index)
+      }
+      let quickSelect = function(nums, left, right, index){
+        let q = randomPartition(nums, left, right)
+        debugger
+        if (q == index) {
+          return nums[index]
+        }else{
+          return q < index ? quickSelect( nums,q+1 ,right , index) : quickSelect( nums,left ,q-1 , index)
+        }
+      };
+      let randomPartition = function(nums, left, right) {
+        let i = Math.floor(Math.random()*(right - left + 1) + left)
+        debugger
+        /* 处理随机快速排序节点 */
+        [nums[i],nums[right]] = [nums[right],nums[i]]
+        return partition(nums, left, right)//此时r为随机点
+      };
+      let partition = function(nums, left, right){
+        debugger// x为随机点 取出随机点
+        let x = nums[right];// 最右边的元素作为 pivot 元素  pivotIndex 初始为 left
+        let pivotIndex = left-1; 
+        for(let i = left; i < right; i++){
+          if(nums[i] <= x){ // 逐个考察元素，和 pivot 比较 如果当前元素比 pivot 小
+            pivotIndex++;
+            [nums[i],nums[pivotIndex]] = [nums[pivotIndex],nums[i]]// 将它交换到 pivotIndex 的位置
+          }
+        } 
+        pivotIndex+=1            // 循环结束时，pivotIndex左边都是比pivot小的
+        [nums[pivotIndex], nums[right]] = [nums[right], nums[pivotIndex]]// pivotIndex和right交换，更新pivot元素
+        return pivotIndex
+      };
+      findKthLargest([3,2,1,5,6,4],2);
+    </script>
+  </body>
+</html>

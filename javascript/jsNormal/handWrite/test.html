@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 先定义三个常量表示状态
+        var PENDING = 'pending';
+        var FULFILLED = 'fulfilled';
+        var REJECTED = 'rejected';
+
+
+        class MyPromise {
+            constructor(ext) {
+                this.status = PENDING;
+                this.value = null;
+                this.reason = null;
+                this.onFullfiledCallback = [];
+                this.onRejectedCallback = [];
+
+                const resolve = (value) => {
+                    this.value = value;
+                    this.status = FULFILLED;
+                    this.onFullfiledCallback.forEach(fn => fn())
+                }
+                const reject = (reason) => {
+                    this.reason = reason;
+                    this.status = REJECTED;
+                    this.onRejectedCallback.forEach(fn => fn())
+                }
+
+                try{
+                    ext(resolve,reject)
+                } catch(e) {
+                    reject(e)
+                }
+            }
+
+            then(onResolved, onRejected) {
+                if(this.status === PENDING) {
+                if(typeof onFulfilled !== 'function') {
+                    onFulfilled = () => this.value
+                }
+                if(typeof onRejected !== 'function') {
+                    onRejected = () => this.reason
+                }
+                this.onFullfiiledCallback.push(() => onFulfilled(this.value))
+                this.onRejectedCallback.push(() => onRejected(this.resolve))
+                }
+                if(this.status === FULFILLED) onResolved(this.value)
+                if(this.status === REJECTED) onRejected(this.reason)
+                
+            }
+
+        }
+    </script>
+</body>
+</html>

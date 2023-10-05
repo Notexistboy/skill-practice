@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+/* 
+  三点运算符 称为剩余参数 组成是 ...和一个可变参数
+ */
+function sum(...values) {
+  /* 以前是用 arguments */
+  const total = values.reduce((prev, curr) => prev +curr, 0, values)
+  console.log(total)
+}
+sum(1,2,3)
+
+function converCurrency(rate, ...amounts){
+  return amounts.map( amount => rate*amount)
+}
+const amounts = converCurrency(0.89, 12, 24, 46, 68)
+ 
+//console.log(amounts)
+const player = ['tom', 123, 5.4, 6.7, 3.4]
+const [name, id, ...score] = player
+console.log(name, id, score)
+
+</script>
+</html>

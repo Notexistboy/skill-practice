@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function hyperscript(nodeName, rootNode, attr, ...children) {
+            const $el = document.createElement(nodeName);
+            for (let key in attr) {
+
+                $el.setAttribute(key, attr[key]);
+            }
+            // $el.innerHTML=children.join()
+            children.forEach(child => {
+                if (typeof child === 'string') {
+                    $el.appendChild(document.createTextNode(child));
+                } else {
+                    $el.appendChild(child);
+                }
+            });
+            rootNode && rootNode.appendChild($el)
+            return $el;
+        }
+    </script>
+</body>
+</html>

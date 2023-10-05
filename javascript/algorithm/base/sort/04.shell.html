@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+    /* 
+        对于大规模的数组，插入排序很慢，因为它只能交换相邻的元素，每次只能将逆序数量减少 1。
+        希尔排序的出现就是为了解决插入排序的这种局限性，它通过交换不相邻的元素，每次可以将逆序数量减少大于 1。
+        希尔排序使用插入排序对间隔 h 的序列进行排序。通过不断减小 h，最后令 h=1，就可以使得整个数组是有序的。
+    */
+        function shell(nums){
+            var len = nums.length;
+            var h = 1;
+            while(h<len / 3){
+                h = 3*h+1
+            }
+            while (h >= 1) {
+                for (var i = h; i < len; i++) {
+                    for (var j = i; j>=h && (nums[j] < nums[j-h]); j -= h){
+                        var temp = nums[j]
+                        nums[j] = nums[j-h]
+                        nums[j-h] = temp
+                    }
+                }
+                h = h / 3;
+            }
+            return nums
+        }
+        shell([2,1,3,5,4]);
+    
+    </script>
+  </body>
+</html>

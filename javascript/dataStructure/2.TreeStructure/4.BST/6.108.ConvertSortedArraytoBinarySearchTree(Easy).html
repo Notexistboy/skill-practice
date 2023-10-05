@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        /**
+         * @param {number[]} nums
+         * @return {TreeNode}
+         */
+        var sortedArrayToBST = function(nums) {
+            return toBST(nums, 0, nums.length - 1);
+        };
+        /* 结合二分查找or快排 */
+        var toBST = function(nums, sIndex, eIndex){
+          if(s > e) return null;
+          let mIndex = Math.floor((sIndex+eIndex)/2);
+          let root = new TreeNode(nums[mIndex]);
+          root.left = toBST(nums, sIdx, mIndex-1);
+          root.right = toBST(nums, mIndex+1, eIndex);
+          return root;
+        }
+        var sortedArrayToBST = function(nums) {
+            return toBST(nums, 0, nums.length - 1);
+        };
+        var toBST = function(nums, sIndex, eIndex){
+          if (left > right) return null;
+          // always choose left middle node as a root
+          let p = Math.floor(left + (right-left) / 2);
+          if ( Math.floor(right-left) % 2 == 1) ++p;
+          // inorder traversal: left -> node -> right
+          let root = new TreeNode(nums[p]);
+          root.left = toBST(nums, left, p - 1);
+          root.right = toBST(nums, p + 1, right);
+          return root;
+        };
+    </script>
+  </body>
+</html>

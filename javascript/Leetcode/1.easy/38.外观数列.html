@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+    /* 
+      1.     1
+      2.     11
+      3.     21
+      4.     1211
+      5.     111221
+      1 被读作  "one 1"  ("一个一") , 即 11。
+      11 被读作 "two 1s" ("两个一"）, 即 21。
+      21 被读作 "one 2",  "one 1" （"一个二" ,  "一个一") , 即 1211。
+      1211 被读作 "one 1" "one 2" "tow 1"  （"一个一"，"一个二" , "两个一")
+      
+      给定一个正整数 n（1 ≤ n ≤ 30），输出外观数列的第 n 项。
+      注意：整数序列中的每一项将表示为一个字符串。
+     */
+    /**
+    * @param {number} n
+    * @return {string}
+    */
+    
+    var countAndSay = function(n) {
+      let prev = '1'
+      for(let i = 1; i < n; i++){
+        /* \d查找数字以1开头作为匹配  */
+        prev = prev.replace(/(\d)\1*/g, (item) =>`${item.length}${item[0]}`)
+      }
+      return prev
+    };
+    countAndSay(5)
+    </script>
+  </body>
+</html>

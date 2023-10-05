@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /**
+       * Definition for a binary tree node.
+       * function TreeNode(val) {
+       *     this.val = val;
+       *     this.left = this.right = null;
+       * }
+       */
+      /**
+       * @param {TreeNode} root
+       * @return {boolean}
+       */
+      /* 
+        递归
+        如果一个树的左子树与右子树镜像对称，
+        那么这个树是对称的。
+       */
+      var isSymmetric = function(root) {
+        return checkTreeNode(root, root)
+      };
+      function checkTreeNode(leftNode,rightNode) {
+        if(leftNode == null && rightNode == null) return true 
+        if(leftNode == null || rightNode == null) return false 
+        return leftNode.val == rightNode.val &&  checkTreeNode(leftNode.left,rightNode.right) &&  checkTreeNode(leftNode.right,rightNode.left)
+      }
+      /* 
+      递归法
+        二叉树的题目，大多数可以用递归
+        递归主要确定2点
+        递归的子问题
+        递归的结束条件
+       */
+    </script>
+  </body>
+</html>

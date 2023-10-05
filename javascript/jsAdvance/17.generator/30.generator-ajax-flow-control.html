@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
+  <script>
+    /* let username
+    const usersPromise = axios.get('https://api.github.com/users')
+    usersPromise
+    .then(res => {
+      username = res.data[0].login
+      return axios.get(`https://api.github.com/users/${username}/repos`)
+    })
+    .then(res => {
+      console.log(res.data)
+    })
+    .catch( err => {
+      console.error(err)
+    }) */
+    /* generator的应用场景是控制ajax的工作流 */
+
+    /* 用generator替换promise */
+    function ajax(url){
+      /* 给next方法调用时传参 会把传入的参数赋值给yield这一行声明的变量
+       所以这些const 声明的变量在执行完每一步就有了值 */
+      axios.get(url).then(res => {
+        debugger
+        usersGen.next(res.data)
+      })
+    }
+    /* 这三次请求是相互依赖的 */
+    let i = 0
+    function* steps() {
+
+      //debugger //执行第一次
+      console.log('fetching users')
+      const users = yield ajax('https://api.github.com/users')
+      //debugger//执行第二次 为第一次赋值
+      console.log(users)
+
+      
+
+      console.log('fetching firstUser')
+      const firstUser = yield ajax(`https://api.github.com/users/${users[0].login}`)
+      //debugger//执行第三次 为第二次赋值
+      console.log(firstUser)
+
+      
+
+      console.log('fetching followers firstUser')
+      const followers = yield ajax(firstUser.followers_url)
+      //debugger//执行第四次 为第三次赋值
+      console.log(followers)
+      
+    }
+    const usersGen = steps()
+    //调用函数开始执行
+    usersGen.next()
+    
+  </script>
+</body>
+</html>

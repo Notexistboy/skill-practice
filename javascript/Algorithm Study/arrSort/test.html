@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+  <html >
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      //selection
+      var arr = [9,12,7,27,5,24,6,10]
+      function mergeSort (a, b){
+        var c = []
+        while( a.length && b.length){
+          if(a[0]<b[0]){
+            c.push(a.shift())
+          }else{
+            c.push(b.shift())
+          }
+        }
+        while(a.length){ c.push(a.shift()) }
+        while(b.length){ c.push(b.shift()) }
+        return c
+      }
+      function merge (arr) {
+        if(arr.length < 2){
+          return arr
+        }
+        var pivotIndex = Math.floor(arr.length / 2)
+        debugger
+        var left = arr.slice(0, pivotIndex)
+        //var arrL = arr.splice(0, pivotIndex)
+        debugger
+        var right = arr.slice(pivotIndex)
+        //var arrR = arr.splice(pivotIndex)
+        debugger
+
+        return mergeSort(merge(left), merge(right))
+      }
+      var result = merge(arr)
+      console.log(result)
+    </script>
+  </body>
+</html>

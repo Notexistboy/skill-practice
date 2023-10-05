@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+  <html >
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+    Array.prototype.first = function () {
+      return Array[0]
+    }
+    // for of可以来遍历任何可遍历的数据结构 包括 array object string map set
+    const fruits = ['apple', 'banana', 'orange', 'mango']
+    fruits.describe = 'lalala'
+    
+    for(let i = 0; i<fruits.length;i++){
+      //for循环缺点 用户可读性较低 没有变量代表当前遍历的元素 只能用
+    }
+    //foreach简化了语法 给每一个元素一个变量名 缺点是不能终止或者跳过
+    let foreach = fruits.forEach(fruit => {
+      console.log(`${'foreach'.repeat(1)}${fruit}`)
+      return `${'foreach'.repeat(1)}${fruit}`
+    })
+    console.log(foreach)//undefined foreach 没有返回值
+    let map = fruits.map(fruit => {
+      console.log(`${'map'.repeat(1)}${fruit}`)
+      return `${'map'.repeat(1)}${fruit}`
+    })
+    console.log(map)//["mapapple", "mapbanana", "maporange", "mapmango"]
+    //遍历的是可枚举属性 包括原型上
+    for (let fruit in fruits) {
+      //参数为索引值
+      console.log(`${'forin-'.repeat(1)}${fruits[fruit]}`)
+      //console.log(`${'forin-'.repeat(1)}${fruit}`)
+      //return `${'forin'.repeat(1)}${fruit}`
+    }
+    //支持 continue break
+    for (let fruit of fruits) {
+      console.log(`${'forin-'.repeat(1)}${fruit}`)
+      //return `${'forin'.repeat(1)}${fruit}`
+    }
+    </script>
+  </body>
+</html>

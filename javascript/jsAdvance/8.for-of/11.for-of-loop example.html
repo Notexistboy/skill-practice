@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+  <html >
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      .completed{
+        text-decoration: line-through;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <ul>
+        <li>go to store</li>
+        <li>watching movie</li>
+        <li>running</li>
+      </ul>
+    </div>
+    <script type="text/javascript">
+    // for of可以来遍历任何可遍历的数据结构 包括 array object string map set
+    const fruits = ['apple', 'banana', 'orange', 'mango']
+    Array.prototype.entries()//js内置的iterator接口 内部含有next方法
+    //for of可以用来遍历可迭代对象
+    //遍历器接口 iterator 或定义了 [Symbol.iterator()]
+    for (let fruit of fruits) {
+      //console.log(`${'forin-'.repeat(1)}${fruit}`)
+      //return `${'forin'.repeat(1)}${fruit}`
+    }
+    console.log(fruits.entries())//Array Iterator {} __proto__.next 方法
+    const iterator = fruits.entries() //将结果存在对象中
+    /* 
+      iterator.next()
+      {value: Array(2), done: false}
+      value: (2) [0, "apple"]
+      done: false
+      __proto__: Object
+      
+      iterator.next()
+      {value: Array(2), done: false}
+      value: (2) [1, "banana"]
+      done: false
+      __proto__: Object
+
+      iterator.next()
+      {value: Array(2), done: false}
+      value: (2) [2, "orange"]
+      done: false
+      __proto__: Object
+
+      iterator.next()
+      {value: Array(2), done: false}
+      value: (2) [3, "mango"]
+      done: false
+      __proto__: Object
+
+      iterator.next()
+      {value: undefined, done: true}
+      value: undefined
+      done: true
+      __proto__: Object
+    
+    调用next方法 可以实现手动遍历数组 
+    每次调用方法 都会返回一个对象 有两个值 
+    第一个是布尔值 表示当前数组是否完成遍历 
+    第二个是数组 元素是当前元素索引值和当前元素的值
+
+     */
+
+     // 遍历数组的iterator 这样的好处是同时获得元素的索引值和元素
+    for (let fruit of fruits.entries()) {
+      //console.log(fruit[0])//索引值
+      //console.log(fruit[1])//元素值
+    }
+    for (let [index, fruit] of fruits.entries()) {
+      //console.log(index)//索引值
+      //console.log(fruit)//元素值
+    }
+    /* 
+    (2) [0, "apple"]
+    (2) [1, "banana"]
+    (2) [2, "orange"]
+    (2) [3, "mango"]
+     */
+    function sum(...values) {
+      let total = 0
+      for (let num of arguments) {
+          total += num
+      }
+      console.log(total)
+      //return values.reduce((prev, curr, currIndex, values ) => prev + curr, 0 )  
+    }
+    sum(10, 23, 324, 435, 34, 12)
+
+    //for of 循环可以遍历字符串
+    /* let name = 'laravist'
+    for (let char of name){
+      console.log(char)
+    } */
+
+    //for of 循环可以遍历NodeList(3)
+    const lis = document.querySelectorAll('li')
+    console.log(lis)
+    for (let  li of lis) {
+      //此处 this指向window 箭头函数 也指向window
+      console.log(this)
+      //此处不能用箭头函数 当需要绑定事件this指向时 不能使用箭头函数 此时箭头函数this指向外层window 而不是button
+      li.addEventListener('click', function () {
+        console.log(this)
+        //此处this指向标签 dom元素
+        this.classList.toggle('completed')
+      })      
+    }
+    </script>
+  </body>
+</html>

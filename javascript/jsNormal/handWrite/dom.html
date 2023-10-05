@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="div" style="background: black; width: 50px; height: 50px;"></div>
+    <script>
+        const div = document.querySelector('#div');
+        div.addEventListener('click',() => {
+            debugger;
+            console.log(this)
+        });
+        div.addEventListener('click',function () {
+            console.log(this)
+        });
+    </script>
+</body>
+</html>

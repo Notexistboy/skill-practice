@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * @param {number[]} nums
+         * @param {number} k
+         * @return {number}
+         */
+        /* 每次对比 */
+        var minimumDifference = function (nums, k) {
+            let numsSort = nums.sort((a, b) => a - b);
+            let min = numsSort[k - 1] - numsSort[0];
+            for (let i = k; i < numsSort.length; i++) {
+                const cur = numsSort[i] - numsSort[i - k + 1]
+                if (cur < min) min = cur
+            }
+            return min;
+        };
+        /* 添加到集合中 */
+        var minimumDifference = function (nums, k) {
+            nums = nums.sort((a, b) => a - b)
+            if (nums.length <= k) return nums[nums.length - 1] - nums[0]
+            let res = [nums[k - 1] - nums[0]]
+            for (let i = k; i < nums.length; i++) {
+                res.push(nums[i] - nums[i - k + 1])
+            }
+            return Math.min.apply(null, res)
+        };
+        minimumDifference([9, 4, 1, 7], 2);
+    </script>
+</body>
+
+</html>

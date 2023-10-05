@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        function TreeNode(val, left, right) {
+            this.val = (val===undefined ? 0 : val)
+            this.left = (left===undefined ? null : left)
+            this.right = (right===undefined ? null : right)
+        }
+        /**
+         * @param {TreeNode} root
+         * @param {number} k
+         * @return {number}
+         */
+        // 利用 BST 的中序遍历特性
+        var kthSmallest = function(root, k) {
+            traverse(root, k);
+            return res;
+        };
+        // 记录结果
+        let res = 0;
+        // 记录当前元素的排名
+        let rank = 0;
+        var traverse = function(root, k) {
+            if (root == null) {
+                return;
+            }
+            traverse(root.left, k);
+            rank++;
+            if(rank === k){
+                res = root.val;
+                return;
+            }
+            traverse(root.right, k);
+        };
+        // 递归解法
+        var kthSmallest = function(root, k) {
+            let leftCnt = count(root.left);
+            if (leftCnt == k - 1) return root.val;
+            if (leftCnt > k - 1) return kthSmallest(root.left, k);
+            return kthSmallest(root.right, k - leftCnt - 1);
+        };
+        var count = function (node) {
+            if (node == null) return 0;
+            return 1 + count(node.left) + count(node.right);
+        };
+    </script>
+  </body>
+</html>

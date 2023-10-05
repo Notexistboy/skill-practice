@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+  /* es6的class有两种定义方式 
+
+  一种是类的声明 class 类的名字 { 类的方法 }
+    class User{
+
+    }
+  
+  一种是类的表达式 const 类的名字 =  class { 类的方法 } 不能频繁去改类 所以用const 
+   const User =  class { 
+     
+    } 
+    类的定义和函数的定义时很相像的 所以类是特殊的函数 因为函数存在变量提升 
+    但是类的定义没有函数提升 在定义类之前调用类 就会报错
+  */
+ 
+    /* function User1(name, email) {
+      this.name = name
+      this.email = email
+      
+    } */
+    /* 可以改写成 */
+    /* 类似于对象字面量 */
+    class User{
+      /* 构造函数 */
+      constructor(name, email) {
+        this.name = name
+        this.email = email
+      }
+      /* es6 类的定义是没有逗号的 */
+      info() {
+        return `Hi, I'm ${this.name}， my email is ${this.email}`
+      }
+
+      /* 静态方法 */
+      /* Array.from() Array.of() 这种只能在原型对象上调用的方法称为静态方法
+      静态方法可以理解成类方法 用类调用 而不是用实例调用  */
+      static description() {
+        /* this指向class User */
+        return `Hi, I'm a user of codecasts.com ${this}`
+      }
+      /* 通过实例调用静态方法会报 is not a function */
+
+      set github(value) {
+        this.githubName = value
+      }
+
+      get github() {
+        return `https://github.com/${this.githubName}`
+      }
+    }
+
+    const codecasts = new User('codecasts', 'i@codecasts.com')
+    const laravist = new User('codecasts', 'i@codecasts.com')
+
+</script>
+</html>

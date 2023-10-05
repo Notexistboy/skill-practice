@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+    /**
+    * @param {number} n
+    * @return {number}
+    */
+    var numSquares = function(n) {
+        let dp = new Array(n+1).fill(0);
+        for(let i = 1; i<=n; i++) {
+          let currMax = 0;
+          for(let j = 1; j < i; j++) {
+            currMax = Math.max(currMax, Math.max(j*(i-j), j*dp[i-j]));
+          }
+          dp[i] = currMax;
+        }
+        return dp[n];
+    };
+    numSquares(13);
+    </script>
+  </body>
+</html>

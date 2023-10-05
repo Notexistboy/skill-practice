@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+    /* 
+      假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+      每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+      注意：给定 n 是一个正整数。
+
+      示例 1：
+
+      输入： 2
+      输出： 2
+      解释： 有两种方法可以爬到楼顶。
+      1.  1 阶 + 1 阶
+      2.  2 阶
+          
+     */
+      /**
+      * @param {number} n
+      * @return {number}
+      */
+      var climbStairs = function(n) {
+        let dp = Array(n).fill(0)
+        if (n <= 2) {
+          return n;
+        }
+        let prev = 1, curr = 2
+        for(let i = 2; i < n; i++){
+          /* let temp = prev
+          prev = curr
+          curr = prev+temp */
+          let temp = prev+curr;
+          prev = curr
+          curr = temp
+        }
+        return curr
+      };
+      var climbStairs = function(n) {
+        let dp = Array(n).fill(0)
+        if (n <= 2) {
+          dp[n] = n
+        }
+        for(let i = 3; i<=n; i++){
+          dp[i] = dp[i-1]+dp[i-2]
+        }
+        debugger
+        return dp[n]
+      };
+      climbStairs(10)
+    </script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "name": "tsinit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --ext ts --exec ts-node src/index.ts",
+    "devFn":"nodemon --ext ts --exec ts-node src/fn.ts",
+    "devClass":"nodemon --ext ts --exec ts-node src/class.ts",
+    "devInterface":"nodemon --ext ts --exec ts-node src/interface.ts",
+    "devT":"nodemon --ext ts --exec ts-node src/T.ts",
+    "devNameSpace":"nodemon --ext ts --exec ts-node src/nameSpace.ts",
+    "devDecorator":"nodemon --ext ts --exec ts-node src/decorator.ts",
+    "c": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.2"
+  },
+  "dependencies": {
+    "@types/jquery": "^3.5.5",
+    "axios": "^0.21.1",
+    "jquery": "^3.6.0"
+  }
+}

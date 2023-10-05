@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+  <html >
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      const person = 'Jelly'
+      const age = 5
+      /* 避免重复拼接字符串  */
+      /* const sentence = person + 'is ' + age + ' years old.' */
+      const sentence = `${person} is ${age} years old.`
+
+      /* 可以直接写html结构 */
+      /* const template = [
+        '<div class="great">',
+          '<p>hello</p>',
+        '</div>'
+      ].join('')//将数组元素通过join的参数拼接成字符串 */
+      /* 模板字符串会保留空格 */
+      /* const template = `
+        <div class="great">
+          <p>hello</p>
+        </div>
+      `.trim() */
+      //Ps. vue
+      /* new Vue({
+        template: `
+        <div>
+
+        </div>
+        `
+      }) */
+      const Jelly = {
+        name: 'Jelly',
+        date: '2017-05-07',
+        todos: [
+          {name: 'go to store', completed: false},
+          {name: 'watching movie', completed: true},
+          {name: 'running', completed: true},
+        ]
+      }
+      /* 箭头函数的隐式返回 */
+      /* <ul>
+          <li>go to store</li>,<li>watching movie</li>,<li>running</li>
+        </ul>
+        因为map方法返回的是数组所以中间是有‘，’
+       */
+      /* const template = `
+        <ul>
+          ${Jelly.todos.map(item => `
+          <li>
+          ${item.name} ${item.completed ? '✅' : '❌'}
+          </li>`).join('')}
+        </ul>
+      ` */
+      function renderTodos(todos) {
+        return (
+          `<ul>
+            ${todos.map(item => `
+            <li>
+              ${item.name} ${item.completed ? '✅' : '❌'}
+            </li>`).join('')}
+          </ul>`
+        )
+      }
+      const template = `
+        <div>
+          <div>${Jelly.name}</div>
+          <div>
+          ${renderTodos(Jelly.todos)}
+          </div>
+        </div>
+      `
+      document.body.innerHTML = template
+
+      //下面，我们来看一个通过模板字符串，生成正式模板的实例。
+
+
+
+    </script>
+  </body>
+</html>

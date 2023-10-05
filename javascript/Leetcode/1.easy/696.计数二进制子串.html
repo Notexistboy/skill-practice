@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /* 给定一个字符串 s，
+      计算具有相同数量0和1的非空(连续)子字符串的数量，
+      并且这些子字符串中的所有0和所有1都是组合在一起的。
+      重复出现的子串要计算它们出现的次数。
+      */
+      /* 
+        方法一：按字符分组
+        思路与算法
+
+        我们可以将字符串 s 按照 0 和 1 的连续段分组，
+        存在 counts 数组中，例如 s=00111011，
+        可以得到这样的 counts 数组：counts={2,3,1,2}。
+        这里 counts 数组中两个相邻的数一定代表的是两种不同的字符。
+        假设 counts 数组中两个相邻的数字为 u 或者 v，
+        它们对应着 u 个 0 和 v 个 1，或者 u 个 1 和 v 个 0。
+        它们能组成的满足条件的子串数目为 min{u,v}，即一对相邻的数字对答案的贡献。
+        我们只要遍历所有相邻的数对，求它们的贡献总和，即可得到答案。
+       */
+      // var countBinarySubstrings = function(s) {
+      //   let counts = []
+      //   let len = s.length
+      //   let n = 0/* 当前位置 */
+      //   while(n < len){
+      //     let count = 0
+      //     let item = s.charAt(n)
+      //     while(n < len && item == s.charAt(n)){
+      //       /* 内循环不断地走item值是不发生改变的 */
+      //       n++
+      //       count++
+      //     }
+      //     counts.push(count)
+      //   }
+      //   /* 从第一位向左开始遍历 */
+      //   let ans = 0
+      //   for(let i= 1; i<counts.length; i++){
+      //     /* 只需要比较不同值之和count中的个数即可 */
+      //     ans += Math.min(counts[i],counts[i-1])
+      //   }
+      //   debugger
+      //   return ans
+      // }
+      // countBinarySubstrings('01001110011')
+      /* 
+        对于某一个位置 i，其实我们只关心i−1 位置的 counts 值是多少，
+        所以可以用一个 last 变量来维护当前位置的前一个位置，
+        这样可以省去一个 counts 数组的空间。
+       */
+      var countBinarySubstrings = function(s) {
+        let last = 0, ans = 0, len = s.length, n = 0;
+        while(n < len){
+          let item = s.charAt(n)
+          let count = 0
+          while(n < len && item == s.charAt(n)){
+             /* 内循环不断地走item值是不发生改变的 */
+             n++
+             count++
+          }
+          ans += Math.min(count,last)
+          last = count
+        }
+        return ans
+      }
+      countBinarySubstrings('01001110011')
+    </script>
+  </body>
+</html>

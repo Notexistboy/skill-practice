@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      var convertToBase7 = function(num) {
+        let absNum = Math.abs(num);
+        let numArr = [];
+        let yushu = num%7
+        let shang
+        if(num == 0) return '0'
+        while(absNum){
+          shang = parseInt(absNum/7)
+          yushu = absNum%7
+          debugger
+          numArr.unshift(yushu)
+          absNum = shang
+        }
+        debugger 
+      };
+      convertToBase7(100)
+    </script>
+  </body>
+</html>

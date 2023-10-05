@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+  <html >
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /*
+      　（1）在数据集之中，选择一个元素作为"基准"（pivot）。
+　      （2）所有小于"基准"的元素，都移到"基准"的左边；所有大于"基准"的元素，都移到"基准"的右边。
+　      （3）对"基准"左边和右边的两个子集，不断重复第一步和第二步，直到所有子集只剩下一个元素为止。 
+      */
+      var arr = [9,12,7,27,5,24,6,10]
+      function arrSort(arr) {
+        if (arr.length < 2)
+          return arr;
+        debugger
+        //取数组最接近中间的数位基准，奇数与偶数取值不同，但不印象，当然，你可以选取第一个，或者最后一个数为基准，这里不作过多描述
+        var pivotIndex = Math.floor(arr.length / 2);
+        debugger
+        var pivot = arr.splice(pivotIndex, 1)[0];
+        debugger
+        //左右区间，用于存放排序后的数
+        var left = [];
+        var right = [];
+        debugger
+        for (var i = 0; i < arr.length; i++) {
+          debugger
+          //小于基准，放于左区间，大于基准，放于右区间
+          if (arr[i] < pivot) {
+            left.push(arr[i]);
+            debugger
+          } else {
+            right.push(arr[i]);
+            debugger
+          }
+        }
+        //这里使用concat操作符，将左区间，基准，右区间拼接为一个新数组
+        //然后递归1，2步骤，直至所有无序区间都 只剩下一个元素 ，递归结束
+        return arrSort(left).concat([pivot], arrSort(right));
+        
+      }
+
+      var result = arrSort(arr)
+      console.log(result)
+    </script>
+  </body>
+</html>

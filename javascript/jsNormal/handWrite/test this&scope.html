@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        // // 1、非严格模式
+        // function myfunc() {
+        //     console.log(this);
+        // }
+        // myfunc(); // window
+
+        // // 2、严格模式
+        // function fn() {
+        //     "use strict"; // 严格模式下，禁止this关键字指向全局对象
+        //     console.log(this);
+        // }
+        // fn(); // undefined
+
+        // 面试题1
+        // var a = 1;
+        // function fn() {
+        //     var a = 2;
+        //     /* this */
+        //     console.log('this', this.a); // console what ?
+        //     /* scope */
+        //     console.log('scope', a); // console what ?
+        // }
+        // fn();// this 1 scope 2
+
+        // 面试题2
+        // let a = 1; // let 定义自己的作用域，不挂载至window
+        // function fn() {
+        //     var a = 2;
+        //     /* this */
+        //     console.log('this', this.a); // console what ?
+        //     /* scope */
+        //     console.log('scope', a); // console what ?
+        // }
+        // fn();// this undefined scope 2
+
+        // // 面试题3
+        // var b = 1;
+        // function outer() {
+        //     // var b = 2;
+        //     function inner() {
+        //         /* this */
+        //         console.log('this', this.b); // console what ?
+        //         /* scope */
+        //         console.log('scope', b); // console what ? 
+        //     }
+        //     inner(); // function 中的
+        // }
+        // outer();// this 1 scope 2 沿着作用域链向上找 如果注释2就会返回1
+
+        // 面试题4
+        var a = 0;
+        const obj = {
+            a: 1,
+            fn: function() {
+                var a = 2
+                /* this */
+                console.log('this', this.a); // console what ?
+                /* scope */
+                console.log('scope', a); // console what ?
+            },
+            fn1: () => {
+                var a = 3
+                /* this */
+                console.log('this', this.a); // console what ?
+                /* scope */
+                console.log('scope', a); // console what ?
+            }
+        };
+
+        // obj.fn() // obj 1 2
+        // const fn = obj.fn
+        // fn() // 0 2
+        // obj.fn1() // window 0 3
+        // const fn1 = obj.fn1
+        // fn1() // window 0 3
+        /* 
+            函数声明 this指向当前调用方
+            箭头函数 this指向当前静态空间
+         */
+        // obj.fn(); // this obj 1 scope 0
+        // const f = obj.fn;
+        // f(); // this obj 0 scope 0
+        // obj.fn1(); // this window 0 scope 0
+        // const f1 = obj.fn1;
+        // f1(); // this window 0 scope 0
+        // /* 如果新声明 a = 2, a = 3作用域受影响 this不受影响 */
+    </script>
+</body>
+
+</html>

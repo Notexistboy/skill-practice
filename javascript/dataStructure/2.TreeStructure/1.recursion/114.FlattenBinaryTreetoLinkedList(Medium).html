@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+    /* 
+      给定一个二叉树，原地将它展开为一个单链表。
+     */
+    // 定义：将以 root 为根的树拉平为链表
+    var flatten = function (root) {
+      if (root == null) return null
+
+      flatten(root.left);
+      
+      flatten(root.right);
+      
+      /* 后序遍历 */      
+      // 1、左右子树已经被拉平成一条链表
+      let left = root.left
+      let right = root.right
+
+      // 2、将左子树作为右子树
+      root.left = null
+      root.right = left
+      
+      // 3、将原先的右子树接到当前右子树的末端
+      
+      let p = root;
+      while (p.right != null) {
+        p = p.right;
+      }
+      /* 走到当前右子树的尽头 */
+      p.right = right;
+    };
+    /* 
+        1
+      2    5
+    3  4  x  6
+     */
+    /* 输出所有左子树都为空 */
+    flatten([1, 2, 5, 3, 4, null, 6])
+    </script>
+  </body>
+</html>

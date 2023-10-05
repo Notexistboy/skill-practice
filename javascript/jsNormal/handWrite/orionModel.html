@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 题目需求
+        let middlewares = []
+        middlewares.push((ctx,next) => {
+            console.log(1)
+            next()
+            console.log(1.1)
+        })
+        middlewares.push((ctx,next) => {
+            console.log(2)
+            next()
+            console.log(2.1)
+        })
+        middlewares.push((ctx,next) => {
+            console.log(3)
+            next()
+            console.log(3.1)
+        })
+
+        let fn = compose(middlewares)
+        debugger;
+        fn(this);
+
+
+        /*
+        1
+        2
+        3
+        3.1
+        2.1
+        1.1
+        */
+
+        //实现compose函数
+        /**
+         * Compose `middleware` returning
+         * a fully valid middleware comprised
+         * of all those which are passed.
+         *
+         * @param {Array} middleware
+         * @return {Function}
+         * @api public
+         */
+        function compose(middleware) {
+            // 校验传入的参数是数组，校验数组中每一项是函数
+            if (!Array.isArray(middleware)) throw new TypeError('Middleware stack must be an array!')
+            for (const fn of middleware) {
+                if (typeof fn !== 'function') throw new TypeError('Middleware must be composed of functions!')
+            }
+
+            /**
+             * @param {Object} context
+             * @return {Promise}
+             * @api public
+             */
+            debugger;
+            return function (context, next) {
+                // last called middleware #
+                let index = -1
+                return dispatch(0)
+
+                function dispatch(i) {
+                    // 一个函数中多次调用报错
+                    // await next()
+                    // await next()
+                    if (i <= index) return Promise.reject(new Error('next() called multiple times'))
+                    index = i
+                    // 取出数组里的 fn1, fn2, fn3...
+                    let fn = middleware[i]
+                    // 最后 相等，next 为 undefined
+                    if (i === middleware.length) fn = next
+                    // 直接返回 Promise.resolve()
+                    if (!fn) return Promise.resolve()
+                    try {
+                        return Promise.resolve(fn(context, dispatch.bind(null, i + 1)))
+                    } catch (err) {
+                        return Promise.reject(err)
+                    }
+                }
+            }
+        };
+    </script>
+</body>
+
+</html>

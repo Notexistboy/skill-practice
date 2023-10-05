@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      console.log([] == 0)
+      //([]).valueOf().toString() = ''
+
+      console.log(![] == 0)
+      //(![]).valueOf() = false
+
+      console.log([] == []) //false 栈空间指向不同的地址值
+      //(![]).valueOf() = 
+
+      console.log(![] == [])
+
+      //(![]).valueOf() = false
+      //[].valueOf().toString() = '' false
+
+      console.log(!{} == {})//false
+      //(!{}) = false
+      //{}.valueOf().toString() = '[object Object]'
+
+      console.log({} == {}); //false 栈空间指向不同的地址值
+
+
+      [].valueOf();//[]
+      ![].valueOf();//false
+      [].valueOf().toString();//''
+      ![].valueOf().toString();
+      //({}).valueOf();//{}
+      (!{}).valueOf();//false
+      ({}).valueOf().toString();//'[object Object]'
+      (!{}).valueOf().toString();
+
+      a={
+        i:0,
+        valueOf: function () {
+          return ++a.i
+        }
+      }
+      if(a==1 && a==2 && a==3){
+        console.log(1)
+      }
+      debugger
+    </script>
+  </body>
+</html>

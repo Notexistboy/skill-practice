@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    /* 动态规划：通过状态转移方程 解决子问题 寻找最优解 */
+    /* 可以理解成 递归和记忆化  recursion+memoization
+      递归的缺点 有些值会重复的计算 导致空间复杂度是指数级的 
+      而记忆化是在递归的过程中 记住或者缓存住中间的值 避免重复计算
+    */
+    /* 动态规划实现斐波那契数列 先判断前一个数是否被缓存如果被缓存 则不需要重新计算 */
+    var fib = function(N) {
+      if(N<=1) return N
+      const cache = [0,1]
+      function memoize(N){
+        if(cache[N] != undefined ) return cache[N]
+        return cache[N] = memoize(N-1) + memoize(N-2)
+      }
+      return memoize(N)
+    }
+  </script>
+</body>
+</html>

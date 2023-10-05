@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        /* 
+            归并排序的思想是将数组分成两部分，分别进行排序，然后归并起来。
+            归并排序就是个二叉树的后续遍历
+            归并排序的逻辑，若要对nums[lo..hi]进行排序，我们先对nums[lo..mid]排序，
+            再对nums[mid+1..hi]排序，最后把这两个有序的子数组合并，整个数组就排好序了。
+            归并排序的代码框架如下：
+        */
+        void sort(int[] nums, int lo, int hi) {
+            int mid = (lo + hi) / 2;
+            sort(nums, lo, mid);
+            sort(nums, mid + 1, hi);
+
+            /****** 后序遍历位置 ******/
+            // 合并两个排好序的子数组
+            merge(nums, lo, mid, hi);
+            /************************/
+        }
+        /* 先对左右子数组排序，然后合并（类似合并有序链表的逻辑） */
+        var aux = [];
+        function mergeSort(nums){
+
+        }
+        mergeSort([2,1,3,5,4]);
+    </script>
+  </body>
+</html>

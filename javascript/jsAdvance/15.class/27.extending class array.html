@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+  /* 但是es6 class 就可以 */
+  /* es6的继承机制是 super创建的this值 指向的是基类Array 
+  随后子类MyArray在基类this值上修改this值 
+  因此在es6中this值是可以访问基类的功能的 */
+  class MyArray extends Array {
+    constructor() {
+      super()
+    }
+  }
+  const color = new MyArray
+
+  color[0] = 'red'
+  console.log(color.length) //red
+
+  color.lognth = 0
+  console.log(color[0]) //undefined 
+
+  /* 这是因为es6的继承机制和以往不同 
+    在以前在子类构造函数的内部 先由子类创建this的值
+    在构造函数中 this的值指向myArray的实例
+    再调用基类的构造函数 Array的其他属性会修饰this的值 通过apply
+  */
+
+  /* 在es6以前 是不能构建内建对象的 */
+  /* 构造类 继承自Array */
+  /* function MyArray() {
+    Array.apply(this, arguments)
+  } */
+
+  /* 生成实例 
+  const color = new MyArray
+
+  color[0] = 'red'
+  console.log(color.length) //undefined
+
+  color.lognth = 0
+  console.log(color[0]) //red */
+
+  const arr = []
+
+  arr[0] = 'red'
+  console.log(arr.length) //red
+
+  color.lognth = 0
+  console.log(color[0]) //undefined
+
+  /* 因此在es6以前是不能扩展内建对象的 */
+
+  class movieCollection extends Array {
+    /* 剩余参数 */
+    constructor(name,...items) {
+      /* 扩展运算符 */
+      super(...items)// 等价于new Array()
+      this.name = name
+
+    }
+    /*  */
+
+    add(movie){
+      /* 因为子类的this是可以访问this的功能 所以可以直接调用 */
+      this.push(movie)
+    }
+    topRated(limit = 10){
+      return this.sort((a, b) => (a.score > b.score) ? -1 : 1).splice(0, limit)
+    }
+  }
+
+  const movie = new movieCollection('favorite movies',
+    {name: 'The Croods', score: 8.7},
+    {name: 'The Shawshank Redemption', score: 9.6},
+    {name: 'Leon', score: 9.4},
+    {name: 'Days of summer', score: 8.0},
+  )
+  //movie.add({name: 'Pride & Prejudice', score: 8.0})
+  //movie.topRated()
+</script>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      A+规范
+      Promise标准解读
+      (1) 一个promise的当前状态只能是pending、fulfilled和rejected三种之一。状态改变只能是pending到fulfilled或者pending到rejected。状态改变不可逆。
+      (2) promise的then方法接收两个可选参数，表示该promise状态改变时的回调(promise.then(onFulfilled, onRejected))。then方法返回一个promise，then 方法可以被同一个 promise 调用多次。
+      Promise/A+并未规范race、all、catch方法，这些是ES6自己规范的。
+      
+      pending: 一个promise在resolve或者reject前就处于这个状态。
+      fulfilled: 一个promise被resolve后就处于fulfilled状态，这个状态不能再改变，而且必须拥有一个不可变的值(value)。
+      rejected: 一个promise被reject后就处于rejected状态，这个状态也不能再改变，而且必须拥有一个不可变的拒绝原因(reason)。
+
+      如果 onFulfilled 不是函数，其必须被忽略
+      如果 onRejected 不是函数，其必须被忽略
+    </div>
+    <script type="text/javascript">
+      // 先定义三个常量表示状态
+      var PENDING = 'pending';
+      var FULFILLED = 'fulfilled';
+      var REJECTED = 'rejected';
+
+
+
+      // 根据规范，resolve方法是将状态改为fulfilled，reject是将状态改为rejected
+      function myPromise (fn) {
+        this.status = PENDING; // 初始状态为pending
+        this.value = null; // 初始化value
+        this.reason = null; // 初始化reason
+        // 构造函数里面添加两个数组存储成功和失败的回调
+        this.onFulfilledCallbacks = [];
+        this.onRejectedCallbacks = [];
+
+        var that = this;
+        resolve = (value) => {
+          if(that.status === PENDING){
+            that.status = FULFILLED;
+            that.value = value; // 初始化value
+            // resolve里面将所有成功的回调拿出来执行
+            that.onFulfilledCallbacks.forEach(callback => {
+              callback(that.value);
+            });
+          }
+        }
+        reject = (reason) => {
+          if(that.status === PENDING){
+            that.status = REJECTED;
+            that.reason = reason; // 初始化reason
+            // resolve里面将所有失败的回调拿出来执行
+            that.onRejectedCallbacks.forEach(callback => {
+              callback(that.reason);
+            });
+          }
+        }
+
+        try {
+          fn(resolve, reject);
+        } catch (error) {
+          reject(error);
+        }
+      }
+
+      // then方法 promise.then(onFulfilled, onRejected)
+      myPromise.prototype.then = function(onFulfilled, onRejected) {
+        // 如果onFulfilled不是函数，给一个默认函数，返回value
+        if(typeof onFulfilled !== 'function'){
+          onFulfilled = function(value){
+            return value
+          }
+        }
+        // 如果onRejected不是函数，给一个默认函数，返回reason的Error
+        if(typeof onRejected !== 'function'){
+          onRejected = function(reason){
+            throw reason
+          }
+        }
+        if(this.status === FULFILLED) {
+          resolve(this.value);
+        }
+
+        if(this.status === REJECTED) {
+          reject(this.reason);
+        }
+
+        // 如果还是PENDING状态，将回调保存下来
+        if(this.status === PENDING) {
+          this.onFulfilledCallbacks.push(() => {
+              onFulfilled(this.value);
+          });
+          this.onRejectedCallbacks.push(() => {
+              onRejected(this.reason);
+          });
+        }
+      };
+
+      const promise = new myPromise((resolve, reject) => {
+        setTimeout(() => {
+          debugger;
+          resolve('成功');
+        }, 1000);
+      }).then(
+        (data) => {
+          debugger;
+          console.log('success', data)
+        },
+        (err) => {
+          console.log('faild', err)
+        }
+      );
+      function resolvePromise(promise, x, resolve, reject) {
+        // 如果 promise 和 x 指向同一对象，以 TypeError 为据因拒绝执行 promise
+        // 这是为了防止死循环
+        if (promise === x) {
+          return reject(new TypeError('The promise and the return value are the same'));
+        }
+
+        if (x instanceof myPromise) {
+          // 如果 x 为 Promise ，则使 promise 接受 x 的状态
+          // 也就是继续执行x，如果执行的时候拿到一个y，还要继续解析y
+          // 这个if跟下面判断then然后拿到执行其实重复了，可有可无
+          x.then(function (y) {
+            resolvePromise(promise, y, resolve, reject);
+          }, reject);
+        }
+        // 如果 x 为对象或者函数
+        else if (typeof x === 'object' || typeof x === 'function') {
+          // 这个坑是跑测试的时候发现的，如果x是null，应该直接resolve
+          if (x === null) {
+            return resolve(x);
+          }
+
+          try {
+            // 把 x.then 赋值给 then 
+            var then = x.then;
+          } catch (error) {
+            // 如果取 x.then 的值时抛出错误 e ，则以 e 为据因拒绝 promise
+            return reject(error);
+          }
+
+          // 如果 then 是函数
+          if (typeof then === 'function') {
+            var called = false;
+            // 将 x 作为函数的作用域 this 调用之
+            // 传递两个回调函数作为参数，第一个参数叫做 resolvePromise ，第二个参数叫做 rejectPromise
+            // 名字重名了，我直接用匿名函数了
+            try {
+              then.call(
+                x,
+                // 如果 resolvePromise 以值 y 为参数被调用，则运行 [[Resolve]](promise, y)
+                function (y) {
+                  // 如果 resolvePromise 和 rejectPromise 均被调用，
+                  // 或者被同一参数调用了多次，则优先采用首次调用并忽略剩下的调用
+                  // 实现这条需要前面加一个变量called
+                  if (called) return;
+                  called = true;
+                  resolvePromise(promise, y, resolve, reject);
+                },
+                // 如果 rejectPromise 以据因 r 为参数被调用，则以据因 r 拒绝 promise
+                function (r) {
+                  if (called) return;
+                  called = true;
+                  reject(r);
+                });
+            } catch (error) {
+              // 如果调用 then 方法抛出了异常 e：
+              // 如果 resolvePromise 或 rejectPromise 已经被调用，则忽略之
+              if (called) return;
+
+              // 否则以 e 为据因拒绝 promise
+              reject(error);
+            }
+          } else {
+            // 如果 then 不是函数，以 x 为参数执行 promise
+            resolve(x);
+          }
+        } else {
+          // 如果 x 不为对象或者函数，以 x 为参数执行 promise
+          resolve(x);
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    /* 
+    promise表示异步操作的最终结果。
+    与promise交互的主要方式是通过它的then方法，
+    该方法注册回调以接收promise的返回值或无法实现promise的原因。 */
+
+    new Promise((resolve, reject) => {  
+        let a = 1
+        setTimeout(() => {
+            if(a === 1){
+                resolve('resolve')
+            }else{
+                reject('reject')
+            }
+        }, 1000)
+    }).then((value)=>{
+        console.log(value)
+    },(err)=>{
+        console.log(err)
+    })
+    /* 在promise还没有出现的时候，在进行异步操作的时候，最常用的方式使用回调函数。
+    但是使用回调函数，会造成回调函数层层嵌套。使得代码不易阅读以及不够优雅。
+    但是如果使用promise之后，可以进行链式调用。代码如下: */
+    // 回调写法
+    asyncFunc1(opt, (...args1) => {  
+        asyncFunc2(opt, (...args2) => {
+            asyncFunc3(opt, (...args3) => {
+                asyncFunc4(opt, (...args4) => {
+                    // some operation
+                });
+            });
+        });
+    });
+
+    // promise 写法
+    new Promise((resolve, reject) => {  
+        resolve(value)
+    }).then((value1) => asyncFunc1())
+    .then((value2) => asyncFun2())
+    .then((value3) => asyncFunc3())
+    .then((value4) => asyncFunc4())
+
+    
+  </script>
+</body>
+</html>

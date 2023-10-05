@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+
+  </div>
+  <script type="text/javascript">
+    /* 
+      设置若干个桶，每个桶存储出现频率相同的数。
+      桶的下标表示数出现的频率，即第 i 个桶中存储的数出现的频率为 i。
+      把数都放到桶之后，从后向前遍历桶，
+      最先得到的 k 个数就是出现频率最多的的 k 个数。
+      解法一：map+数组
+      解法二：map + 小顶堆
+     */
+    //给定一个非空的整数数组，返回其中出现频率前 k 高的元素。
+    let topKFrequent = function (nums, k) {
+      let newMap = new Map()
+      nums.forEach((num) => {
+        if (newMap.has(num)) newMap.set(num, newMap.get(num) + 1)
+        else newMap.set(num, 1)
+      })
+      let buckets = Array(nums.length + 1).fill();
+      [...newMap.keys()].forEach(key => {
+        let bucket = newMap.get(key)
+        if (buckets[bucket] == null) {
+          buckets[bucket] = []
+        }
+        buckets[bucket].push(key)
+      })
+      let topK = []
+      for (let i = buckets.length - 1; i >= 0 && topK.length < k; i--) {
+        if (buckets[i] == null) {
+          continue;
+        }
+        if (buckets[i].length <= (k - topK.length)) {
+          topK.push(...buckets[i]);
+        } else {
+          topK.push(...buckets[i].slice(0, k - topK.length));
+        }
+      }
+      return topK;
+    }
+    topKFrequent([1, 2], 2)
+    topKFrequent([1, 1, 1, 2, 2, 3], 2)
+  </script>
+</body>
+
+</html>

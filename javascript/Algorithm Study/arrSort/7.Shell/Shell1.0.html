@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+
+  </div>
+  <script type="text/javascript">
+    /*
+    * 希尔排序 时间复杂度 o（nlog2n）.
+    * 开始时针对无序序列，步长大，交换速度有提升，当数组基本有序的时候，步长少，交换次数少，速度快
+    */
+    //不使用temp,交换数据信息
+
+    //希尔排序，自组采用直接插入排序 针对有序序列在插入时采用交换法
+    function shellSort(arr) {
+      var len = arr.length;
+      gap = Math.floor(len / 2);
+      while (gap !== 0) {
+        for (var i = gap; i < len; i++) {
+          var temp = arr[i];
+          var j;
+          for (j = i - gap; j >= 0 && temp < arr[j]; j -= gap) {
+            arr[j + gap] = arr[j];
+          }
+          arr[j + gap] = temp;
+        }
+        gap = Math.floor(gap / 2);
+      }
+      return arr;
+    }
+    // example
+    var arr = [9,12,7,27,5,24,6,10]
+    let result = shellSort(arr)
+    console.log(result);
+  </script>
+</body>
+
+</html>

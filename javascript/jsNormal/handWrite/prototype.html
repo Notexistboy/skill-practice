@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      var num = 100;
+      var obj = {
+        num:200,
+        inner:{
+          num: 300,
+          print: function(){
+            console.log(this.num)
+          }
+        }
+      }
+      obj.inner.print();
+      var func = obj.inner.print
+      func();
+      (obj.inner.print)();
+      (obj.inner.print = obj.inner.print)();
+    </script>
+  </body>
+</html>

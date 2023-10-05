@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 
+        给你一个二进制字符串 s 。如果字符串中由 1 组成的 最长 连续子字符串 严格长于 由 0 组成的 最长 连续子字符串，返回 true ；否则，返回 false 。
+
+        例如，s = "110100010" 中，由 1 组成的最长连续子字符串的长度是 2 ，由 0 组成的最长连续子字符串的长度是 3 。
+        注意，如果字符串中不存在 0 ，此时认为由 0 组成的最长连续子字符串的长度是 0 。字符串中不存在 1 的情况也适用此规则。
+        
+        */
+        /**
+         * @param {string} s
+         * @return {boolean}
+         */
+        var checkZeroOnes = function (s) {
+            let zeroLength = 1,
+                oneLength = 1,
+                oneTemp = 1,
+                zeroTemp = 1;
+            for (let i = 1; i < s.length; i++) {
+                if (s[i] === s[i - 1] && +s[i] === 1) {
+                    oneTemp = oneTemp + 1;
+                    oneLength = Math.max(oneLength, oneTemp);
+                }
+                if (s[i] === s[i - 1] && +s[i] === 0) {
+                    zeroTemp = zeroTemp + 1;
+                    zeroLength = Math.max(zeroLength, zeroTemp);
+                }
+                if (s[i] !== s[i - 1]) {
+                    oneTemp = 1;
+                    zeroTemp = 1
+                }
+            }
+            return s.length === 1 ?
+                +s[0] : oneLength > zeroLength
+        };
+        checkZeroOnes("1101");
+    </script>
+</body>
+
+</html>

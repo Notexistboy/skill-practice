@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "commonjs",
+    "moduleResolution":"classic",
+    // //"resolveJsonModule":true,
+    // "alwaysStrict": true, // 在代码中注入'use strict'
+    // "importHelpers": true, // 通过tslib引入helper函数，文件必须是模块
+    // "lib": ["DOM", "ES2015", "ScriptHost", "ES2019.Array"],
+    // "declaration": true
+    //"esModuleInterop":true]
+  },
+  "include":["src/*"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /**
+      * @param {number[]} nums
+      * @return {number}
+      */
+      var singleNumber = function(nums) {
+        /* reduce写法 */
+        //return nums.reduce((ans,curr) => ans ^= curr)
+        /* 
+          执行用时 :
+          64 ms , 在所有 JavaScript 提交中击败了 90.59% 的用户
+          内存消耗 :
+          35.3 MB , 在所有 JavaScript 提交中击败了 96.77% 的用户
+        
+         */
+        /* 循环写法 */
+        /* let ans = 0
+        let len = nums.length
+        for(var i= 0; i<len; i++){
+          ans ^= nums[i]
+        }
+        return ans */
+        /* 
+        执行用时 :
+        68 ms, 在所有 JavaScript 提交中击败了 81.64% 的用户
+        内存消耗 :
+        35.6 MB , 在所有 JavaScript 提交中击败了 90.32% 的用户
+         */
+      };
+      singleNumber([4,1,2,1,2])
+    </script>
+  </body>
+</html>

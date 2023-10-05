@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /**
+       * @param {number} x
+       * @return {boolean}
+       */
+      var isPalindrome = function(x) {
+        if(x < 0 || (x % 10 == 0 && x != 0)) {
+            return false;
+        }
+        let revert = 0
+        while(x > revert){
+          revert = revert*10 + x % 10
+          debugger
+          x = parseInt(x/10)
+        }
+        debugger
+        return x === revert || x === parseInt(revert/10)
+      }
+      isPalindrome(1234321)
+      isPalindrome(123321)
+    </script>
+  </body>
+</html>

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /* 常见用途
+      Object.assign方法有很多用处。 */
+      /* （1）为对象添加属性 */
+      class Point {
+        constructor(x, y) {
+          Object.assign(this, {x, y});
+        }
+      }
+      /* 上面方法通过Object.assign方法，将x属性和y属性添加到Point类的对象实例。 */
+
+      /* （2）为对象添加方法 */
+      /* Object.assign(SomeClass.prototype, {
+        someMethod(arg1, arg2) {
+        },
+        anotherMethod() {
+        }
+      }); */
+      // 等同于下面的写法
+      //SomeClass.prototype.someMethod = function (arg1, arg2) {
+      //};
+      //SomeClass.prototype.anotherMethod = function () {
+      //};
+      /* （3）克隆对象 */
+      function clone(origin) {
+        return Object.assign({}, origin);
+      }
+      /* 上面代码将原始对象拷贝到一个空对象，就得到了原始对象的克隆。
+      不过，采用这种方法克隆，只能克隆原始对象自身的值，不能克隆它继承的值。
+      如果想要保持继承链，可以采用下面的代码。 */
+      function clone(origin) {
+        let originProto = Object.getPrototypeOf(origin);
+        return Object.assign(Object.create(originProto), origin);
+      }
+      /* （4）合并多个对象
+      将多个对象合并到某个对象。 */
+      //const merge = (target, ...sources) => Object.assign(target, ...sources);
+      /* 如果希望合并后返回一个新对象，可以改写上面函数，对一个空对象合并。 */
+      //const merge = (...sources) => Object.assign({}, ...sources);
+
+      /* （5）为属性指定默认值 */
+      let testClone2 = [1,2,3]
+      let DEFAULTS = {
+        logLevel: 0,
+        outputFormat: 'html',
+        testClone: [1,2,3],
+        testClone1:{
+          testClone11: [1,2,3],
+        },
+        testClone2: testClone2,
+        url: {
+          host: 'example.com',
+          port: 7070
+        },
+      };
+
+      function processContent(options) {
+        options = Object.assign({}, DEFAULTS, options);
+        /* 对象合并的时候 options中的属性会覆盖之前对象中的属性
+          并不会改变改变之前对象中的属性
+        */
+        return options
+        // ...
+      }
+      const options1 = {a:1}
+      const options2 = {outputFormat:'outputFormat'}
+      const options3 = {a:2}
+      let options11 = processContent(options1)
+      let options21 = processContent(options2)
+      let options31 = processContent(options3)
+      /* 合并并不会改变DEFAULTS */
+      DEFAULTS.testClone1.testClone11 = [3,4,5] //生效 浅拷贝对嵌套引用型数据无法进行拷贝
+      testClone2 = [3,4,5]//没生效 修改的是指针的地址值
+      DEFAULTS.testClone[0] = 3 //生效 直接修改堆空间
+      DEFAULTS.testClone = [3,4,5] //没生效 修改的是指针地址值
+      /* 上面代码中，DEFAULTS对象是默认值，options对象是用户提供的参数。
+      Object.assign方法将DEFAULTS和options合并成一个新对象，如果两者有同名属性，
+      则options的属性值会覆盖DEFAULTS的属性值。 */
+
+      /* 注意，由于存在浅拷贝的问题，DEFAULTS对象和options对象的所有属性的值，
+      最好都是简单类型，不要指向另一个对象。否则，DEFAULTS对象的该属性很可能不起作用。 */
+
+      let options41 = processContent({ url: {port: 8000} })
+      // {
+      //   url: {port: 8000}
+      // }
+      /* 上面代码的原意是将url.port改成 8000，url.host不变。
+      实际结果却是options.url覆盖掉DEFAULTS.url，所以url.host就不存在了。
+      直接更改url的指针
+      */
+
+      /* Object.getOwnPropertyDescriptors() */
+      /* ES5 的Object.getOwnPropertyDescriptor()方法会返回某个对象属性的描述对象（descriptor）。
+      ES2017 引入了Object.getOwnPropertyDescriptors()方法，返回指定对象所有自身属性（非继承属性）的描述对象。 */
+      const objDescriptors = {
+        foo: 123,
+        get bar() { return 'abc' }
+      };
+
+      Object.getOwnPropertyDescriptors(objDescriptors)
+      // { foo:
+      //    { value: 123,
+      //      writable: true,
+      //      enumerable: true,
+      //      configurable: true },
+      //   bar:
+      //    { get: [Function: get bar],
+      //      set: undefined,
+      //      enumerable: true,
+      //      configurable: true } }
+      /* 上面代码中，Object.getOwnPropertyDescriptors()方法返回一个对象，
+      所有原对象的属性名都是该对象的属性名，对应的属性值就是该属性的描述对象。
+      该方法的实现非常容易。
+      */
+      /* 这时，Object.getOwnPropertyDescriptors()方法配合Object.defineProperties()方法，
+      就可以实现正确拷贝。*/
+      /* Object.defineProperty()
+      功能:
+      方法会直接在一个对象上定义一个新属性，或者修改一个对象的现有属性， 
+      并返回这个对象。如果不指定configurable, writable, enumerable ，
+      则这些属性默认值为false，如果不指定value, get, set，则这些属性默认值为undefined
+      语法: Object.defineProperty(obj, prop, descriptor)
+      obj: 需要被操作的目标对象
+      prop: 目标对象需要定义或修改的属性的名称
+      descriptor: 将被定义或修改的属性的描述符
+
+      var obj = new Object();
+      Object.defineProperty(obj, 'name', {
+          configurable: false,
+          writable: true,
+          enumerable: true,
+          value: '张三'
+      })
+      console.log(obj.name)  //张三 */
+
+      /* Object.defineProperties()
+      功能:
+      方法直接在一个对象上定义一个或多个新的属性或修改现有属性，并返回该对象。
+      语法: Object.defineProperties(obj, props)
+      obj: 将要被添加属性或修改属性的对象
+      props: 该对象的一个或多个键值对定义了将要为对象添加或修改的属性的具体配置
+      var obj = new Object();
+      Object.defineProperties(obj, {
+          name: {
+              value: '张三',
+              configurable: false,
+              writable: true,
+              enumerable: true
+          },
+          age: {
+              value: 18,
+              configurable: true
+          }
+      })
+
+      console.log(obj.name, obj.age) // 张三, 18 */
+
+      const sourceCopy = {
+        state:1,
+        testClone1:{
+          testClone11: [1,2,3],
+        },
+        set foo(value) {
+          console.log(value);
+        }
+      };
+      const targetCopy2 = {};
+      let sourceCopyProps = Object.getOwnPropertyDescriptors(sourceCopy)
+      let targetCopy2Props = Object.defineProperties(targetCopy2, Object.getOwnPropertyDescriptors(sourceCopy));
+      sourceCopy.testClone1.testClone11 = [4,5,6]
+      /* {}
+      set foo: ƒ foo(value)
+      __proto__: Object */
+      let targetCopy2Prop = Object.getOwnPropertyDescriptors(targetCopy2)
+      /* get: undefined
+      set: ƒ foo(value)
+      enumerable: true
+      configurable: true
+      __proto__: Object */
+      /* 上面代码中，两个对象合并的逻辑可以写成一个函数。 */
+      const objectShallowCopy = (target,source) => Object.defineProperties(
+        target,
+        Object.getOwnPropertyDescriptors(source)
+      )
+      /* Object.getOwnPropertyDescriptors()方法的另一个用处，
+      是配合Object.create()方法，将对象属性克隆到一个新对象。这属于浅拷贝。 */
+      /* const clone = Object.create(Object.getPrototypeOf(obj),
+      Object.getOwnPropertyDescriptors(obj)); */
+      // 或者
+
+      const shallowClone = (obj) => Object.create(
+        Object.getPrototypeOf(obj),
+        Object.getOwnPropertyDescriptors(obj)
+      );
+      /* 上面代码会克隆对象obj。
+      另外，Object.getOwnPropertyDescriptors()方法可以实现一个对象继承另一个对象。
+      以前，继承另一个对象，常常写成下面这样。 */
+      /* const obj = {
+        __proto__: prot,
+        foo: 123,
+      }; */
+      /* ES6 规定__proto__只有浏览器要部署，其他环境不用部署。
+      如果去除__proto__，上面代码就要改成下面这样。 */
+      /* Object.create()方法创建一个新对象，使用现有的对象来提供新创建的对象的__proto__。 
+      （请打开浏览器控制台以查看运行结果。） */
+      let prot = {a:1}
+      let objprot = Object.create(prot);
+      objprot.foo = 123;
+      prot.a = 2
+      /* foo: 123
+      __proto__:
+      a: 1
+      __proto__: Object
+      */
+
+      // 或者
+      /*let objprot = Object.assign(
+        Object.create(prot),
+        {
+          foo: 123,
+        }
+      ); */
+      /* 有了Object.getOwnPropertyDescriptors()，我们就有了另一种写法。 */
+      let objprot1 = Object.create(
+        prot,
+        Object.getOwnPropertyDescriptors({
+          foo: 123,
+        })
+      );
+      /* Object.getOwnPropertyDescriptors({
+        foo: 123,
+      })
+      foo: value: 123
+      writable: true
+      enumerable: true
+      configurable: true */
+      /* Object.getOwnPropertyDescriptors()也可以用来实现 Mixin（混入）模式。 */
+      /* create会将第二个参数的属性添加到原型上 第二个参数必须是原始包装对象 */
+      const mixin = (obj) => ({
+        with: (...mixins) => {
+            return mixins.reduce((c,mixin) => Object.create(c,Object.getOwnPropertyDescriptors(mixin)
+          ),obj)
+        }
+      })
+      /* Object.getOwnPropertyDescriptors(amixin)
+      a: value: "a"
+      writable: true
+      enumerable: true
+      configurable: true*/
+      let amixin = {a: 'a'};
+      let bmixin = {b: 'b'};
+      let cmixin = {c: 'c'};
+      let dmixin = mixin(cmixin).with(amixin, bmixin);
+      /* 出于完整性的考虑，Object.getOwnPropertyDescriptors()进入标准以后，
+      以后还会新增Reflect.getOwnPropertyDescriptors()方法。 */
+      /* __proto__属性，Object.setPrototypeOf()，Object.getPrototypeOf()
+      JavaScript 语言的对象继承是通过原型链实现的。ES6 提供了更多原型对象的操作方法。 */
+      /* __proto__属性
+      __proto__属性（前后各两个下划线），用来读取或设置当前对象的原型对象（prototype）。
+      目前，所有浏览器（包括 IE11）都部署了这个属性。 */
+      // es5 的写法
+      const someOtherObj = {}
+      const objproto = {
+        method: function() {  }
+      };
+      objproto.__proto__ = someOtherObj;
+
+      // es6 的写法
+      var objcreate = Object.create(someOtherObj);
+      objcreate.method = function() {  };
+      /* 该属性没有写入 ES6 的正文，而是写入了附录，
+      原因是__proto__前后的双下划线，说明它本质上是一个内部属性，
+      而不是一个正式的对外的 API，只是由于浏览器广泛支持，才被加入了 ES6。
+      标准明确规定，只有浏览器必须部署这个属性，其他运行环境不一定需要部署，
+      而且新的代码最好认为这个属性是不存在的。因此，无论从语义的角度，
+      还是从兼容性的角度，都不要使用这个属性，
+      而是使用下面的Object.setPrototypeOf()（写操作）、
+      Object.getPrototypeOf()（读操作）、Object.create()（生成操作）代替。 */
+      /* 实现上，__proto__调用的是Object.prototype.__proto__，具体实现如下。 */
+      /* Object.defineProperty(Object.prototype, '__proto__', {
+          get() {
+            let _thisObj = Object(this);
+            return Object.getPrototypeOf(_thisObj);
+          },
+          set(proto) {
+            if (this === undefined || this === null) {
+              throw new TypeError();
+            }
+            if (!isObject(this)) {
+              return undefined;
+            }
+            if (!isObject(proto)) {
+              return undefined;
+            }
+            let status = Reflect.setPrototypeOf(this, proto);
+            if (!status) {
+              throw new TypeError();
+            }
+          },
+        });
+
+        function isObject(value) {
+          return Object(value) === value;
+        } */
+      /* 如果一个对象本身部署了__proto__属性，该属性的值就是对象的原型。
+      Object.getPrototypeOf({ __proto__: null })
+      // null */
+
+      /* Object.setPrototypeOf() */
+      /* Object.setPrototypeOf方法的作用与__proto__相同，用来设置一个对象的原型对象（prototype），
+      返回参数对象本身。它是 ES6 正式推荐的设置原型对象的方法。 */
+
+      // 格式
+      //Object.setPrototypeOf(object, prototype)
+
+      // 用法
+      //const o = Object.setPrototypeOf({}, null);
+      /* 该方法等同于下面的函数。 */
+
+      /* function setPrototypeOf(obj, proto) {
+        obj.__proto__ = proto;
+        return obj;
+      } */
+      /* 下面是一个例子。 */
+
+      /* let proto = {};
+      let obj = { x: 10 };
+      Object.setPrototypeOf(obj, proto);
+
+      proto.y = 20;
+      proto.z = 40;
+
+      obj.x // 10
+      obj.y // 20
+      obj.z // 40 */
+      /* 上面代码将proto对象设为obj对象的原型，所以从obj对象可以读取proto对象的属性。 */
+      /* 如果第一个参数不是对象，会自动转为对象。但是由于返回的还是第一个参数，所以这个操作不会产生任何效果。
+      Object.setPrototypeOf(1, {}) === 1 // true
+      Object.setPrototypeOf('foo', {}) === 'foo' // true
+      Object.setPrototypeOf(true, {}) === true // true
+      由于undefined和null无法转为对象，所以如果第一个参数是undefined或null，就会报错。 */
+
+      /* Object.setPrototypeOf(undefined, {})
+      // TypeError: Object.setPrototypeOf called on null or undefined
+
+      Object.setPrototypeOf(null, {})
+      // TypeError: Object.setPrototypeOf called on null or undefined */
+      /* Object.getPrototypeOf()
+      该方法与Object.setPrototypeOf方法配套，用于读取一个对象的原型对象。 */
+
+      /* Object.getPrototypeOf(obj);
+      //下面是一个例子。
+
+      function Rectangle() {
+        // ...
+      }
+
+      const rec = new Rectangle();
+
+      Object.getPrototypeOf(rec) === Rectangle.prototype
+      // true
+
+      Object.setPrototypeOf(rec, Object.prototype);
+      Object.getPrototypeOf(rec) === Rectangle.prototype */
+      // false
+      /* 如果参数不是对象，会被自动转为对象。
+      // 等同于 Object.getPrototypeOf(Number(1))
+      Object.getPrototypeOf(1)
+      // Number {[[PrimitiveValue]]: 0}
+
+      // 等同于 Object.getPrototypeOf(String('foo'))
+      Object.getPrototypeOf('foo')
+      // String {length: 0, [[PrimitiveValue]]: ""}
+
+      // 等同于 Object.getPrototypeOf(Boolean(true))
+      Object.getPrototypeOf(true)
+      // Boolean {[[PrimitiveValue]]: false}
+
+      Object.getPrototypeOf(1) === Number.prototype // true
+      Object.getPrototypeOf('foo') === String.prototype // true
+      Object.getPrototypeOf(true) === Boolean.prototype // true */
+      /* 如果参数是undefined或null，它们无法转为对象，所以会报错。
+      Object.getPrototypeOf(null)
+      // TypeError: Cannot convert undefined or null to object
+      Object.getPrototypeOf(undefined)
+      // TypeError: Cannot convert undefined or null to object */
+      /* Object.keys()，Object.values()，Object.entries()
+          见9.method
+      */
+      /* 上面代码中，Object.create方法的第二个参数添加的对象属性（属性p），
+      如果不显式声明，默认是不可遍历的，
+      因为p的属性描述对象的enumerable默认是false，Object.values不会返回这个属性。
+      只要把enumerable改成true，Object.values就会返回属性p的值。 */
+
+      /* const obj = Object.create({}, {p:
+        {
+          value: 42,
+          enumerable: true
+        }
+      });
+      Object.values(obj) // [42]
+      /* Object.values会过滤属性名为 Symbol 值的属性。 */
+
+      /* Object.values({ [Symbol()]: 123, foo: 'abc' });
+      // ['abc'] */
+      /* 如果Object.values方法的参数是一个字符串，会返回各个字符组成的一个数组。
+      Object.values('foo')
+      // ['f', 'o', 'o']
+      上面代码中，字符串会先转成一个类似数组的对象。字符串的每个字符，就是该对象的一个属性。
+      因此，Object.values返回每个属性的键值，就是各个字符组成的一个数组。
+      如果参数不是对象，Object.values会先将其转为对象。
+      由于数值和布尔值的包装对象，都不会为实例添加非继承的属性。
+      所以，Object.values会返回空数组。
+      Object.values(42) // []
+      Object.values(true) // [] */
+      /* Object.entries()
+      Object.entries()方法返回一个数组，
+      成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键值对数组。 */
+      Object.entries({ foo: 'bar', baz: 42 })
+      // [ ["foo", "bar"], ["baz", 42] ]
+      /* 除了返回值不一样，该方法的行为与Object.values基本一致。
+      如果原对象的属性名是一个 Symbol 值，该属性会被忽略。 */
+
+      Object.entries({ [Symbol()]: 123, foo: 'abc' });
+      // [ [ 'foo', 'abc' ] ]
+      /* 上面代码中，原对象有两个属性，Object.entries只输出属性名非 Symbol 值的属性。
+      将来可能会有Reflect.ownEntries()方法，返回对象自身的所有属性。
+      Object.entries的基本用途是遍历对象的属性。 */
+
+      for (let [k, v] of Object.entries({ one: 1, two: 2 })) {
+        console.log(
+          `${JSON.stringify(k)}: ${JSON.stringify(v)}`
+        );
+      }
+      // "one": 1
+      // "two": 2
+      /* Object.entries方法的另一个用处是，将对象转为真正的Map结构。 */
+      /* 会返回 ['foo', 'bar'],[ 'baz', 42] */
+      const objEntries = { foo: 'bar', baz: 42 };
+      const newmap = new Map(Object.entries({ foo: 'bar', baz: 42 }));
+      const newset = new Set(Object.entries({ foo: 'bar', baz: 42 }))
+      /* Set(2) {Array(2), Array(2)}
+      [[Entries]]
+      0: Array(2)
+      1: Array(2)
+      value: (2) ["baz", 42]
+      size: 2 */
+      // Map { foo: "bar", baz: 42 }
+      /* 自己实现Object.entries方法，非常简单。 */
+
+      // Generator函数的版本
+      function* generentries(obj) {
+        
+        for (let key of Object.keys(obj)) {
+          yield [key, obj[key]];
+          
+        }
+      }
+      const objEntries1 = generentries(objEntries)
+      objEntries1.next().value
+      // 非Generator函数的版本
+      function entries(obj) {
+        let arr = [];
+        for (let key of Object.keys(obj)) {
+          arr.push([key, obj[key]]);
+        }
+        return arr;
+      }
+      const objEntries2 = entries(objEntries)
+      /* Object.fromEntries()
+      Object.fromEntries()方法是Object.entries()的逆操作，
+      用于将一个键值对数组转为对象。 */
+      Object.fromEntries([
+        ['foo', 'bar'],
+        ['baz', 42]
+      ])
+      // { foo: "bar", baz: 42 }
+      /* 该方法的主要目的，是将键值对的数据结构还原为对象，
+      因此特别适合将 Map 结构转为对象。 */
+      // 例一
+      const entriesMap = new Map([
+        ['foo', 'bar'],
+        ['baz', 42]
+      ])
+      const entriesSet = new Set([
+        'foo', 'bar',
+        'baz', 42
+      ])
+      Object.fromEntries(entriesMap)
+      // { foo: "bar", baz: 42 }
+      /* set结构不能还原成类数组 */
+      // 例二
+      const mapset = new Map().set('foo', true).set('bar', false);
+      Object.fromEntries(mapset)
+      // { foo: true, bar: false }
+      /* 该方法的一个用处是配合URLSearchParams对象，将查询字符串转为对象。 */
+      Object.fromEntries(new URLSearchParams('foo=bar&baz=qux'))
+      // { foo: "bar", baz: "qux" }
+    </script>
+  </body>
+</html>

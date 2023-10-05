@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * @param {ListNode} l1
+         * @param {ListNode} l2
+         * @return {ListNode}
+         */
+        var addTwoNumbers = function (l1, l2) {
+            const l1Stack = [];
+            const l2Stack = [];
+            while (l1) {
+                l1Stack.push(l1.val);
+                l1 = l1.next;
+            }
+            while (l2) {
+                l2Stack.push(l2.val);
+                l2 = l2.next;
+            }
+            let ansList = null;
+            let remainder = 0;
+            while (l1Stack.length || l2Stack.length || remainder) {
+                const node1 = l1Stack.length === 0 ? 0 : l1Stack.pop();
+                const node2 = l2Stack.length === 0 ? 0 : l2Stack.pop();
+                let val = node1 + node2 + remainder;
+                remainder = Math.floor(val / 10);
+                val %= 10;
+                let curNode = new ListNode(val);
+                curNode.next = ansList;
+                ansList = curNode;
+            }
+            return ansList;
+        };
+    </script>
+</body>
+
+</html>

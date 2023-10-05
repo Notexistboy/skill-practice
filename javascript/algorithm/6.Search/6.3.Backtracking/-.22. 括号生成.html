@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        /* 
+      数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
+    */
+        /* 
+
+          示例 1：
+          输入：n = 3
+          输出：["((()))","(()())","(())()","()(())","()()()"]
+
+          示例 2：
+          输入：n = 1
+          输出：["()"]
+
+        */
+        /**
+         * @param {number} n
+         * @return {string[]}
+         */
+        var generateParenthesis = function (nums) {
+            const track = [];
+            backtrack(track, '', 0, 0, nums);
+            return track;
+        };
+        /* 
+          如果左括号数量不大于 nn，我们可以放一个左括号。如果右括号数量小于左括号的数量，我们可以放一个右括号。
+        */
+        var backtrack = function (track, cur, left, right, nums) {
+            // 触发结束条件
+            if (cur.length === nums * 2) {
+                track.push(cur);
+                return;
+            }
+            if (left < nums) {
+                backtrack(track, cur + '(', left + 1, right, nums);
+            }
+            if (right < left) {
+                backtrack(track, cur + ')', left, right + 1, nums);
+            }
+        };
+
+        generateParenthesis(3);
+    </script>
+</body>
+
+</html>

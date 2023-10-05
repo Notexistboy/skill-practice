@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 
+            给你一个字符串 s 和一个字符串数组 words ，请你判断 s 是否为 words 的 前缀字符串 。
+            字符串 s 要成为 words 的 前缀字符串 ，需要满足：s 可以由 words 中的前 k（k 为 正数 ）个字符串按顺序相连得到，且 k 不超过 words.length 。
+            如果 s 是 words 的 前缀字符串 ，返回 true ；否则，返回 false 。
+        */
+        /**
+         * @param {string} s
+         * @param {string[]} words
+         * @return {boolean}
+         */
+        var isPrefixString = function (s, words) {
+            let str = '';
+            for (let i = 0; i < words.length; i++) {
+                str += words[i];
+                if (s.length === str.length) {
+                    if (s === str) {
+                        return true
+                    } else {
+                        return false
+                    }
+                }
+            }
+        };
+        var isPrefixString = function (s, words) {
+            let str = '';
+            for (let i = 0; i < words.length; i++) {
+                str += words[i];
+                if (s.length === str.length) {
+                    break;
+                }
+            }
+            return s === str;
+        };
+        isPrefixString("iloveleetcode", ["i", "love", "leetcode", "apples"]);
+    </script>
+</body>
+
+</html>

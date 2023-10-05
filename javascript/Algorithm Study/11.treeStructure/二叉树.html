@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    /* 二叉树：binary tree
+      最开始的节点时根节点(root),在每个节点都会分出两个支，最后一个节点，称为叶子节点(leaf)
+      如何获得节点的值：node(node就是根节点root) node.left node.right 不断的.left .right 最后通过value拿到
+      
+      二叉树的概念：
+      Perfect Binary Tree 完美二叉树
+      一个深度为k(>=-1)且有2^(k+1) - 1个结点的二叉树称为完美二叉树。 (注： 国内的数据结构教材大多翻译为"满二叉树")
+
+      full binary tree  完满二叉树 
+      除了叶子节点 每一个节点都有左右子叶 每个叶子节点都在底层(根据根节点左右对称的结构)
+      
+      complate binary tree   完全二叉树 
+      若二叉树的高度为h 那么0到h-1层 各层的节点数都达到最大数 且h层的叶子节点都在左半侧
+
+      二叉搜索树：binary search tree （BST）
+      每一个节点的左半侧的值都是小于这个节点的 但是右半侧的值都是大于这个节点的 
+      所以一个节点左侧的数全部都是小于这个节点的 右侧的数全部都是大于这个节点的 
+      （AVL树，红黑树）
+    */
+    //创建树元素节点
+    class TreeNode {
+      constructor(data){
+        this.root = this;
+        this.data = data;
+        this.left = null;
+        this.right = null        
+      }
+    }
+    class BinarySearchTree {
+      constructor(node) {
+        this.root = node;
+      }
+      //插入节点
+      insert(element,node = this.root){
+        debugger
+        let newNode = new TreeNode(element)
+        if(!this.root){
+          this.root = newNode
+        }else {
+          insertNode(newNode,this.root)
+        }
+        //封装一个方法进行递归
+        let insertNode = (newNode,node) =>{
+          //如果没有根节点 传入的元素节点就是根节点
+          //如果有根节点
+          if(newNode.key < node.key){
+            if (node.left === null) {
+              debugger
+              node.left = newNode;
+            } else {
+              debugger
+              return insertNode(newNode, node.left);
+            }
+          }else{
+            if (node.right === null) {
+              debugger
+              node.right = newNode;
+            } else {
+              debugger
+              return insertNode(newNode, node.right);
+            }
+          }
+        }
+      }
+      //
+    }
+    let binarySearchTree = new BinarySearchTree()
+    binarySearchTree.insert(20)
+    binarySearchTree.insert(16)
+    binarySearchTree.insert(24)
+  </script>
+</body>
+</html>

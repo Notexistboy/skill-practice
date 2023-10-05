@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* 三列布局 */
+    .parent {
+      display: flex;
+      height: 200px
+    }
+
+    .left {
+      order: -1;
+      width: 100px;
+      background: gray;
+    }
+
+    .container {
+      order: 1;
+      flex: 1;
+      background: purple;
+    }
+
+    .right {
+      order: 2;
+      width: 100px;
+      background: palevioletred;
+    }
+
+    /* 圣杯 */
+    .container-grail {
+      height: 200px;
+      padding: 0 200px;
+    }
+
+    .container-grail .middle {
+      width: 100%;
+      height: 200px;
+      background-color: deeppink;
+      float: left;
+      min-height: 200px;
+    }
+
+    .container-grail .left {
+      width: 200px;
+      height: 200px;
+      background: blue;
+      float: left;
+      margin-left: -100%;
+      position: relative;
+      left: -200px;
+      min-height: 200px;
+    }
+
+    .container-grail .right {
+      width: 200px;
+      height: 200px;
+      background: green;
+      float: left;
+      margin-left: -200px;
+      position: relative;
+      right: -200px;
+      min-height: 200px;
+    }
+
+    .footer {
+      clear: both;
+    }
+
+    /* 定位 */
+    .container-fly {
+      height: 200px;
+    }
+
+    .container-fly .main,
+    .container-fly .left,
+    .container-fly .right {
+      float: left;
+      min-height: 200px;
+    }
+
+    .container-fly .left {
+      margin-left: -100%;
+      width: 200px;
+      background: red;
+    }
+
+    .container-fly .right {
+      margin-left: -200px;
+      width: 200px;
+      background: blue;
+    }
+
+    .container-fly .main {
+      width: 100%;
+    }
+
+    .container-fly .main-inner {
+      margin: 0 200px 0 200px;
+      min-height: 200px;
+      background: green;
+
+    }
+
+    .footer {
+      clear: both;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <div class="parent">
+      <div class="left"></div>
+      <div class="container">
+        aaa
+      </div>
+      <div class="right"></div>
+    </div>
+  </div>
+  <script type="text/javascript">
+
+  </script>
+</body>
+
+</html>

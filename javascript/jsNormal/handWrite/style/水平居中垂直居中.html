@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* !水平居中 */
+        .parent{
+            text-align:center; /* 1.父元素为块元素子元素是行内元素 */
+            margin:0 auto; /* 2.若是块级元素, 该元素设置 margin:0 auto即可 */
+            width:fit-content; /* 3.若子元素包含 float:left 属性, 则可让父元素宽度设置为fit-content,并且配合 margin:0 auto */
+
+        }
+        /* 4.使用flex 2012年版本布局, 可以轻松的实现水平居中 */
+        .son{
+            display: flex;
+            justify-content: center;
+        }
+        /* 5.使用flex 2009年版本, 针对父元素样式 */
+        .parent {
+            display: box;
+            box-orient: horizontal;
+            box-pack: center;
+        }
+        /* 6.使用CSS3中新增的transform属性 */
+        .parent{
+            position:relative;
+        }
+        .son{
+            position:absolute;
+            left:50%;
+            transform:translate(-50%,0);
+        }
+        /* 7.使用绝对定位方式, 以及负值的margin-left */
+        .parent{
+            position:relative;
+        }
+        .son{
+            position:absolute;
+            left:50%;
+            width:固定;
+            margin-left:-0.5宽度;
+        }
+        /* 8.使用绝对定位方式, 以及left:0;right:0;margin:0 auto; */
+        .parent{
+            position:relative;
+        }
+        .son{
+            position:absolute;
+            width:固定;
+            left:0;
+            right:0;
+            margin:0 auto;
+        }
+        
+        /* !垂直居中 */
+        /* 1.若元素是单行文本, 则可设置 line-height 等于父元素高度 */
+        .son{
+            line-height:父元素高度;
+        }
+        /* 2.若元素是行内块级元素, 基本思想是使用display: inline-block, vertical-align: middle和一个伪元素让内容块处于容器中央. */
+        .parent::after, .son{
+            display:inline-block;
+            vertical-align:middle;
+        }
+        .parent::after{
+            content:'';
+            height:100%;
+        }
+        /* 3.若元素高度不定,可用 vertical-align 属性, 而vertical-align只有在父层为 td 或者 th 时, 才会生效, 对于其他块级元素, 例如 div、p 等, 默认情况是不支持的. 为了使用vertical-align, 我们需要设置父元素display:table, */
+        .son{
+            display:table-cell;
+            vertical-align:middle;
+        }
+        .parent{
+            display: table;
+        }
+        /* 4.使用flex 2012年版本布局, 父元素做如下设置即可保证子元素垂直居中 */
+        .parent {
+            display: flex;
+            align-items: center;
+        }
+        /* 5.使用flex 2009年版本布局, 父元素做如下设置即可保证子元素垂直居中 */
+        .parent {
+            display: box;
+            box-orient: vertical;
+            box-pack: center;
+        }
+        /* 6.使用CSS3中新增的transform属性 */
+        .parent{
+            position:relative;
+        }
+        .son{
+            position:absolute;
+            top:50%;
+            transform:translate(0,-50%);
+        }
+        /* 7.负外边距 */
+        .parent{
+            position:relative;
+        }
+        .son{
+            position:absolute;
+            top:50%;
+            height:固定;
+            margin-top:-0.5高度;
+        }
+        /* 8.设置父元素相对定位(position:relative), 子元素如下css样式: */
+        .parent{
+            position:relative;
+        }
+        .son{
+            position:absolute;
+            height:固定;
+            top:0;
+            bottom:0;
+            margin:auto 0;
+        }
+
+        /* 水平垂直居中 */
+        /* 1.使用flex 2012年版本布局, 父元素做如下设置即可保证子元素垂直居中 */
+        .parent {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* 2.使用CSS3中新增的transform属性 */
+        .parent{
+            position:relative;
+        }
+        .son{
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform:translate(-50%,-50%);
+        }
+        /* 3.负外边距 */
+        .parent{
+            position:relative;
+        }
+        .son{
+            position:absolute;
+            top:50%;
+            height:固定;
+            margin-top:-0.5高度;
+            left:50%;
+            width:固定;
+            margin-left:-0.5宽度;
+        }
+        /* 4.设置父元素相对定位(position:relative), 子元素如下css样式: */
+        .parent{
+            position:relative;
+        }
+        .son{
+            position:absolute;
+            height:固定;
+            top:0;
+            bottom:0;
+            width:固定;
+            left:0;
+            right:0;
+            margin:auto;
+        }
+    </style>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>generator</title>
+</head>
+<body>
+  <script>
+    /* generator */
+    /* js的函数是从上到下依次执行直到结束 
+    generator function 生成器函数 可以随时开始随时暂停 
+    可以在以后的调用中更改传入参数 */
+
+    function* listColors() {
+      /* yield 相当于 return 但是yield是本次执行函数的返回值 */
+      /* yield 'red'
+      yield 'green'
+      yield 'blue' */
+      let i = 0
+      yield i;
+      i++
+      yield i;
+      i++
+      yield i;
+
+    }
+
+    const colors = listColors() 
+    /* 调用生成器函数 返回的是迭代器
+      listColors {<suspended>}
+      __proto__: Generator
+      [[GeneratorLocation]]: generator.html:15
+      [[GeneratorStatus]]: "suspended"
+      [[GeneratorFunction]]: ƒ* listColors()
+      [[GeneratorReceiver]]: Window
+      [[Scopes]]: Scopes[3]
+    */
+   //colors.next()//本质是可迭代对象
+   //{value: "red", done: false}...
+
+   /* 调用结束时
+   listColors {<closed>}
+    __proto__: Generator
+    [[GeneratorLocation]]: generator.html:15
+    [[GeneratorStatus]]: "closed"
+    [[GeneratorFunction]]: ƒ* listColors()
+    [[GeneratorReceiver]]: Window
+   */
+    const repos = [
+      {name: 'grit', owner: 'mojombo', description: '...', id: 1},
+      {name: 'jsawesome', owner: 'vanpelt', description: '...', id: 2},
+      {name: 'merb-core', owner: 'wycats', description: '...', id: 3},
+    ]
+    function* loop(arr){
+      for(const repo of arr){
+        yield repo
+      }
+    }
+    const repoGen = loop(repos)
+    /* 
+    __proto__: Generator
+    [[GeneratorLocation]]: generator.html:55
+    [[GeneratorStatus]]: "suspended"
+    [[GeneratorFunction]]: ƒ* loop(arr)
+    [[GeneratorReceiver]]: Window
+    [[Scopes]]: Scopes[3]
+    */
+    /* repoGen.next()
+    {value: {…}, done: false}
+    value: {name: "grit", owner: "mojombo", description: "...", id: 1}
+    done: false
+    __proto__: Object
+    */
+
+  </script>
+</body>
+</html>

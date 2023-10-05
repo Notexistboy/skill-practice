@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+
+  </div>
+  <script type="text/javascript">
+    /**
+      给定一个字符串，请你找出其中不含有重复字符的最长子串的长度。
+    */
+    /**
+ * Longest Substring Without Repeating Characters
+ * 无重复字符的最长子串
+*/
+
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    var lengthOfLongestSubstring = function (s) {
+      var hash = {};
+      var start = 0;
+      var ans = 0;
+      debugger
+      for (var i = 0, len = s.length; i < len; i++) {
+        var item = s[i];
+        debugger
+        if (!hash[item])//判断对象中是否出现此值
+          hash[item] = true;
+        else {//判断对象中是否多次出现此值
+          // item 已经在 substring 中存在了
+          for (; ;) {
+            debugger
+            if (s[start] === item) {
+              start++;
+              break;
+            }
+            debugger
+            hash[s[start]] = false;
+            start++;
+          }
+        }
+        ans = Math.max(ans, i - start + 1);
+      }
+      return ans;
+    };
+    
+    lengthOfLongestSubstring('leetcode')
+  </script>
+</body>
+
+</html>

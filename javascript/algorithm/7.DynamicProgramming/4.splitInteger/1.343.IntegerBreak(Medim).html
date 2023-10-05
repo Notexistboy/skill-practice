@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /* 
+        对于正整数 nn，当 n≥2 时，可以拆分成至少两个正整数的和。令 x 是拆分出的第一个正整数，则剩下的部分是 n−x，n−x可以不继续拆分，
+        或者继续拆分成至少两个正整数的和。由于每个正整数对应的最大乘积取决于比它小的正整数对应的最大乘积，因此可以使用动态规划求解。
+
+        创建数组 dp，其中 dp[i] 表示将正整数 i 拆分成至少两个正整数的和之后，这些正整数的最大乘积。特别地，0 不是正整数，1 是最小的正整数，0 和 1
+        都不能拆分，因此 dp[0]=dp[1]=0。
+
+        当 i≥2 时，假设对正整数 ii 拆分出的第一个正整数是 jj（1 \le j < i1≤j<i），则有以下两种方案： 
+            将 i 拆分成 j 和 i−j 的和，且 i−j 不再拆分成多个正整数，此时的乘积是 j×(i−j)； 
+            将 i 拆分成 j 和 i−j 的和，且 i−j 继续拆分成多个正整数，此时的乘积是 j×dp[i−j]。
+          
+
+      */
+      /**
+      * @param {number} n
+      * @return {number}
+      */
+      var integerBreak = function(n) {
+        let dp = new Array(n+1).fill(0);
+        for(let i = 2; i<=n; i++) {
+          let currMax = 0;
+          for(let j = 1; j<i; j++) {
+            currMax = Math.max(currMax, Math.max(j*(i-j), j*dp[i-j]));
+          }
+          dp[i] = currMax;
+        }
+        return dp[n];
+      };
+      integerBreak(10);
+    </script>
+  </body>
+</html>

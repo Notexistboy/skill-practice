@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /**
+      * @param {string} s
+      * @return {number}
+      */
+      var lengthOfLastWord = function(s) {
+        debugger
+
+        let sList = s.split(' ')
+        sLast = sList[sList.length - 1]
+        if(sLast){
+          return sLast.length
+        }else{
+          return 0
+        }
+
+      };
+      lengthOfLastWord("Hello World ")
+    </script>
+  </body>
+</html>

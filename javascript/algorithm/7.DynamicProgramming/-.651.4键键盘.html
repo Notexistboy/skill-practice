@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /* 
+        设你有一个特殊的键盘，键盘上有如下键:
+
+        键1: (A): 在屏幕上打印一个’A’。
+        键2: (Ctrl-A): 选择整个屏幕。
+        键3: (Ctrl-C): 复制选择到缓冲区。
+        键4: (Ctrl-V): 在屏幕上已有的内容后面追加打印缓冲区的内容。
+        现在，你只能按键盘上N次(使用以上四个键)，找出你可以在屏幕上打印的“A”的最大数量
+
+        样例
+        1
+        输入: 3
+        输出: 3
+        解释: A, A, A
+
+        2
+        输入: 7
+        输出: 9
+        解释: A, A, A, Ctrl A, Ctrl C, Ctrl V, Ctrl V
+
+        如何在 N 次敲击按钮后得到最多的 A？
+        对于每次按键，可以穷举四种可能，
+        很明显就是一个动态规划问题。
+      */
+      /* 
+        对于动态规划问题，首先要明白有哪些「状态」，有哪些「选择」。
+
+        具体到这个问题，对于每次敲击按键，有哪些「选择」是很明显的：4 种，
+        就是题目中提到的四个按键，分别是A、C-A、C-C、C-V（Ctrl简写为C）。
+        接下来，思考一下对于这个问题有哪些「状态」？或者换句话说，
+        我们需要知道什么信息，才能将原问题分解为规模更小的子问题？
+        第一个状态是剩余的按键次数，用n表示；
+        第二个状态是当前屏幕上字符 A 的数量，
+        用a_num表示；第三个状态是剪切板中字符 A 的数量，用copy表示。
+        如此定义「状态」，就可以知道 base case：
+        当剩余次数n为 0 时，a_num就是我们想要的答案。
+        结合刚才说的 4 种「选择」，
+        我们可以把这几种选择通过状态转移表示出来：
+
+        dp(n - 1, a_num + 1, copy),    # A
+        解释：按下 A 键，屏幕上加一个字符
+        同时消耗 1 个操作数
+
+        dp(n - 1, a_num + copy, copy), # C-V
+        解释：按下 C-V 粘贴，剪切板中的字符加入屏幕
+        同时消耗 1 个操作数
+
+        dp(n - 2, a_num, a_num)        # C-A C-C
+        解释：全选和复制必然是联合使用的，
+        剪切板中 A 的数量变为屏幕上 A 的数量
+        同时消耗 2 个操作数
+
+        这样可以看到问题的规模n在不断减小，
+        肯定可以到达n = 0的 base case，所以这个思路是正确的：
+       */
+
+      let maxA = function(N) {
+        let dp = function(n, a_num, copy){
+          if( n<=0 ) return a_num
+          return Math.max(
+            /* 单纯输入一个a */
+            dp(n-1, a_num+1, copy),
+            /* 将剪切板中内容粘贴出来 */
+            dp(n-1, a_num+copy, copy),
+            /* c-a c-v 更新剪切板内容 */
+            dp(n-2, a_num, a_num),
+          )
+
+        }
+        return dp(N, 0 ,0)
+      }
+    </script>
+  </body>
+</html>

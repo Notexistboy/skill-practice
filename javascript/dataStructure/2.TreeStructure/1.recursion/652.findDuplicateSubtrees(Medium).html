@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+    /* 
+        1、以我为根的这棵二叉树（子树）什么样？
+        2、以其他节点为根的子树都什么样？
+        要知道以自己为根的子树长啥样，是不是得先知道我的左右子树长啥样，再加上自己，就构成了整棵子树的样子
+        所以采用后序遍历
+    */
+    function TreeNode(val, left, right) {
+        this.val = (val===undefined ? 0 : val)
+        this.left = (left===undefined ? null : left)
+        this.right = (right===undefined ? null : right)
+    }
+    /**
+     * @param {TreeNode} root
+     * @return {TreeNode[]}
+     */
+    // 记录重复的子树根节点
+    const res = [];
+    // 记录所有子树以及出现的次数
+    const memo = new Map();
+
+    var findDuplicateSubtrees = function(root) {
+        traverse(root);
+        return res;
+    };
+    /* 辅助函数 */
+    var traverse = function (root){
+        if(root === null) return '#';
+        let left = traverse(root.left);
+        let right = traverse(root.right);
+        /* 后序遍历 */
+        const subTree = left +',' + right +',' + root.val;
+
+        let times = memo.get(subTree) || 0;
+        // 多次重复也只会被加入结果集一次
+        if(times === 1){
+            res.push(root);
+        }
+        // 给子树对应的出现次数加一
+        memo.set(subTree,times+1)
+        return subTree;
+    };
+
+    </script>
+  </body>
+</html>

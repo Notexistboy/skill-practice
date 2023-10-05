@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+ <style>
+   .heading span{
+     font-size: 32px;
+     cursor: pointer;
+     display: inline-block;
+     transition: transform 0.25s;
+   }
+   .heading span:hover{
+
+     transform: translateY(-20px) rotate(10deg) scale(2);
+   }
+ </style>
+</head>
+<body>
+  <h2 class="heading">laravist</h2>
+</body>
+<script>
+  const heading = document.querySelector('.heading')
+
+  heading.innerHTML = wrapWithSpan(heading.textContent)
+
+  function wrapWithSpan(word) {
+    //map遍历之后返回的是数组 需要通过 .join('')转成string
+    return [...word].map(letter => `<span>${letter}</span>`).join('')
+  }
+
+</script>
+</html>

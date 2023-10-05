@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    class Node {　　　　　　 //新元素构造
+      constructor(element){
+        this.val = element;
+        this.next = null;
+      }
+    }
+    class ListNode {
+      constructor() {
+        this.head = null;
+        this.length = 0;
+      }
+      //添加节点
+      append (element) {
+        let newNode = new Node(element) //构造新的元素节点
+        let current
+        if(this.head === null){ //头节点为空时  当前结点作为头节点
+          this.head = newNode;
+        }else{ //头节点不为空
+          current = this.head;
+          while(current.next){
+            current = current.next //循环链表找到链表尾部next为空的节点
+          }
+          current.next = newNode //将链表尾部next为空的节点的next指针指向 当前节点
+        }
+        this.length++
+        return newNode
+      }
+      //显示链表
+      display() {
+        var currNode = this.head;
+        while (currNode != undefined && currNode.element != null){
+          console.log( `${currNode.element}->${currNode.next ? currNode.next.element : null}` );
+          currNode = currNode.next;
+        }
+      }
+      //
+    }
+    //
+    let l1 = new ListNode()
+    l1.append(2)
+    l1.append(4)
+    l1.append(3)
+    let l2 = new ListNode()
+    l2.append(5)
+    l2.append(6)
+    l2.append(4)
+
+    function ListNode(val) {
+      this.val = val;
+      this.next = null;
+    }
+    
+    var addTwoNumbers = function(l1, l2) {
+      let node = new ListNode('head')
+      let temp = node , sum , n = 0/* node: 链表容器, sum: 同级别求和, n: 同级别求和进位, */
+      while(l1||l2){
+        let n1 = l1 ? l1.val:0
+        let n2 = l2 ? l2.val:0
+        sum = n1+n2+n
+        n = parseInt( sum/10 )
+        /* 通过构造函数实现对val的赋值 */
+        temp.next = new ListNode( sum-n*10 )
+        temp = temp.next
+        if(l1) l1 = l1.next
+        if(l2) l2 = l2.next
+        debugger
+      }
+      //计算到最后如果n>0需要重新添加链表节点
+      if( n > 0 ) temp.next = new ListNode(n)
+      return node.next
+    };
+    var addTwoNumbers = function(l1, l2) {
+      let node = new ListNode('head');
+      let temp = node , sum , n = 0;
+      while(l1 || l2){
+          sum = (l1? l1.val : 0) +(l2? l2.val : 0) + n
+          n = sum >= 10 ? 1 : 0;
+          temp.next = new ListNode( sum % 10 )
+          temp = temp.next
+          l1 && (l1 = l1.next)
+          l2 && (l2 = l2.next)
+      }
+      n && (temp.next = new ListNode(n))
+      return node.next
+    };
+    addTwoNumbers(l1,l2)
+  </script>
+</body>
+</html>

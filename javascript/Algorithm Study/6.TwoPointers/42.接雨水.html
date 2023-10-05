@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    /* 题目42 接雨水：给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，
+    计算按此排列的柱子，下雨之后能接多少雨水。
+    */
+    /* 结题思路：计算数组中相邻的三个数 中间和两侧的差是多少并求和
+    很明显，雨水接的大小取决于木桶效应，
+    也就是当前元素左右两边最大高度中较矮的那个高度的大小 */
+    /**
+     * @param {number[]} height
+     * @return {number}
+     */
+     var trap = function(height) {
+        let sum = 0
+        let currMax = 0
+        let leftHeight = []
+        let rightHeight = []
+        //求左侧最大高度的变化过程
+        for(let i=0; i<= height.length-1; i++){
+            if(height[i] > currMax){
+                currMax = height[i]
+            }
+            leftHeight[i] = Math.max(height[i],currMax)
+        }
+        //求左侧最大高度的变化过程
+        currMax = 0
+        for(let i=height.length-1; i>= 0; i--){
+            if(rightHeight[i] > currMax){
+                currMax = height[i]
+            }
+            rightHeight[i] = Math.max(height[i],currMax)
+        }
+        for(let i=0; i<= height.length-1; i++){
+           sum += Math.min(leftHeight[i],rightHeight[i]) - height[i]
+        }
+        let currMax = 0
+        let leftHeight = []
+        let rightHeight = []
+        return sum
+    };
+    /* var trap = function(height) {
+      let indexMax = 0
+      //找到最大值的索引
+      for(let i=0; i<= height.length-1; i++){
+        if(height[i] >= height[indexMax]){
+          indexMax = i
+        }
+      }
+      let leftArr = height.slice(0,indexMax+1)
+      let rightArr = height.slice(indexMax).reverse()
+      debugger
+      return max(leftArr)+max(rightArr)
+    };
+    function max(arr){
+      let currMax = 0
+      let total = 0
+      let newTotal = 0
+      let newArr = []
+      for(let i=0; i<arr.length; i++){
+        if(arr[i] > currMax){
+            currMax = arr[i]
+        }
+        newArr[i] = Math.max(arr[i],currMax)
+        total += arr[i];
+        newTotal += newArr[i];
+      }
+      debugger
+      let area = newTotal - total
+      currMax = null
+      total = null
+      newTotal = null
+      newArr = null
+      return area
+    } */
+    trap([0,1,0,2,1,0,1,3,2,1,2,1])
+  </script>
+</body>
+</html>

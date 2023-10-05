@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 封装类
+    class Node{ //新元素构造
+      constructor(element){
+        this.element = element;
+        this.next = null;
+        this.previous = null;        
+      }
+    }
+    //双向链表
+    class DuoListNode {
+      constructor() {
+        this.head = null;
+        this.length = 0;
+      }
+      //添加节点
+      append (element) {
+        let newNode = new Node(element) //构造新的元素节点
+        let current
+        if(this.head === null){ //头节点为空时  当前结点作为头节点
+          this.head = newNode;
+        }else{ //头节点不为空
+          current = this.head;
+          while(current.next){
+            current = current.next //循环链表找到链表尾部next为空的节点
+          }
+          current.next = newNode //将链表尾部next为空的节点的next指针指向当前节点
+          newNode.previous = current//将当前节点的previous指针指向链表尾部节点
+        }
+        this.length++
+        return newNode
+      }
+      //删除节点
+      remove (element) {
+        //找到当前节点
+        let prevNode = this.find(element)
+        if( prevNode.next != null ){
+          prevNode.previous.next = prevNode.next;
+          prevNode.next.previous = prevNode.previous;
+          this.length --
+        }else{
+          prevNode.previous.next = null;
+          this.length --
+        }
+        //prevNode.next.next = null
+      }
+      //查找节点
+      find (element){
+        let current = this.head
+        debugger
+        while(current.element != element){
+          current = current.next
+        }
+        debugger
+        return current
+      }
+      //查找前一节点
+      findPrev (element) {
+        let current = this.head
+        while( current.next != null && current.next.element != element){
+          current = current.next
+        }
+        return current
+      }
+      //查找后一个节点
+      findNext (element) {
+        let current = this.head
+        while( current.next != null && current.next.element != element){
+          current = current.next
+        }
+        return current
+      }
+      //查找节点索引值
+      findIndexOf (element) {
+        let nodeIndex = 0
+        let current = this.head
+        debugger
+        while (current) {
+          if (element === current.element) {　　　　　　　　　　　　//从头节点开始遍历
+              return nodeIndex;
+          }
+          nodeIndex++;
+          current = current.next;
+        }
+        return -1
+      }
+      //插入节点
+      insert (newElement, element){
+        let newNode = new Node(newElement)
+        let currentElement = this.find(element)
+        newNode.next = currentElement.next
+        newNode.previous = currentElement
+        newNode.next.previous = newNode
+        currentElement.next = newNode
+        this.length++
+      }
+      //显示链表
+      display() {
+        var currNode = this.head;
+        while (currNode != undefined && currNode.element != null){
+          console.log( `${currNode.previous ? currNode.previous.element : null}<-${currNode.element}->${currNode.next ? currNode.next.element : null}` );
+          currNode = currNode.next;
+        }
+      }
+      //
+    }
+    //
+    let duoListNode = new DuoListNode()
+    duoListNode.append('apple')
+    //Node {element: "apple", next: null, previous: null}
+    duoListNode.append('banana')
+    //Node {element: "banana", next: null, previous: null}
+    duoListNode.append('mango')
+    //Node {element: "mango", next: null, previous: null}
+    duoListNode.insert('water','banana') //
+    //duoListNode.display()
+    duoListNode.remove('water') //
+    //duoListNode.display()
+
+  </script>
+</body>
+</html>

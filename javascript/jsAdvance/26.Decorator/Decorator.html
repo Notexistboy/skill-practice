@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    /* 修饰器Decorator
+    ES8神器Decorator，修饰器，也称修饰器模式 */
+
+    /* 伪Decorator
+    在介绍Decorator之前，我们先来实现这样一个功能：
+    定义一个函数，在调用这个函数时，能够执行一些其他额外操作
+    如下代码,定义doSometing(),在调用它时再执行其他代码 */
+
+    function doSometing(name) {
+      console.log('Hello' + name)
+    }
+    function myDecorator(fn) {
+      return function() {
+        console.log('start')
+        const res = fn.apply(this, arguments)
+        console.log('end')
+        return res
+      }
+    }
+    const wrapped = myDecorator(doSometing)
+    doSometing('lindaidai')
+    //Hellowlindaidai
+    
+    wrapped('lindaidai')
+    //start 
+    //Hellowlindaidai
+    //end
+
+    /* 可以看到上面的操作：其实就是一个函数包装成另一个函数,这样的方式我们称之为“修饰器”
+    同理，我们是不是能用一个什么东西附着在我们的类或者类的属性上，
+    让它们也有一些附加的属性或者功能呢，比如这样： */
+    //@addSkill
+    class Person {
+      constructor(name, email) {
+        this.name = name
+        this.email = email
+      }
+      info() {
+        return `Hi, I'm ${this.name}， my email is ${this.email}`
+      }
+      static description() {
+        return `Hi, I'm a user of codecasts.com ${this}`
+      }
+     }
+
+    function addSkill(target) {
+      target.say = "hello world";
+    }
+
+    /* 类修饰器
+    直接作用在类上面的修饰器，我们可以称之为类修饰器。
+    如上面案例中的@addSkill就是一个类修饰器，
+    它修改了Person这个类的行为，为它加上了静态属性say。
+    addSkill函数的参数target是Person这个类本身。*/
+
+    /*1.修饰器的执行原理基本就是这样： */
+
+    //@decorator
+    class A {}
+
+    // 等同于
+
+    class A {}
+    A = decorator(A) || A;
+
+    /* 换句话说，类修饰器是一个对类进行处理的函数。
+    它的第一个参数target就是函数要处理的目标类。 */
+
+    /* 多参数
+    当然如果你想要有多个参数也是可以的，
+    我们可以在修饰器外面再封装一层函数： */
+    //@addSkill("hello world")
+    class Person { }
+    function addSkill(text) {
+        return function(target) {
+            target.say = text;
+        }
+    }
+    console.log(Person.say)  //'hello world'
+
+    /* 上面代码中，修饰器addSkill可以接受参数，
+    这就等于可以修改修饰器的行为。 */
+
+    /* 修饰器在什么时候执行。
+    先来看一个案例： */
+
+    //@looks
+    class Person { }
+    function looks(target) {
+        console.log('I am handsome')
+        target.looks = 'handsome'
+    }
+    console.log(Person['looks'])
+    //I am handsome
+    //handsome
+    /* 在修饰器@looks中添加一个console.log()语句，却发现它是最早执行的，其次才打印出handsome。
+    这是因为装饰器对类的行为的改变，是代码编译时发生的，而不是在运行时。
+    这意味着，装饰器能在编译阶段运行代码。也就是说，装饰器本质就是编译时执行的函数。
+    装饰器是在编译时就执行的函数 */
+
+    /* 方法修饰器
+    上面的案例中，修饰器作用的对象是类本身。
+    当然修饰器不仅仅这么简单，它也可以作用在类里的某个方法或者属性上，这样的修饰器我们称它为方法修饰器。 */
+
+    /* 如下面的案例： */
+
+    class Person {
+        constructor() {}
+        //@myname  //方法修饰器
+        name() {
+            console.log('霖呆呆') 
+        }
+    }
+    function myname(target, key, descriptor) {
+        console.log(target);
+        console.log(key);
+        console.log(descriptor);
+        descriptor.value = function() {
+            console.log('霖呆呆')
+        }
+    }
+
+    var personOne = new Person() //实例化
+    personOne.name() //调用name()方法
+
+
+    //打印结果：
+   /*  Person {}
+    name
+    { value: [Function: name],
+      writable: true,
+      enumerable: false,
+      configurable: true 
+    } */
+    
+
+    /* 上面案例中的修饰器@myname是放在name()方法上的，myname函数有三个参数：
+    target: 类的原型对象，上例是Person.prototype
+    key: 所要修饰的属性名  name
+    descriptor: 该属性的描述对象
+    我们改变了descriptor中的value，使之打印出霖呆呆。 */
+
+    /* 多个修饰器的执行顺序
+    若是同一个方法上有多个修饰器，会像剥洋葱一样，先从外到内进入，然后由内向外执行。 */
+
+    class Person {
+        constructor() {}
+        //@dec(1)
+        //@dec(2)
+        name() {
+            console.log('霖呆呆')
+        }
+    }
+    function dec(id) {
+        console.log('out', id);
+        return function(target, key, descriptor) {
+            console.log(id);
+        }
+    }
+
+    var person = new Person()
+    person.name()
+    //结果
+    /* out 1
+    out 2
+    2
+    1 */
+    /* 霖呆呆
+    如上所属，外层修饰器dec(1)先进入，但是内层修饰器dec(2)先执行。 */
+
+    /* 不能作用于函数
+    修饰器不能作用于函数之上，这是因为函数和变量一样都会提升 */
+
+    var counter = 0;
+
+    var add = function () {
+      counter++;
+    };
+
+    //@add
+    function foo() {
+    }
+
+    /* 如上面的例子所示，给函数foo()定义了修饰器@add，作用是想将counter++
+    预计的结果counter为1，但实际上却还是为0
+    原因：
+    定义的函数foo()会被提升至最上层，定义的变量counter和add也会被提升，效果如下： */
+
+    //@add
+    function foo() {
+    }
+
+    var counter;
+    var add;
+
+    counter = 0;
+
+    add = function () {
+      counter++;
+    };
+
+    /* 总之，由于存在函数提升，使得修饰器不能用于函数。类是不会提升的，所以就没有这方面的问题。
+    另一方面，如果一定要修饰函数，可以采用高阶函数的形式直接执行。 */
+
+    //如在7.1中的例子所示：
+
+
+    function doSometing(name) {
+        console.log('Hello' + name)
+    }
+    function myDecorator(fn) {
+        return function() {
+            console.log('start')
+            const res = fn.apply(this, arguments)
+            console.log('end')
+            return res
+        }
+    }
+    const wrapped = myDecorator(doSometing)
+    doSometing('lindaidai')
+    //Hellowlindaidai
+    
+    wrapped('lindaidai')
+    //start 
+    //Hellowlindaidai
+    //end
+  </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+ <style>
+   .heading span{
+     font-size: 32px;
+     cursor: pointer;
+     display: inline-block;
+     transition: transform 0.25s;
+   }
+   .heading span:hover{
+
+     transform: translateY(-20px) rotate(10deg) scale(2);
+   }
+ </style>
+</head>
+<body>
+  <div>
+    <ul>
+      <li>go to store</li>
+      <li>watching movie</li>
+      <li>running</li>
+    </ul>
+  </div>
+</body>
+<script>
+  /* const todos = Array.from(document.querySelectorAll('li'))
+  //const todos = [...document.querySelectorAll('li')]
+  console.log(todos)
+  const names = todos.map(todo => todo.textContent) */
+
+  const fruit = ['apple','bananas', 'mongo']
+  const newFruit = ['orange', 'pear']
+
+  /* apply 第二个参数是一个数组 相当于将数组中的每一个元素push进去 */
+  //fruit.push.apply(fruit, newFruit) //concat mapFlat
+  fruit.push(...newFruit)
+  /* 扩展运算符不仅可以把可遍历对象的元素扩展到新的数组当中
+   还可以把每个元素扩展到函数当中 作为参数使用 */
+
+   const dateFields = [2017, 5, 6]
+   const date = new Date(...dateFields)
+
+</script>
+</html>

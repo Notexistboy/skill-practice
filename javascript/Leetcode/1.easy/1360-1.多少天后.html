@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+/**
+ * @param {string} date1
+ * @param {string} date2
+ * @return {number}
+ */
+    var daysBetweenDates = function(date1, days) {
+      debugger
+      let time =  new Date(new Date(date1).getTime() +(24*60*60*1000)*days)
+      var Y = date.getFullYear() + '-';
+	    var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+	    var D = date.getDate() + ' ';
+	    return Y + M + D;
+    };
+    daysBetweenDates('2020-04-22',15)
+    </script>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    /* var daysBetweenDates = function(date1, date2) {
+        let data1List = date1.split('-')
+        let data2List = date2.split('-')
+        let months = [0, 31, 28, 31 ,30, 31, 30, 31, 31, 30, 31, 30, 31]
+        let data1MonthDay = 0
+        let data2MonthDay = 0
+        if( data2List[0]*1-data1List[0] <= 1 ){
+            
+        }
+    }; */
+    var daysBetweenDates = function(date1, date2) {
+      return Math.abs((+new Date(date1)) - (+new Date(date2)))/(24*60*60*1000)
+    };
+  </script>
+</body>
+</html>

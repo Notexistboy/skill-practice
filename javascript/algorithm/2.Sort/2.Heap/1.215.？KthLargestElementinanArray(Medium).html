@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+
+  </div>
+  <script type="text/javascript">
+    /* 
+        方法1: 维护一个堆
+        寻找第k大的数据 可以看做是数据插入的过程 从数组头部出发 依次读入每个元素
+        在读入过程中读入第k大的值
+        模式识别:维护动态数据的最大最小值 可以考虑堆
+        建立容量为k的最小值堆 这样堆顶的元素就是所求 
+        遍历完数组之后 堆里储存的是最大的k个元素并且堆定元素是其中的最小值
+        建立一个最小值堆
+        然后遍历数组依次插入最小值堆中 如果堆的大小超过容量 弹出最小元素 最后返回堆定元素
+
+
+
+        时间复杂度O(nlogk) 调整堆的时间复杂度O(nlogk)
+        空间复杂度O(k)
+      */
+    /* 
+      我们也可以使用堆排序来解决这个问题——建立一个大根堆，
+      做k−1次删除操作后堆顶元素就是我们要找的答案。
+      在很多语言中，都有优先队列或者堆的的容器可以直接使用，
+      但是在面试中，面试官更倾向于让更面试者自己实现一个堆。
+      所以建议读者掌握这里大根堆的实现方法，
+      在这道题中尤其要搞懂「建堆」、「调整」和「删除」的过程。
+      友情提醒：「堆排」在很多大公司的面试中都很常见，
+      不了解的同学建议参考《算法导论》或者大家的数据结构教材，
+      一定要学会这个知识点哦! ^_^
+     */
+    /* 
+    full binary tree  满二叉树 
+    除了叶子节点 每一个节点都有左右子叶 每个叶子节点都在底层(根据根节点左右对称的结构)
+    complate binary tree   完全二叉树 
+    若二叉树的高度为h 那么0到h-1层 各层的节点数都达到最大数 且h层的叶子节点都在左半侧
+    1.构建大根堆:存入完全二叉树 先按照顺序将该数组元素构建成一颗完全二叉树
+    2.构建大根堆:调整元素 从第一个非叶子节点为根节点的子树开始,将其调整为大根堆
+    3.构建大根堆:调整元素 调整倒数第二个非叶子节点作为根节点的子树
+    4.构建大根堆:调整元素 调整倒数第三个非叶子节点作为根节点的子树
+    5.构建大根堆:调整元素 调整倒数第三个非叶子节点作为根节点的子树
+    3.构建大根堆:调整元素 调整倒数第四个非叶子节点作为根节点的子树
+    3.构建大根堆:调整元素 调整倒数第二个非叶子节点作为根节点的子树
+    */
+    let findKthLargest = function (nums, k) {
+      let len = nums.length
+      buildMaxHeap(nums, len);
+      for (let i = len - 1; i >= len - k + 1; --i) {
+        swap(nums, 0, i)
+          --len
+        maxHeapify(nums, 0, len)
+      }
+      return nums[0];
+    }
+    let buildMaxHeap = function (nums, len) {
+      for (let i = Math.floor(len / 2); i >= 0; --i) {
+        maxHeapify(nums, i, len)
+      }
+    }
+    let maxHeapify = function (nums, i, len) {
+      let l = i * 2 + 1,
+        r = i * 2 + 2,
+        largest = i;
+      if (l < len && nums[l] > nums[largest]) {
+        largest = l
+      }
+      if (r < len && nums[r] > nums[largest]) {
+        largest = r
+      }
+      if (largest != i) {
+        swap(nums, i, largest)
+        maxHeapify(nums, largest, len)
+      }
+    }
+    let swap = function (arr, a, b) {
+      let temp = arr[a];
+      arr[a] = arr[b];
+      arr[b] = temp;
+      //[arr[a], arr[b]] = [arr[b], arr[a]]
+    }
+    //小根堆
+    var findKthLargest = function (nums, k) {
+      if (!nums.length) return -1
+      // 调堆过程
+      let heapSort = function (arr, start, end) {
+        let temp = arr[start]
+        for (let j = 2 * start + 1; j <= end; j = 2 * j + 1) {
+          if (j < end && arr[j] > arr[j + 1]) j++
+          if (temp < arr[j]) break
+          arr[start] = arr[j]
+          start = j
+        }
+        arr[start] = temp
+      }
+      // 创建一个为长度k的数组，并建立小根堆
+      let numsArr = nums.slice(0, k)
+      for (let i = Math.floor(k / 2 - 1); i >= 0; i--)
+        heapSort(numsArr, i, k - 1)
+      // 逐个与堆外元素比较大小
+      for (let i = k; i < nums.length; i++) {
+        // 若比小根堆根元素大就替换掉根元素，然后调整堆使堆顶元素最小
+        if (nums[i] > numsArr[0]) {
+          numsArr[0] = nums[i]
+          heapSort(numsArr, 0, k - 1)
+        }
+      }
+      return numsArr[0]
+    };
+
+    var findKthLargest = function (nums, k) {
+      if (!nums.length) return -1
+      // 调堆过程
+      let heapSort = function (arr, start, end) {
+        let temp = arr[start]
+        for (let j = 2 * start + 1; j <= end; j = 2 * j + 1) {
+          if (j < end && arr[j] > arr[j + 1]) j++
+          if (temp < arr[j]) break
+          arr[start] = arr[j]
+          start = j
+        }
+        arr[start] = temp
+      }
+      // 创建一个为长度k的数组，并建立大根堆
+      let numsArr = nums.slice(k)
+      for (let i = Math.floor(k / 2 - 1); i < nums.length; i++)
+        heapSort(numsArr, k, nums.length)
+      // 逐个与堆外元素比较大小
+      for (let i = k; i >= 0; i--) {
+        // 若比小根堆根元素大就替换掉根元素，然后调整堆使堆顶元素最小
+        if (nums[i] < numsArr[0]) {
+          numsArr[0] = nums[i]
+          heapSort(numsArr, k, nums.length)
+        }
+      }
+      return numsArr[0]
+    };
+  </script>
+</body>
+
+</html>

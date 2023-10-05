@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    var dayOfYear = function(date) {
+      let dateList = date.split('-')
+      let months = [0, 31, 28, 31 ,30, 31, 30, 31, 31, 30, 31, 30, 31]
+      let year = date.substr(0,4);
+      let mouth = date.substr(5,2);
+      let day = date.substr(8,2);
+      let monthDay = 0
+      if(year%400==0||(year%4==0&&year%100!=0)){
+          months[2]=29;
+      }
+      for(let i=0; i<mouth*1; i++){
+          monthDay += months[i]
+      }
+      return monthDay+day*1
+    }
+  </script>
+</body>
+</html>

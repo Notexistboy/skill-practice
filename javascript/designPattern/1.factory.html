@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* Simple Factory */
+        function createBook(name, time, type) {
+            var o = new Object();
+            o.name = name;
+            o.time = time;
+            o.type = type;
+            return o;
+        };
+
+        /* Factory Method */
+        var Java = function () { }
+        var Php = function () { }
+        var JavaScript = function () { console.log(this); return {} }
+
+        var MethodFactory = function (type, content) {
+            switch(type) {
+                case 'java':
+                return new Java(content);
+                case 'php':
+                return new Php(content);
+                case 'javascript':
+                return new JavaScript(content);
+            }
+        }
+        MethodFactory('javascript', {});
+
+        var SafeFactory = function (type, content) {
+            // 如果直接调用
+            if (this instanceof safeFactory) {
+                var s = new this[type](content)
+                return s;
+            } else {
+                return new SafeFactory(type, content);
+            }
+        };
+
+        SafeFactory.prototype = {
+            java: function (content) {
+
+            },
+            js: function (content) {
+
+            },
+            php: function (content) {
+
+            },
+        };
+
+        /* Abstract Factory */
+        // 抽象类中定义的方法只是显性地定义一些功能,但没有具体的实现
+        var PhantomFactory = function (subType, superType) {
+            // 判断抽象工厂中是否有该抽象类
+            debugger;
+            if(typeof PhantomFactory[superType] === 'function'){
+                // 缓存类
+                function F() {}
+                // 继承父类属性和方法
+                // 这种继承方式类似于寄生组合式继承
+                F.prototype = new PhantomFactory[superType]();
+                // 将子类constructor指向子类
+                subType.constructor = subType;
+                // 子类原型继承父类
+                debugger;
+                subType.prototype = new F();
+            } else {
+                console.log('未创建该抽象类')
+            }
+        }
+
+        PhantomFactory.Car = function () {
+            this.type = 'car'
+        }
+
+        PhantomFactory.Car.prototype = {
+            getPrice: function () {
+                debugger;
+                console.log('未创建该抽象类')
+            }
+        }
+        var BMW = function(price) {
+            this.price = price
+        }
+        PhantomFactory(BMW, 'Car');
+        BMW.prototype.getPrice = function() {
+            debugger;
+            return this.price
+        }
+        var car = new BMW(10000)
+        console.log(car);
+        // car.__proto__.__proto__.getPrice() 未创建该抽象类 
+    </script>
+</body>
+</html>

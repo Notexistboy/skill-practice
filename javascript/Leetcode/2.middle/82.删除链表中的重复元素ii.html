@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * Definition for singly-linked list.
+         * function ListNode(val, next) {
+         * this.val = (val===undefined ? 0 : val)
+         * this.next = (next===undefined ? null : next)
+         * }
+         */
+        /**
+         * @param {ListNode} head
+         * @return {ListNode}
+         */
+        var deleteDuplicates = function (head) {
+            if (head == null || head.next == null) return head;
+            if (head.val !== head.next.val) {
+                head.next = deleteDuplicates(head.next);
+            } else {
+                let window = head.next;
+                while (window && head.val === window.val) {
+                    window = window.next;
+                }
+                return deleteDuplicates(window);
+            }
+            return head;
+        };
+
+        var deleteDuplicates = function (head) {
+            if (!head || !head.next) return head;
+            let preHead = new ListNode(0, head);
+            let pre = preHead;
+            let cur = head;
+            while (cur) {
+                let window = head.next;
+                while (window && cur.val === window.val) {
+                    cur = window;
+                    window = cur.next;
+                }
+                if (pre.next === cur) {
+                    pre = pre.next;
+                } else {
+                    pre.next = cur.next;
+                }
+                cur = cur.next;
+            }
+            return preHead.next;
+        };
+    </script>
+</body>
+
+</html>

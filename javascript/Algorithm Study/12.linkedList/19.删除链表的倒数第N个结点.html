@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        /* 
+            给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
+            进阶：你能尝试使用一趟扫描实现吗？
+        */
+        /**
+         * Definition for singly-linked list.
+         * function ListNode(val, next) {
+         *     this.val = (val===undefined ? 0 : val)
+         *     this.next = (next===undefined ? null : next)
+         * }
+         */
+        /**
+         * @param {ListNode} head
+         * @param {number} n
+         * @return {ListNode}
+         */
+        /* 
+            方法一：计算链表长度
+            思路与算法
+            一种容易想到的方法是，我们首先从头节点开始对链表进行一次遍历，得到链表的长度L。随后我们再从头节点开始对链表进行一次遍历，当遍历到第L-n+1个节点时，它就是我们需要删除的节点。
+            为了与题目中的n保持一致，节点的编号从1开始，头节点为编号1的节点。
+            为了方便删除操作，我们可以从哑节点开始遍历L-n+1个节点。当遍历到第L-n+1个节点时，它的下一个节点就是我们需要删除的节点，这样我们只需要修改一次指针，就能完成删除操作。
+        */
+        var removeNthFromEnd = function(head, n) {
+            let dummy = new ListNode(0, head);
+            let length = getLength(head);
+            let cur = dummy;
+            for (let i = 1; i < length - n + 1; ++i) {
+                cur = cur.next;
+            }
+            cur.next = cur.next.next;
+            let ans = dummy.next;
+            return ans;
+        }
+
+        var getLength = function (head) {
+            let length = 0;
+            while (head != null) {
+                ++length;
+                head = head.next;
+            }
+            return length;
+        }
+        /* 
+            复杂度分析
+            时间复杂度：O(L)，其中 L 是链表的长度。
+            空间复杂度：O(1)。
+        */
+        /* 
+            方法二：栈
+            思路与算法
+            我们也可以在遍历链表的同时将所有节点依次入栈。根据栈「先进后出」的原则，我们弹出栈的第n个节点就是需要删除的节点，并且目前栈顶的节点就是待删除节点的前驱节点。这样一来，删除操作就变得十分方便了。
+        */
+        /* 
+            方法三：双指针
+            思路与算法
+            我们也可以在不预处理出链表的长度，以及使用常数空间的前提下解决本题。
+            由于我们需要找到倒数第n个节点，因此我们可以使用两个指针first和first遍历到链表的末尾时，second就恰好处于倒数第n个节点。
+            具体地，初始时first和second均指向头节点。我们首先使用first对链表进行遍历，遍历的次数为n。此时，first和second之间间隔了n-1个节点，即first比second超前了n个节点。
+            在这之后，我们同时使用first和second对链表进行遍历。当first遍历到链表的末尾（即first为空指针）时，second恰好指向倒数第n个节点。
+            根据方法一和方法二，如果我们能够得到的是倒数第n个节点的前驱节点而不是倒数第n个节点的话，删除操作会更加方便。因此我们可以考虑在初始时将second指向哑节点，
+            其余的操作步骤不变。这样一来，当first遍历到链表的末尾时，second的下一个节点就是我们需要删除的节点。
+        */
+        var removeNthFromEnd = function(head, n) {
+            let dummy = new ListNode(0, head);
+            let first = head;
+            let second = dummy;
+            for (let i = 0; i < n; ++i) {
+                first = first.next;
+            }
+            while (first != null) {
+                first = first.next;
+                second = second.next;
+            }
+            second.next = second.next.next;
+            let ans = dummy.next;
+            return ans;        
+        }
+
+    </script>
+  </body>
+</html>

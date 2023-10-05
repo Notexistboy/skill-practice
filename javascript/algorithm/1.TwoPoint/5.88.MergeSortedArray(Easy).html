@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        /* 
+            题目描述：把归并结果存到第一个数组上。
+            需要从尾开始遍历，否则在 nums1 上归并得到的值会覆盖还未进行归并比较的值。
+        */
+        /**
+         * @param {number[]} nums1
+         * @param {number} m
+         * @param {number[]} nums2
+         * @param {number} n
+         * @return {void} Do not return anything, modify nums1 in-place instead.
+         */
+        /* 
+            已经被排序的性质。为了利用这一性质，我们可以使用双指针方法。这一方法将两个数组看作队列，每次从两个数组头部取出比较小的数字放到结果中。
+        */
+        var merge = function (nums1, m, nums2, n) {
+            let p1 = 0;
+            let p2 = 0;
+            let curr = 0;
+            const sorted = new Array(m + n).fill(0);
+            while (p1 < m || p2 < n) {
+                if (p1 === m) {
+                    curr = nums2[p2++]
+                } else if (p2 === n) {
+                    curr = nums1[p1++]
+                } else if (nums1[p1] < nums2[p2]) {
+                    curr = nums1[p1++];
+                } else {
+                    curr = nums2[p2++];
+                }
+                sorted[p1 + p2 - 1] = curr;
+            };
+            for (let i = 0; i != m + n; ++i) {
+                nums1[i] = sorted[i];
+            }
+        };
+        /* 
+            逆向双指针
+            方法二汇总,之所以要使用临时变量,是因为如果直接合并到数组nums1中,nums1中的元素可能会在取出之前被覆盖。那么如何直接避免覆盖nums1中的元素呢?
+            观察可知,nums后半部分是空的,可以直接覆盖不影响结果.因此可以指针设置为从后向前遍历,每次取两者之间最大值放入num1的后半部,nums2中有n-p2-1个元素被放入,
+            而在指针p1的后面,nums1有m+n-p1-1个位置.
+            m+n-p1-1 >= m-p1-1 + n - p2 -1 等价于 p2 >= -1
+
+        */
+        // var merge = function(nums1, m, nums2, n) {
+        //     let p1 = m-1;
+        //     let p2 = n-1;
+        // 	let tail = m + n - 1;
+        //     var curr;
+        //     while(p1>=0 || p2>=0){
+        // 		if(p1 === -1){
+        // 			curr = nums2[p2--]
+        // 		} else if(p2 === -1){
+        // 			curr = nums1[p1--]
+        // 		} else if(nums1[p1]<nums2[p2]){
+        // 			curr = nums2[p2--]
+        // 		}else{
+        // 			curr = nums1[p1--]
+        // 		}
+        // 	    nums1[tail--] = curr;
+        //     };
+        //     return nums1
+        // };
+        // merge(nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3);
+        merge(nums1 = [0], m = 0, nums2 = [2], n = 1);
+    </script>
+</body>
+
+</html>

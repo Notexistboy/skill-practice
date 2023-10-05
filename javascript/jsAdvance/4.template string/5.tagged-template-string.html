@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+  <html >
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      .highlight{
+        background-color: aqua;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      const user = 'Jelly'
+      const topic = 'Learn to use markdown'
+      /* 函数会接收模板字符串作为参数 */
+      /**
+      @parmas: string 数组 当传入的模板字符串以变量开头或结尾 string参数会对应的生成空字符串
+      @parmas: values 剩余参数组成的数组（避免剩余参数过度，所以使用...进行封装）*/
+      function highlight (strings, ...values) {
+        const highlighted = values.map(value => `<span class="highlight">${
+          value}</span>`)
+        let str = ''
+        /* ||保证最后的值不是undefined */
+        /* 将strings数组中的元素和values数组的元素连接起来，并且过滤strings最后元素为空字符串 */
+        /* strings.forEach((string, i) => str += `${string}${highlighted[i] || ''}`)
+
+        return str */
+        debugger
+        /* reduce(fn, '') */
+        return strings.reduce((prev,curr, i) => `${prev}${curr}${values[i] || ''}`,'')
+        document.body.innerHTML = strings.reduce((prev, curr, i) => `${prev}${curr}${highlight[i]|| ''}`,'')
+      }
+      /* 标签模板字符串是在模板字符串中打一个标签，
+      标签对应js的一个函数名，可以制定一些规则返回想要的字符串 */
+      const sentence = highlight `${user} has commented on your topic ${topic}.`
+      /* 当使用标签模板字符串时，标签模板字符串最后返回标签的内容由标签决定 */
+      /* 可以直接写html结构 */
+      /* const template = [
+        '<div class="great">',
+          '<p>hello</p>',
+        '</div>'
+      ].join('')//将数组元素通过join的参数拼接成字符串 */
+      /* 模板字符串会保留空格 */
+      /* const template = `
+        <div class="great">
+          <p>hello</p>
+        </div>
+      `.trim() */
+      //Ps. vue
+      /* new Vue({
+        template: `
+        <div>
+
+        </div>
+        `
+      }) */
+      const Jelly = {
+        name: 'Jelly',
+        date: '2017-05-07',
+        todos: [
+          {name: 'go to store', completed: false},
+          {name: 'watching movie', completed: true},
+          {name: 'running', completed: true},
+        ]
+      }
+      /* 箭头函数的隐式返回 */
+      /* <ul>
+          <li>go to store</li>,<li>watching movie</li>,<li>running</li>
+        </ul>
+        因为map方法返回的是数组所以中间是有‘，’
+       */
+      /* const template = `
+        <ul>
+          ${Jelly.todos.map(item => `
+          <li>
+          ${item.name} ${item.completed ? '✅' : '❌'}
+          </li>`).join('')}
+        </ul>
+      ` */
+      /* function renderTodos(todos) {
+        return (
+          `<ul>
+            ${todos.map(item => `
+            <li>
+              ${item.name} ${item.completed ? '✅' : '❌'}
+            </li>`).join('')}
+          </ul>`
+        )
+      } */
+      /* const template = `
+        <div>
+          <div>${Jelly.name}</div>
+          <div>
+          ${renderTodos(Jelly.todos)}
+          </div>
+        </div>
+      ` */
+      //document.body.innerHTML = template
+    </script>
+  </body>
+</html>

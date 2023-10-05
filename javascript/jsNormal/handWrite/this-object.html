@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 
+        this的默认绑定
+        1.web全局环境下的this指向window
+        2.函数独立调用
+        非严格模式下，函数内部的this指向window
+        严格模式下，为undefined
+        3.被嵌套的函数独立调用时，this默认指向window
+        4.IIFE自执行函数，this默认指向window
+        5.闭包中this默认指向window
+        隐式绑定
+            1.当函数当做对象上的方法使用时，this指向直接对象
+        隐式丢失
+            1.被隐式绑定的函数丢失了绑定对象，从而默认绑定到window
+            2.参数传递
+            3.setTimeout() 和 setInterval() 第一个参数的回调函数中的this 默认指向window
+        显示绑定
+            call apply bind
+            数组的forEach(fn,对象)
+        new绑定
+            1.new关键字来执行函数，相当于构造函数来实例化对象，则this指向当前实例化的对象
+        箭头函数
+            1.箭头函数中的this指向外层函数（非箭头函数）的作用域中的this指向。
+        */
+        var myName = "bar";
+        let myName1 = "bar";
+        var obj1 = {
+            myName1: "obj1",
+            fun: () => {
+                console.log(this.myName1);
+            },
+            func: function () {
+                console.log(this.myName1);
+            }
+        }
+        var obj2 = {
+            myName1: "obj2",
+            fun: () => {
+                console.log(this, this.myName1);
+            },
+            func: function () {
+                console.log(this, this.myName1);
+            },
+            funct: function () {
+                debugger;
+                console.log(this, this.myName1);
+                return {
+                    getName: () => {
+                        debugger;
+                        console.log(this, this.myName1);
+                    },
+                    getName1: function () {
+                        console.log(this, this.myName1);
+                    }
+                }
+            },
+            functi: () => {
+                return {
+                    getName: () => {
+                        console.log(this, this.myName1);
+                    },
+                    getName1: function () {
+                        console.log(this, this.myName1);
+                    }
+                }
+            }
+        };
+
+        // obj2.fun();
+        // obj2.func();
+        // obj2.fun.call(obj1);
+        // obj2.func.call(obj1);
+        // var anotherFun = obj2.fun;
+        // anotherFun();
+        // var anotherFunc = obj2.func;
+        // anotherFunc();
+        // obj2.funct().getName();
+        // obj2.funct().getName1();
+        // obj2.functi().getName();
+        // obj2.functi().getName1();
+
+        // var anotherFunct0 = obj2.funct;
+        // var anotherFunct1 = obj2.functi;
+        // anotherFunct0().getName();
+        // anotherFunct0().getName1();
+        // anotherFunct1().getName();
+        // anotherFunct1().getName1();
+        // var anotherFunct2 = obj2.funct().getName; 
+        // var anotherFunct3 = obj2.funct().getName1; 
+        // var anotherFunct4 = obj2.functi().getName;
+        // var anotherFunct5 = obj2.functi().getName1;
+        // anotherFunct2();
+        // anotherFunct3();
+        // anotherFunct4();
+        // anotherFunct5();
+        var name = 'window';
+
+        var person1 = {
+            name: 'person1',
+            foo1: function () {
+                console.log(this)
+                console.log(this.name)
+            },
+            foo2: () => console.log(this.name),
+            foo3: function () {
+                console.log('this', this);
+                return function () {
+                    console.log(this.name)
+                }
+            },
+            foo4: function () {
+                console.log('this', this);
+                return () => {
+                    console.log(this.name)
+                }
+            },
+            foo5: () => {
+                console.log('this', this);
+                return function () {
+                    console.log(this.name)
+                }
+            },
+            foo6: () => {
+                console.log('this', this);
+                return () => {
+                    console.log(this.name)
+                }
+            },
+            foo7: function () {
+                console.log(this, 'foo7');
+                setTimeout(function () {
+                    debugger;
+                    console.log(this.name, 'foo7');
+                }, 0)
+            },
+            foo8: function () {
+                console.log(this, 'foo8');
+                setTimeout(() => {
+                    debugger;
+                    console.log(this.name, 'foo8');
+                }, 0)
+            },
+            foo9: () => {
+                console.log(this, 'foo9');
+                setTimeout(function () {
+                    debugger;
+                    console.log(this.name, 'foo9');
+                }, 0)
+            },
+            foo10: () => {
+                console.log(this, 'foo10');
+                setTimeout(() => {
+                    debugger;
+                    console.log(this.name, 'foo10');
+                }, 0)
+            },
+        }
+
+        var person2 = {
+            name: 'person2'
+        }
+
+        person1.foo1();
+        person1.foo1.call(person2);
+        debugger;
+        person1.foo2();
+        person1.foo2.call(person2);
+        debugger;
+        person1.foo3()();
+        person1.foo3.call(person2)();
+        person1.foo3().call(person2);
+        debugger;
+        person1.foo4()();
+        person1.foo4.call(person2)();
+        person1.foo4().call(person2);
+        debugger;
+        person1.foo5()();
+        person1.foo5.call(person2)();
+        person1.foo5().call(person2);
+        debugger;
+        person1.foo6()();
+        person1.foo6.call(person2)();
+        person1.foo6().call(person2);
+        debugger;
+        person1.foo7();
+        person1.foo7.call(person2);
+        debugger;
+        person1.foo8();
+        person1.foo8.call(person2);
+        debugger;
+        person1.foo9();
+        person1.foo9.call(person2);
+        debugger;
+        person1.foo10();
+        person1.foo10.call(person2);
+    </script>
+</body>
+
+</html>

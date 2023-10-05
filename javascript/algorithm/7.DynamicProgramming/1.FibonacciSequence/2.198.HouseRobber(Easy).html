@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /* 
+        你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，
+        影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，
+        如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+        给定一个代表每个房屋存放金额的非负整数数组，
+        计算你不触动警报装置的情况下 ，
+        一夜之内能够偷窃到的最高金额。
+        偷当前房间就不能偷当前房的前一间房 可以偷当前房的前两间或者前三间房
+        S0 = H0
+        S1 = MAX(S0,H1)
+        S2 = MAX(S1,S0+H2)
+        S3 = MAX(S2,S1+H3)
+        Sn = MAX(Sn-1,Sn-2+Hn)
+       */
+      /* 
+          Hi 表示第i间房中的金额
+          Si 表示偷窃前i间房的金额
+       */
+      /* 「状态」和「选择」：你面前房子的索引就是状态，抢和不抢就是选择。
+        在两个选择中，每次都选更大的结果，最后得到的就是最多能抢到的 money：
+        自顶向下
+        var rob = function(nums) {
+          return dp(nums, 0)
+        }
+        var dp = function(nums, start) {
+          if (start >= nums.length) {
+            return 0;
+          }
+          let res = Math.max(dp(num, start+1), num[start] + dp(nums, start+2))
+          return res
+        }
+        明确了状态转移，就可以发现对于同一start位置，是存在重叠子问题的.
+        所以说存在重叠子问题，可以用备忘录进行优化：
+        let memo
+        let rob = function(nums) {
+          memo = Array(nums.length).fill(-1)
+          return dp(nums,0)
+        }
+        let dp = function(nums,start){
+          if (start >= nums.length) {
+            return 0;
+          }
+          if(memo[start] != -1) return memo[start]
+          let res = Math.max(dp(nums,start+1), nums[start] + dp(nums, start+2))
+          return memo[start] = res
+        }
+       */
+      // 正向遍历
+      // var rob = function(nums) {
+      //   let len = nums.length
+      //   if(len == 0) return 0
+      //   if(len == 1) return nums[0]
+      //   /* 声明一个数组 表示 偷对应长度的房间 可以获得的最大金额 */
+      //   let dp = []
+      //   dp[0] = nums[0]
+      //   dp[1] = Math.max(nums[0],nums[1])
+      //   for( let i = 2; i<len; i++){
+      //     dp[i] = Math.max(dp[i-1],dp[i-2]+nums[i])
+      //   }
+      //   return dp[len-1]
+      // }
+      /* 
+        上述方法使用了数组存储结果。
+        考虑到每间房屋的最高总金额只和该房屋的前两间房屋的最高总金额相关，
+        因此可以使用滚动数组，在每个时刻只需要存储前两间房屋的最高总金额
+       */
+      // var rob = function(nums) {
+      //   let len = nums.length
+      //   if(len == 0) return 0
+      //   if(len == 1) return nums[0]
+      //   /* 声明一个数组 表示 偷对应长度的房间 可以获得的最大金额 */
+      //   /* first为之前最大值,second为当前最大值 */
+      //   let prev = nums[0], curr = Math.max(nums[0],nums[1])
+      //   for( let i = 2; i<len; i++){
+      //     /* 用一个变量接管当前最大值 */
+      //     let temp = curr
+      //     /* 比较当前值和之前最大值的和 和当前最大值的比较 */
+      //     curr = Math.max(prev+nums[i],curr)
+      //     /* 用之前最大值接管变量存储的之前最大值 */
+      //     prev = temp
+      //   }
+      //   return curr
+      // }
+      //let memo
+      // let rob = function(nums) {
+      //   memo = Array(nums.length).fill(-1)
+      //   return dp(nums,0)
+      // }
+      // let dp = function(nums,start){
+      //   if (start >= nums.length) return 0;
+      //   if(memo[start] != -1) return memo[start]
+      //   let res = Math.max(dp(nums,start+1), nums[start] + dp(nums, start+2))
+      //   return memo[start] = res
+      // }
+      /* 简化版 */
+      // var rob = function(nums) {
+      //   let len = nums.length
+      //   let memo = Array(len).fill(-1)
+      //   let dp = function(start){
+      //     if(start >= len) return 0
+      //     if(memo[start] != -1) return memo[start]
+      //     let res = Math.max(dp(start+1), nums[start]+dp(start+2))
+      //     return memo[start] = res
+      //   }
+      //   return dp(0)
+      // };
+      // 反向遍历
+      let rob = function(nums) {
+        let n = nums.length;
+        // dp[i] = x 表示：
+        // 从第 i 间房子开始抢劫，最多能抢到的钱为 x
+        // base case: dp[n] = 0
+        let dp = new Array(n+2).fill(0)
+        for (let i = n - 1; i >= 0; i--) {
+          debugger
+          dp[i] = Math.max(dp[i + 1], nums[i] + dp[i + 2]);
+        }
+        debugger
+        return dp[0];
+      }
+      /* 我们又发现状态转移只和dp[i]最近的两个状态有关，
+      所以可以进一步优化，将空间复杂度降低到 O(1)。 */
+
+      // let rob = function(nums) {
+      //   let n = nums.length;
+      //   // 记录 dp[i+1] 和 dp[i+2]
+      //   let dp_i_1 = 0, dp_i_2 = 0;
+      //   // 记录 dp[i]
+      //   let dp_i = 0; 
+      //   for (let i = n - 1; i >= 0; i--) {
+      //       dp_i = Math.max(dp_i_1, nums[i] + dp_i_2);
+      //       dp_i_2 = dp_i_1;
+      //       dp_i_1 = dp_i;
+      //   }
+      //   return dp_i;
+      // }
+      rob([1,2,3,1]);
+    </script>
+  </body>
+</html>

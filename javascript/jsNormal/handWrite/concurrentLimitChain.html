@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const request1 = () => new Promise(resolve => setTimeout(() => resolve(1), 4000))
+        const request2 = () => new Promise(resolve => setTimeout(() => resolve(2), 1000))
+        const request3 = () => new Promise(resolve => setTimeout(() => resolve(3), 2000))
+        const request4 = () => new Promise(resolve => setTimeout(() => resolve(4), 1500))
+
+        const scheduler = max => {
+            const queue = [];
+            let first = true;
+            let currentIndex = 0;
+            let currnetInvoke = 0;
+            function run() {
+                if(currentIndex >= queue.length) return;
+                while( currnetInvoke < max) {
+                    const cb = () => {
+                        currnetInvoke--;
+                        run();
+                    }
+                    queue[currentIndex](cb);
+                    currnetInvoke++;
+                    currentIndex++;
+                }
+            }
+            return function s (fun) {
+                return new Promise((resolve) => {
+                    queue.push(async (cb) => {
+                        const res = await fun();
+                        cb();
+                        resolve(res);
+                    });
+                    if(first) {
+                        first = !first
+                        Promise.resolve().then(run);
+                    }
+                })
+            }
+        }
+
+        const s = scheduler(2)
+        s(request1).then(res => console.log(res))
+        s(request2).then(res => console.log(res))
+        s(request3).then(res => console.log(res))
+        s(request4).then(res => console.log(res))
+        // 打印顺序如下
+        // 2, 3, 1, 4
+    </script>
+</body>
+</html>

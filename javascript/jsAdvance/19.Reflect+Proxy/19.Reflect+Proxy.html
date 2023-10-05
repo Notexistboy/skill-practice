@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function sum(a,b){
+      return a+b
+    }
+
+    let newSum = new Proxy(sum, {
+      apply(target, content, args){
+        //console.log(target, content, args)
+        //console.log(...arguments)
+        return Reflect.apply(...arguments)
+      }
+    })
+    /* 需要增强方法的功能 就要用到反射 */
+    console.log(newSum(2,3))
+
+    //Reflect.apply(调用的函数，this指向，参数数组) 和apply和call类似 
+    console.log(Math.ceil(4.6))
+    let res = Reflect.apply(Math.ceil, null, [4.6])
+
+    function show(...args){
+      console.log(this)
+      console.log(args)
+    }
+    Object.defineProperty
+    show(1,2,3,4)//this指向window
+    show.call(null,1,2,3,4)//this指向函数
+    show.apply(null,[1,2,3,4])//this指向函数
+    Reflect.apply(show, null, [1,2,3,4])//this指向函数
+    
+    /* Reflect 反射
+        Object.defineProperty属于语言内部的方法 ECMA想尽量将Object的方法放到Reflect上
+
+        Reflect.defineProperty
+
+        Reflect
+        在未来 新方法可能直接放到Reflect上 通过Reflect对象直接拿到语言内部的东西
+     */
+    console.log('assign' in Object)
+
+    console.log(Reflect.has(Object, 'assign'))
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let middleware = []
+        middleware.push((next) => {
+            console.log(1)
+            next()
+            console.log(1.1)
+        })
+        middleware.push((next) => {
+            console.log(2)
+            next()
+            console.log(2.1)
+        })
+        middleware.push((next) => {
+            console.log(3)
+            next()
+            console.log(3.1)
+        })
+
+        let fn = compose(middleware)
+        fn();
+        debugger;
+        /**
+         * 中间件包裹方法，返回函数集 functions
+         * @param functions
+         */
+        function compose(functions) {
+            debugger;
+            if (functions.length === 0) {
+                // 中间件长度为0时,因为compose需要返回一个函数并执行
+                // 所以直接返回一个函数,执行后直接返回入参,
+                // 结合之前的代码 相当于 this.basicRequest = this.basicRequest
+                return (arg) => arg
+            }
+            if (functions.length === 1) {
+                // 当中间件长度为1时, 直接返回中间件, 结合之前的代码
+                // logMiddleware中的next参数就是this.basicRequest
+                return functions[0]
+            }
+            // 有多个中间情况逻辑比较复杂,我们看下面一端代码
+            return functions.reduce((a, b) => {
+                debugger;
+                return (...args) => a(b(...args))
+            })
+        }
+
+    </script>
+</body>
+</html>

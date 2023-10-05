@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        Array.prototype.myReduce = function (callback, initValue){
+            let arr = this;
+            let res = [], startIndex;
+            res = initialValue ? initialValue : arr[0]; // 不传默认取数组第一项
+            startIndex = initialValue ? 0 : 1;
+            for (let i = startIndex; i < arr.length; i++) {
+                // 把初始值、当前值、索引、当前数组返回去。调用的时候传到函数参数中 [1,2,3,4].reduce((initVal,curr,index,arr))
+                res = callback.call(null, res, arr[i]);
+            }
+            return res;
+        };
+        Array.prototype.myMap = function (callback, context) {
+            if(typeof callback !== 'function') throw ('callback参数必须是函数');
+            let arr = this;
+            let res = [];
+            len = arr && arr.length || 0;
+            context = context || window;
+            for (let index = 0; index < len; index++) {
+                res.push(callback.call(context, arr[index], index, arr));
+            }
+            return res;
+        };
+        Array.prototype.myForEach = function (callback, context) {
+            if (typeof callback !== 'function') throw ('callback参数必须是函数');
+            let arr = this;
+            len = arr && arr.length || 0;
+            context = context || window;
+            for (let index = 0; index < len; index++) {
+                callback.call(context, arr[index], index, arr);
+            }          
+        };
+    </script>
+</body>
+</html>

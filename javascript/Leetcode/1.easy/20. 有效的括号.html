@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /* 利用栈。
+      遇到左括号，一律推入栈中，
+      遇到右括号，将栈顶部元素拿出，如果不匹配则返回 false，如果匹配则继续循环。
+
+      为了提高性能, 在循环前进行这一步：let len = s.length是非常关键的，减少了计算次数。
+      为了提高执行时间，这一步if (len%2) return false是非常关键的，减少了不必要的计算。
+      */
+      /**
+       * @param {string} s
+       * @return {boolean}
+       */
+      var isValid = function(s) {
+        let sArr = s.split('')
+        let len = sArr.length
+        if (len%2) return false
+        let leftBrackets = []
+        for(let i=0;i<len;i++){
+          let item = sArr[i]
+          if(item == '(' ||item == '{' ||item == '[' ){
+            debugger
+            leftBrackets.push(item)
+          }else{
+            debugger
+            if (!len) return false
+            let justify = leftBrackets.pop()
+            debugger
+            if(item == ')' && justify !== '(') return false
+            else if(item == '}' && justify !== '{') return false
+            else if(item == ']' && justify !== '[') return false
+          }
+        }
+        debugger
+        return !leftBrackets.length
+      };
+      /* 
+      var isValid = function(s) {
+        let sArr = s.split('')
+        let len = sArr.length
+        if (len%2) return false
+        let leftBrackets = []
+        for(let i=0;i<len;i++){
+          let item = sArr[i]
+          switch(letter) {
+            case "(": {
+                leftBrackets.push(letter)
+                break;
+            }
+            case "[": {
+                leftBrackets.push(letter)
+                break;
+            }
+            case "{": {
+                leftBrackets.push(letter)
+                break;
+            }
+            case ")": {
+                if (leftBrackets.pop() !== "(") return false
+                break;
+            }
+            case "]": {
+                 if (leftBrackets.pop() !== "[") return false
+                break;
+            }
+            case "}": {
+                if (leftBrackets.pop() !== "{") return false
+                break;
+            }
+          }
+        }
+        return !leftBrackets.length
+      }; */
+      isValid('{}')
+    </script>
+  </body>
+</html>

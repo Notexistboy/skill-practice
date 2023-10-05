@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      // 一、原型链继承
+      // 子类的原型是父类的实例
+      function Parent() {
+        this.isShow = true
+        this.info = {
+            name: "foo",
+            age: 18,
+        };
+      }
+
+      Parent.prototype.getInfo = function() {
+        console.log(this.info);
+        console.log(this.isShow); // true
+      }
+
+      function Child() {};
+      Child.prototype = new Parent()
+
+      let child1 = new Child();
+      let child11 = new Child();
+      debugger;
+      child1.info.gender = "男";
+
+      // console.log(child1);
+      // console.log(child11);
+
+      // 优点：
+      // 1.父类方法可以复用
+      // 缺点：
+      // 1.无法向父类构造函数传参
+      // 2.父类的所有属性被共享，只要一个实例修改了属性，其他所有的子类实例都会被影响(先创建的实例会影响后创建的实例)
+
+      // 二、构造函数继承（对象冒充继承）
+      为了解决引用共享和超类型无法传参的问题，在子类构造函数中调用父类构造函数，可以在子类构造函数中使用call()和apply()方法。
+      function Parent(name) {
+        this.info = {
+          name,
+          age: 19,
+        }
+      }
+      
+      Parent.prototype.getInfo = function() {
+        console.log(this.info);
+        console.log(this.isShow); // true
+      }
+
+      function Child(name) {
+        Parent.call(this, name)
+        this.gender = "男";
+      }
+
+      let child2 = new Child('foo');
+      let child22 = new Child('bar');
+
+      // console.log(child2);
+      // console.log(child22);
+
+      // 优点：
+      // 1.可以在子类构造函数中向父类传参数
+      // 2.父类的引用属性不会被共享
+      // 缺点：
+      // 1.子类不能访问父类原型上定义的方法（即不能访问Parent.prototype上定义的方法），
+      // 2.方法都在构造函数中定义，每次创建实例都会创建一遍方法
+
+
+      // 三、组合继承（原型链继承+构造函数继承）
+      // 借用构造函数虽然解决了刚才两种问题，但没有原型，就无法复用。所以，需要原型链+借用构造函数的模式，这种模式成为组合继承。基本的思路就是使用原型链继承原型上的属性和方法，而通过构造函数继承实例属性，这样既可以把方法定义在原型上以实现重用，又可以让每个实例都有自己的属性。
+      function Parent(name) {
+        this.info = {
+          name: name,
+          age: 18,
+        };
+      }
+      
+      Parent.prototype.getInfo = function() {
+        console.log(this.info);
+        console.log(this.isShow); // true
+      }
+
+      function Child(name) {
+        Parent.call(this, name)
+        this.gender = "男";
+      }
+
+      Child.prototype = new Parent();
+
+      Child.prototype.sayAge = function () {
+        console.log(this.age);
+      };
+
+      let child3 = new Child('foo');
+      let child33 = new Child('bar');
+
+      // console.log(child1);
+      // console.log(child2);
+
+      // 四、原型式继承
+      // 对参数对象的一种浅复制，这种继承借助原型并基于已有的对象创建新对象，同时还不必因此创建自定义类型
+        function objectCopy(obj) {
+          function Fun() { };
+          Fun.prototype = obj;
+          return new Fun;
+        }
+        let person = {};
+
+        let person1 = objectCopy(person);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      // 五、寄生式继承
+        function objectCopy(obj) {
+          function Fn () {};
+          Fn.prototype = obj;
+          return new Fn();
+        }
+        function enhencer(original) {
+          let clone = objectCopy(original);
+          clone.getName = function () { // 添加属性
+            console.log(this.name);
+          };
+          return clone;
+        }
+
+      // 六、寄生式组合继承
+      function inheritPrototype(child, parent) {
+        let prototype = objectCopy(parent.prototype);
+        prototype.constructor = child;
+        child.prototype = prototype;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /**
+      * @param {number} n
+      * @return {number}
+      */
+      /* 
+      动态规划
+       */
+      /* 
+      贪心枚举
+      
+      */
+      /* 
+      贪心 + BFS（广度优先搜索）
+       */
+      /* 
+      正如上述贪心算法的复杂性分析种提到的，调用堆栈的轨迹形成一颗 N 元树，
+      其中每个结点代表 is_divided_by(n, count) 函数的调用。基于上述想法，
+      我们可以把原来的问题重新表述如下：
+
+      给定一个 N 元树，其中每个节点表示数字 n 的余数减去一个完全平方数的组合，
+      我们的任务是在树中找到一个节点，该节点满足两个条件：
+
+      (1) 节点的值（即余数）也是一个完全平方数。
+      (2) 在满足条件（1）的所有节点中，节点和根之间的距离应该最小。
+
+      由于我们执行调用的贪心策略，我们实际上是从上到下逐层构造 N 元树。
+      我们以 BFS（广度优先搜索）的方式遍历它。
+      在 N 元树的每一级，我们都在枚举相同大小的组合。
+      遍历的顺序是 BFS，而不是 DFS（深度优先搜索），这是因为在用尽固定数量的完全平方数分解数字
+      n 的所有可能性之前，我们不会探索任何需要更多元素的潜在组合。
+
+      算法：
+      首先，我们准备小于给定数字 n 的完全平方数列表（即 square_nums）。
+      然后创建 queue 遍历，该变量将保存所有剩余项在每个级别的枚举。
+      在主循环中，我们迭代 queue 变量。在每次迭代中，我们检查余数是否是一个完全平方数。
+      如果余数不是一个完全平方数，就用其中一个完全平方数减去它，得到一个新余数，然后将新余数添加到 next_queue 中，
+      以进行下一级的迭代。一旦遇到一个完全平方数的余数，我们就会跳出循环，这也意味着我们找到了解。
+      注意：在典型的 BFS 算法中，queue 变量通常是数组或列表类型。
+      但是，这里我们使用 set 类型，以消除同一级别中的剩余项的冗余。
+      事实证明，这个小技巧甚至可以增加 5 倍的运行加速。
+      
+       */
+      var numSquares = function(n) {
+        let square_nums = []
+        let queue = new Set([0])
+        for (let i = 1; i * i <= n; ++i) {
+          square_nums.push(i * i);
+        }
+        let level = 0
+        debugger
+        while (queue.size) {
+          level += 1;
+          let next_queue = new Set()
+          debugger
+          for (let v of queue) {
+            for (let c of square_nums) {
+              debugger
+              let add = v + c
+              if (add === n) { return level; }
+              if (add > n) {
+                debugger
+                //后面都是更大的了
+                break;
+              }
+              debugger
+              next_queue.add(add);
+            }
+          }
+          queue = next_queue;
+        }
+        return level;
+      };
+      numSquares(12)
+      numSquares(13)
+    </script>
+  </body>
+</html>

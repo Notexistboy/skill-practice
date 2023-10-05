@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    //https://www.jianshu.com/p/2975c25e4d71
+    function foo(n,value){
+      if(n === 1) return 1
+      return foo(n-1, n*value)//重复调用n-1 n*(n-1)
+    }
+    foo(5,1)//初始值
+    function foo1(n){
+      if(n ===1 ) return 1
+      return n*foo1(n-1)
+    }
+    foo1(5)
+    function fooo(n){
+      if( n<= 1) return 1
+      return fooo(n-1) + fooo(n-2)
+    }
+    fooo(5)
+    function fooo1(n,ttl1 = 1, ttl2 = 1){
+      if( n<= 1) return ttl2
+      return fooo1(n-1, ttl2, ttl1+ttl2)
+    }
+    fooo1(5)
+    function trampoline(f) {
+      while (f && f instanceof Function) {
+        f = f();
+      }
+      return f;
+    }
+    function fooo2(n,ttl1 = 1, ttl2 = 1){
+      if( n > 1) return fooo2.bind(null, n-1, ttl2, ttl1+ttl2)
+      else return ttl2
+    }
+    trampoline(fooo2(5))
+    
+
+    /* 尾递归优化只在严格模式下生效，那么正常模式下，
+    或者那些不支持该功能的环境中，有没有办法也使用尾递归优化呢？
+    回答是可以的，就是自己实现尾递归优化。
+    它的原理非常简单。尾递归之所以需要优化，
+    原因是调用栈太多，造成溢出，那么只要减少调用栈，
+    就不会溢出。怎么做可以减少调用栈呢？就是采用“循环”换掉“递归”。
+    下面是一个正常的递归函数。 */
+    
+  </script>
+</body>
+</html>

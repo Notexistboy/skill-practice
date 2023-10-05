@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        Promise.myRace = function(promises) {
+            return new Promise((resolve, reject) => {
+                let successCounter = 0;
+                let length = promises.length;
+                let result = []
+                for(let i =0; i < length; i++) {
+                    const promiseItem = Promise.resolve(promises[i]);
+                    promiseItem.then(resolve, reject)
+                }
+            })
+        };
+        Promise.myRace1 = function(promises) {
+            return new Promise((resolve, reject) => {
+                let successCounter = 0;
+                let iteratorCounter = 0;
+                let length = promises.length;
+                let result = []
+                for(let promiseItem of promises) {
+                    let currentCounter = iteratorCounter;
+                    iteratorCounter++;
+                    Promise.resolve(promiseItem).then(resolve, reject)
+                }
+            })
+        };
+        Promise.myRace([
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    console.log("index = 1; timeout = 1000; resolve(200)")
+                    resolve(200)
+                }, 2000);
+            }),
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    console.log("index = 2; timeout = 3000; reject(300)")
+                    reject(300)
+                }, 3000);
+            }), 
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    console.log("index = 3; timeout = 2000; reject(400)")
+                    reject(100)
+                }, 1000);
+            })
+        ]).then(data => {
+            console.log("then", data)
+        }).catch(err => {
+            console.log('catch', err)
+        })
+        Promise.myRace1([
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    console.log("index = 1; timeout = 1000; resolve(200)")
+                    resolve(200)
+                }, 2000);
+            }),
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    console.log("index = 2; timeout = 3000; reject(300)")
+                    reject(300)
+                }, 3000);
+            }), 
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    console.log("index = 3; timeout = 2000; reject(400)")
+                    reject(100)
+                }, 1000);
+            })
+        ]).then(data => {
+            console.log("then", data)
+        }).catch(err => {
+            console.log('catch', err)
+        })
+
+    </script>
+</body>
+</html>

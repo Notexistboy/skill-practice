@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 封装类
+    class Node {　　　　　　 //新元素构造
+      constructor(element){
+        this.element = element;
+        this.next = null;
+        this.previous = null;        
+      }
+    }
+    //单向链表
+    class ListNode {
+      constructor() {
+        this.head = null;
+        this.length = 0;
+      }
+      append (element) {
+        let newNode = new Node(element) //构造新的元素节点
+        let current
+        if(this.head === null){ //头节点为空时  当前结点作为头节点
+          this.head = newNode;
+        }else{ //头节点不为空
+          current = this.head;
+          while(current.next){
+            current = current.next //循环链表找到链表尾部next为空的节点
+          }
+          current.next = newNode //将链表尾部next为空的节点的next指针指向 当前节点
+        }
+        this.length++
+        return newNode
+      }
+      //删除节点
+      remove (element) {
+        let prevNode = this.findPrev(element)
+        if( prevNode.next != null ){
+          prevNode.next = prevNode.next.next;
+          this.length --
+        }
+        //prevNode.next.next = null
+      }
+      //查找节点
+      find (element){
+        let current = this.head
+        while(current.element == element){
+          current = current.next
+        }
+        return current.next
+      }
+      //查找前一节点
+      findPrev (element) {
+        let current = this.head
+        while(!( current.next == null) && current.next.element != element){
+          current = current.next
+        }
+        return current
+      }
+      //查找节点索引值
+      findIndexOf (element) {
+        let nodeIndex = 0
+        let current = this.head
+        debugger
+        while (current) {
+          if (element === current.element) {　　　　　　　　　　　　//从头节点开始遍历
+              return nodeIndex;
+          }
+          nodeIndex++;
+          current = current.next;
+        }
+        return -1
+      }
+      //插入节点
+      insert (newElement, item){
+        let newNode = new Node(newElement)
+        let currentElement = this.find(item)
+        newNode.next = currentElement.next 
+        currentElement.next = newNode
+        this.length++
+      }
+      //显示链表
+      display() {
+        var currNode = this.head;
+        while (currNode != undefined && currNode.element != null){
+          console.log( `${currNode.element}->${currNode.next ? currNode.next.element : null}` );
+          currNode = currNode.next;
+        }
+      }
+      //
+    }
+    //
+    let ListNode = new ListNode()
+    ListNode.append('apple')
+    //Node {element: "apple", next: null, previous: null}
+    ListNode.append('banana')
+    //Node {element: "banana", next: null, previous: null}
+    ListNode.append('mango')
+    //Node {element: "mango", next: null, previous: null}
+    ListNode.insert('water','banana')
+    ListNode.remove('water')
+  </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        let a;
+        const b = new Promise((resolve, reject) => {
+            console.log('promise1');
+            resolve();
+        }).then(() => {
+            console.log('promise2');
+        }).then(() => {
+            console.log('promise3');
+        }).then(() => {
+            console.log('promise4');
+        });
+
+        a = new Promise(async (resolve, reject) => {
+            console.log('a',a);
+            await b;// 等到promise都执行完 微任务
+            console.log('a',a);
+            console.log('after1');
+            await a; //after2不会执行
+            resolve(true);
+            console.log('after2');
+        });
+
+        console.log('end');
+
+        /* 
+        promise1
+        a undefined
+        end
+
+        =====同步执行=====
+
+        promise2
+        promise3
+        promise4
+
+        ====await====
+
+        a Promise { <pending> }
+        after1
+        */
+       setTimeout(()=>{
+        console.log(1);
+            Promise.resolve().then(()=>{
+                console.log(2);
+            });
+            setTimeout(()=>{
+                console.log(0)
+            }, 0);
+        }, 0)
+        setTimeout(()=>{
+            console.log(3);
+            Promise.resolve().then(()=>{
+                console.log(4);
+            });
+        }, 0)
+        // 1 2 3 4 0
+       
+
+        console.log(1);
+        new Promise(resolve => {
+            console.log(5);
+            resolve();
+            console.log(6);
+        }).then(() => {
+            console.log(7);
+        });
+        setTimeout(() => {
+            console.log(2);
+        },0);
+        Promise.resolve().then(() => {
+            console.log(8);
+        });
+    </script>
+  </body>
+</html>

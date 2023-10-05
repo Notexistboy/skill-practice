@@ -1,0 +1,1 @@
+export declare function jquery(selector: string): any;

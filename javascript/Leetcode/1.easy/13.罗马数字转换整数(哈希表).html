@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+
+  </div>
+  <script type="text/javascript">
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    var romanToInt = function (s) {
+      let romaList = new Map([['I', 1], ['V', 5], ['X', 10], ['L', 50], ['C', 100], ['D', 500], ['M', 1000]])
+      let sArr = s.split('')//["M", "C", "M", "X", "C", "I", "V"]
+      let sum = 0
+      for (let i = 0, len = sArr.length; i < len; i++) {
+        let value = romaList.get(sArr[i]) - romaList.get(sArr[i + 1])
+        if (i < len - 1 && value < 0) {
+          sum = sum - value
+          i += 1
+        } else {
+          sum += romaList.get(sArr[i])
+        }
+      }
+      return sum
+    };
+
+    romanToInt("III")
+    romanToInt('MCMXCIV')
+  </script>
+</body>
+
+</html>

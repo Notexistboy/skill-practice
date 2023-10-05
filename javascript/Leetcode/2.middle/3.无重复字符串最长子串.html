@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+
+  </div>
+  <script type="text/javascript">
+    /**
+      给定一个字符串，请你找出其中不含有重复字符的最长子串的长度。
+    */
+    /* 
+      滑动窗口及优化
+      关键字 重复字符 出现1次
+      
+      模式识别1 一旦涉及出现次数 需要用到散列表
+      散列表需要字符作为键 出现的次数作为值
+      构造子串 散列表存下标
+
+      模式识别2涉及子串 考虑滑动窗口
+      动态扩张收缩子串
+     */
+    /* 
+    字符串为空的情况
+    字符串均为重复字符情况
+    测试其他常规输入
+     */
+    /* 
+      我们使用两个指针表示字符串中的某个子串（的左右边界）。
+      其中左指针代表着上文中「枚举子串的起始位置」，
+      而右指针即为上文中的 r_krk；
+      在每一步的操作中，我们会将左指针向右移动一格，
+      表示 我们开始枚举下一个字符作为起始位置，
+      然后我们可以不断地向右移动右指针，
+      但需要保证这两个指针对应的子串中没有重复的字符。
+      在移动结束后，这个子串就对应着 以左指针开始的，
+      不包含重复字符的最长子串。我们记录下这个子串的长度；
+     */
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    /*  */
+    var lengthOfLongestSubstring = function (s) {
+      var hash = {};
+      var start = 0;
+      var ans = 0;
+      debugger
+      for (var i = 0, len = s.length; i < len; i++) {
+        var item = s[i];
+        debugger
+        if (!hash[item])//判断对象中是否出现此值
+          hash[item] = true;
+        else {//判断对象中是否多次出现此值
+          // item 已经在 substring 中存在了
+          for (; ;) {
+            debugger
+            if (s[start] === item) {
+              start++;
+              break;
+            }
+            debugger
+            hash[s[start]] = false;
+            start++;
+          }
+        }
+        ans = Math.max(ans, i - start + 1);
+      }
+      return ans;
+    };
+    var lengthOfLongestSubstring = function(s) {
+      // 哈希集合，记录每个字符是否出现过
+      const occ = new Set();
+      const n = s.length;
+      // 右指针，初始值为 -1，相当于我们在字符串的左边界的左侧，还没有开始移动
+      let rk = 0, ans = 0;
+      for(let i = 0; i<n; ++i){
+        debugger
+        if(i != 0){
+          debugger
+          // 左指针向右移动一格，移除一个字符
+          occ.delete(s.charAt(i - 1))
+        }
+        debugger
+        
+        /* 右指针初始时不为0 添加时变为0 所以判断时需要进行加1操作 且要小于总长度 并且occ中不包含 rk右侧的值 && 判断set中不存在当前位置的元素  */
+        while (rk < n && !occ.has(s.charAt(rk))){
+          debugger
+          // 不断地移动右指针
+          occ.add(s.charAt(rk));
+          ++rk;
+        }
+        /* 不符合while判断条件就会跳出 作比较取最长 */
+        debugger
+        // 第 i 到 rk 个字符是一个极长的无重复字符子串
+        ans = Math.max(ans, rk - i);
+      }
+      return ans
+    };
+    console.log(lengthOfLongestSubstring('leeewtcode'))
+  </script>
+</body>
+
+</html>

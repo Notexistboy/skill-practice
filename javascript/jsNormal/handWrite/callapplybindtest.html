@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+  Function.prototype.myCall = function(target,...args) {
+    // 如果obj为null/undefined,this指向为window(node下=globalThis(全局对象))
+    if (target === null || target === undefined) {
+      target = window || globalThis
+    }
+    // console.log(this)// add方法
+    // 1.给对象添加add方法
+    target.temp = this
+    // 2.调用对象的该方法（隐式改变函数this指向）,获得返回值
+    const res = target.temp(...args)
+    // 3.删除对象上的该方法
+    delete target.temp
+    // 4. 返回函数的返回值
+    return res
+  };
+  Function.prototype.myApply = function(target, args) {
+     // 如果obj为null/undefined,this指向为window(node下=globalThis(全局对象))
+      if (target === null || target === undefined) {
+        target = window || globalThis
+      }
+      // console.log(this)// add方法
+      // 1.给对象添加add方法
+      target.temp = this
+      let res
+      // 2.执行该方法，获得函数返回值
+      // 注意如果args参数存在,传参调用；如果不存在，直接调用
+      if(!args) {
+        res = target.temp()
+      } else {
+        res = target.temp(...args)
+      }
+      // 3.删除对象上的该方法
+      delete target.temp
+      // 4. 返回函数的返回值
+      return res   
+  };
+  Function.prototype.myBind = function (target, ...args) {
+    // 调用函数
+    let that = this;
+    debugger;
+    return function (...args1) {
+      that.apply(target, [...args, ...args1])
+    }
+  }
+  Function.prototype.myHardBind = function (target, ...args) {
+    // 调用函数
+    let that = this;
+    function callback(...arg1) {
+      debugger;
+      if(this instanceof callback) {
+        that.apply(this, [...args, ...arg1])
+      }else{
+        that.apply(target, [...args, ...arg1])
+      }
+    }
+    debugger;
+    // 实现继承（原型式继承）
+    function Fun () { };//创建一个空函数
+    Fun.prototype = that.prototype;
+    callback.prototype = new Fun(); // mHB的原型为add原型的实例
+    return callback
+  }
+  function add(a, b) {
+    return a + b + this.c;
+  }
+
+  // let obj = {c: 10};
+  // let addC = add.myHardBind(obj, 5, 10);
+  // console.log(addC()); // 输出 25
+
+  let obj2 = {
+    c: 10,
+  };
+  obj2.addC = add.myHardBind(obj2, 5, 10);
+  console.log(obj2.addC()); // 输出 25
+  </script>
+</body>
+</html>

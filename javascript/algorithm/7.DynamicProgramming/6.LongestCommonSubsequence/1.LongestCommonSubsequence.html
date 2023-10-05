@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+/* 最长公共子序列
+对于两个子序列S1和S2，找出它们最长的公共子序列。
+
+定义一个二维数组dp用来存储最长公共子序列的长度，
+其中dp[i][j]表示S1的前i个字符与S2的前j个字符最长公共子序列的长度。
+考虑S1i与S2j值是否相等，分为两种情况：
+
+当S1i==S2j时，那么就能在S1的前i-1个字符
+与S2的前j-1个字符最长公共子序列的基础上再加上S1i这个值，
+最长公共子序列长度加1，即dp[i][j]=dp[i-1][j-1]+1。
+当S1i!=S2j时，此时最长公共子序列为S1的前i-1个字符
+和S2的前j个字符最长公共子序列，或者S1的前i个字符和S2的前j-1个字符最长公共子序列，
+取它们的最大者，即dp[i][j]=max{dp[i-1][j],dp[i][j-1]}。
+综上，最长公共子序列的状态转移方程为： */
+
+/* 对于长度为N的序列S1和长度为M的序列S2，
+dp[N][M]就是序列S1和序列S2的最长公共子序列长度。
+
+与最长递增子序列相比，最长公共子序列有以下不同点：
+
+针对的是两个序列，求它们的最长公共子序列。
+在最长递增子序列中，dp[i]表示以Si为结尾的最长递增子序列长度，
+子序列必须包含Si；在最长公共子序列中，
+dp[i][j]表示S1中前i个字符与S2中前j个字符的最长公共子序列长度，
+不一定包含S1i和S2j。
+在求最终解时，最长公共子序列中dp[N][M]就是最终解，
+而最长递增子序列中dp[N]不是最终解，
+因为以SN为结尾的最长递增子序列不一定是整个序列最长递增子序列，
+需要遍历一遍dp数组找到最大者。
+ */
+
+/* public int lengthOfLCS(int[] nums1, int[] nums2) {
+    int n1 = nums1.length, n2 = nums2.length;
+    int[][] dp = new int[n1 + 1][n2 + 1];
+    for (int i = 1; i <= n1; i++) {
+        for (int j = 1; j <= n2; j++) {
+            if (nums1[i - 1] == nums2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    return dp[n1][n2];
+} */
+    </script>
+  </body>
+</html>

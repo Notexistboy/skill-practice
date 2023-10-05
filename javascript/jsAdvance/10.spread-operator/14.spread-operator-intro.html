@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+  const youngers = ['george', 'john', 'thomas']
+  const olders = ['james', 'andrew', 'martin']
+
+  /* ！！！扩展运算符可以把可遍历对象扩展成参数序列 */
+  //合并两个数组
+  let members = youngers.concat(olders)
+  console.log(members)
+  /* 在两个数组中添加另外的元素 */
+  /* members = []
+  members = members.concat(youngers)
+  members.push('merry')
+  members = members.concat(olders)
+  console.log(members) */
+
+  /*  */
+  members = [...youngers, 'merry', ...olders]
+  console.log(members)
+  /* 扩展运算符可以实现深拷贝 */
+  const current = [...member]
+
+</script>
+</html>

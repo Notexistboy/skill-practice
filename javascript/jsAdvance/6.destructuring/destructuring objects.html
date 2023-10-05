@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+  <html >
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+
+    </div>
+    <script>
+    /* 对象的解构与数组有一个重要的不同。
+    数组的元素是按次序排列的，变量的取值由它的位置决定；
+    而对象的属性没有次序，变量必须与属性同名，才能取到正确的值。 */
+      const Tom = {
+        name: 'Tom Jones',
+        age: 25,
+        family: {
+          mother: 'Norah Jones',
+          father: 'Richard Jones',
+          brother: 'Howard Jones',
+        }
+      }
+
+      let name;//分号很重要
+      /*  */
+      //const {name, age} = Tom
+      /* 因为JavaScript引擎会将{name, age}理解成一个代码块 
+      从而发生语法错误 只有不将大括号放在行首 才能避免JavaScript将其解释为代码块 
+      才能解决这个问题 */
+      /* 解构赋值允许等号左边的模式之中，不放置任何变量名。因此，可以写出非常古怪的赋值表达式。 */
+
+      ({} = [true, false]);
+      ({} = 'abc');
+      ({} = []);
+      /* 上面的表达式虽然毫无意义，但是语法是合法的，可以执行。 */
+      /* 解构赋值虽然很方便，但是解析起来并不容易。
+      对于编译器来说，一个式子到底是模式，还是表达式，没有办法从一开始就知道，必须解析到（或解析不到）等号才能知道。
+      由此带来的问题是，如果模式中出现圆括号怎么处理。
+      ES6 的规则是，只要有可能导致解构的歧义，就不得使用圆括号。
+      但是，这条规则实际上不那么容易辨别，处理起来相当麻烦。
+      因此，建议只要有可能，就不要在模式中放置圆括号。 */
+
+      /* 以下三种解构赋值不得使用圆括号。
+      （1）变量声明语句 */
+      /* 
+      let [(a)] = [1]
+      let {x:(a)} = {}
+      let {(x: a)} = {}
+      let ({x:a}) = {}
+      let {(x):a} = {}
+      let {o:({p:p})} = {o:{p:2}}
+      //正确写法let {o: {p: p} } = {o:{p:2}}
+       */
+      /* （2）函数参数
+      函数参数也属于变量声明，因此不能带有圆括号。 */
+
+
+      //function f([(z)]) {return z}
+      //function f([z,(x)]) { return x; }
+
+      /* （3）赋值语句的模式 */
+      //({p: a}) = {p: 42}
+      //([a]) = [5]
+      //上面代码将整个模式放在圆括号之中，导致报错。
+      //[({ p: a }), { x: c }] = [{}, {}];
+      //上面代码将一部分模式放在圆括号之中，导致报错。
+
+
+      //可以使用圆括号的情况只有一种：赋值语句的非模式部分，可以使用圆括号。
+      //[(b)] = [3]; // 正确
+      //({ p: (d) } = {}); // 正确
+      //[(parseInt.prop)] = [3]; // 正确
+      /* 上面三行语句都可以正确执行，因为首先它们都是赋值语句，而不是声明语句；
+      其次它们的圆括号都不属于模式的一部分。第一行语句中，模式是取数组的第一个成员，跟圆括号无关；
+      第二行语句中，模式是p，而不是d；第三行语句与第一行语句的性质一致。
+      */
+
+
+      ({name, age} = Tom) //语法逻辑 先声明变量名 name age 然后在tom对象中去找和name age的同名属性
+      //此时如果不写() 编译器会把{} 解析成代码块 而不是对象解构的语法
+      //name = 'Tom Jones',
+      //age = 25
+      const father = 'Dad'
+      //如果变量被提前占用 如果变量在对象中是明确的undefined时 会使用默认值
+      const { father: f, mother, brother, sister='have no sister' } = Tom.family
+      //此时 Tom.family.father 被赋值给 f 
+
+      var {x = 3} = {};
+      x // 3
+
+      var {x, y = 5} = {x: 1};
+      x // 1
+      y // 5
+
+      var {x: y = 3} = {};
+      y // 3
+
+      var {x: y = 3} = {x: 5};
+      y // 5
+
+      /* var { message: msg = 'Something went wrong' } = {};
+      msg // "Something went wrong" */
+
+      //默认值生效的条件是，对象的属性值严格等于undefined。
+      var {x = 3} = {x: undefined};
+      x // 3
+
+      var {y = 3} = {y: null};
+      x // null
+      /* 上面代码中，属性x等于null，因为null与undefined不严格相等，
+      所以是个有效的赋值，导致默认值3不会生效。 */
+
+
+      
+      /* 对象的解构赋值，可以很方便地将现有对象的方法，赋值到某个变量。 */
+      // 例一
+      let arr = [1,2,3,4]
+      let { max, min} = Math;
+      max.apply(null,arr)
+      min.apply(null,arr)
+      // 例二
+      const { log } = console;
+      log('hello') // hello
+
+      let { foo: baz, bar = 'bar' } = { foo: 'aaa', bar: 'bbb' }
+      //baz = "aaa"
+      //bar = "bbb"
+
+      //与数组一样，解构也可以用于嵌套结构的对象。
+      let obj = {
+        p: [
+          'Hello',
+          { y: 'World' }
+        ]
+      }
+      //let { p: [x, { y }] } = obj
+      //P p is not defined at <anonymous>:1:1
+      //x  "Hello"
+      //y  "World"
+      /* 注意，这时p是模式，不是变量，因此不会被赋值。如果p也要作为变量赋值，可以写成下面这样。 */
+      //let { p, p: [x, { y }] } = obj;
+
+      const node = {
+        loc: {
+          start: {
+            line: 1,
+            column: 5
+          }
+        }
+      };
+      let {loc, loc:{start, start:{line, column}}} = node
+
+      /* 或者let { loc, loc: { start }, loc: { start: { line }} } = node; */
+      //loc start: {line: 1, column: 5}
+      //start {line: 1, column: 5}
+      //line: 1, column: 5
+
+      //如果解构模式是嵌套的对象，而且子对象所在的父属性不存在，那么将会报错。
+      // 报错
+      //let {foo: {bar}} = {baz: 'baz'};
+      /* 上面代码中，等号左边对象的foo属性，对应一个子对象。
+      该子对象的bar属性，解构时会报错。
+      原因很简单，因为foo这时等于undefined，再取子属性就会报错。 */
+
+      const obj1 = {};
+      const obj2 = { foo: 'bar' };
+      Object.setPrototypeOf(obj1, obj2);
+      //obj1 {} __proto__: foo: "bar"
+      const {foo} = obj1
+
+      //在一些第三方库当中会提供一个options选项让用户自定义 内部会有一个回滚值 在用户没有提供值的 时候使用默认值
+      //默认不传参 options就是空对象
+      function append(options = {}) {
+        const {parent = 'body', width = '100px', height = '100px', backgroundColor = 'pink'} = options
+        const div = document.createElement('div')
+        div.style.width = width
+        div.style.height = height
+        div.style.backgroundColor = backgroundColor
+        document.querySelector(parent).appendChild(div)
+      }
+
+      append({parent:'.container', width: '200px', height: '200px', backgroundColor: 'yellow'})
+    </script>
+  </body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+
+  </div>
+  <script type="text/javascript">
+    function Foo() {
+      getName = function () {
+        console.log(1);
+      };
+      return this;
+    } //首先定义了一个叫Foo的函数，
+
+    Foo.getName = function () {
+      console.log(2);
+    };
+    //之后为Foo创建了一个叫getName的静态方法存储了一个匿名函数
+    //静态方法 区别于 实例方法 实例方法 可以在函数的实例对象当中调用
+    Foo.prototype.getName = function () {
+      console.log(3);
+    };
+    //之后为Foo的原型对象新创建了一个叫getName的匿名函数
+
+
+    var getName = function () {
+      console.log(4);
+    };
+    //之后又通过 函数变量表达式 创建了一个getName的函数
+
+    function getName() {
+      console.log(5);
+    }
+    //最后再通过 函数声明 声明一个叫getName函数。
+
+    /* 函数声明会比函数表达式更早的提前 函数表达式实现对函数声明的覆盖 */
+
+    //请写出以下输出结果：
+    Foo.getName(); //   
+    //访问Foo函数上存储的静态方法
+    getName(); // 
+    //一是变量声明提升，二是函数表达式和函数声明的区别。
+    Foo().getName(); //  
+    //更改this指向 Foo()的返回值是this  this指向window
+    /* 先执行方式1的“Foo()”,结果是"this" 并指向window，
+    并产生了一个全局getName(window.getName)指针指向一个匿名函数，
+    然后再执行"this.getName()" , 
+    其实就是执行刚刚造出来的那个全局getName指向的匿名函数，所以输出“1”. */
+    /* 
+      Foo函数的第一句getName = function () { console.log(1); };
+      是一句函数赋值语句，注意它没有var声明，
+      所以先向当前Foo函数作用域内寻找getName变量，没有。
+      再向当前函数作用域上层，
+      即外层作用域内寻找是否含有getName变量，找到了，
+      也就是第二问中的console.log(4)函数，将此变量的值赋值为function(){console.log(1)}。
+      此处实际上是将外层作用域内的getName函数修改了。
+     */
+    getName(); // 作用域绑定在全局而不是绑定在函数上
+
+    /* 此处考察的是JS的运算符优先级问题 */
+    /* new Foo() >  Foo() > new Foo */
+    new Foo.getName(); // new (Foo.getName)() //
+    //先执行Foo.getName()，输出2，再创建Foo.getName()方法的实例。
+    new Foo().getName(); //(new Foo()).getName() //
+    //先创建Foo的实例，调用实例的getName()方法，由于自身没有该方法，去原型链上找，即调用Foo.prototype.getName()，输出3
+    new new Foo().getName(); //new ((new Foo()).getName)(); //
+    //即先执行new Foo().getName()，由第六步可知，输出3，再创建Foo.prototype.getName()这个函数的实例返回。
+    /* 
+      为什么new Foo().getName()先运算new Foo()，
+      而new Foo.getName()是先运算Foo.getName？
+      对照下面链接里的优先级，看这两个的区别：
+
+      new Foo() 属于new（带参数列表）
+      new Foo属于new（无参数列表）
+      无参数列表的优先级为18，
+      而成员访问的优先级为19，
+      高于无参数列表。
+      因此new Foo.getName()先执行Foo.getName()
+
+      带参数列表的优先级为19，而成员访问的优先级也为19，
+      按照运算符规则（同一优先级，按照从左向右的执行顺序），
+      new Foo().getName()先执行new Foo()，
+      再对new之后的实例进行成员访问.getName()操作。
+      这是js运算符的优先级链接，可查看每个运算符的优先级。
+    */
+
+  </script>
+</body>
+
+</html>

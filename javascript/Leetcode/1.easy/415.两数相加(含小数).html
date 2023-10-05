@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        /**
+        * @param {string} num1
+        * @param {string} num2
+        * @return {string}
+        */
+        var addString = function(num1, num2,carry) {
+            let num1Len = num1.length - 1;
+            let num2Len = num2.length - 1;
+            let maxLen = num1.length > num2.length ? num1.length : num2.length;
+            let i = 0;
+            let res = '';
+            while( i < maxLen){
+                let curr = (Number(num1[num1Len-i]) || 0) + (Number(num2[num2Len-i]) || 0) + carry;
+                carry = Math.floor(curr/10);
+                curr %= 10;
+                res = curr + res;
+                i++;
+            }
+            return carry ? carry + res : res;
+        }
+        
+        var addFloat = function(numFloat1, numFloat2) {
+          let numFloat1Len = numFloat1.length-1;
+          let numFloat2Len = numFloat2.length-1;
+          let min = min2 = numFloat1Len > numFloat2Len ? numFloat2Len : numFloat1Len;
+          let carry = 0;
+          let res = '';
+          let i = 0;
+          while(min>=0) {
+            let curr = Number(numFloat1[min]) + Number(numFloat2[min]) + carry;
+            carry = Math.floor(curr/10);
+            curr %= 10;
+            res = curr + res;
+            min--;
+          }
+          if(numFloat1Len>numFloat2Len){
+            res += numFloat1.slice(min2+1, numFloat1Len+1);
+          } else if(numFloat1Len<numFloat2Len) {
+            res += numFloat2.slice(min2+1, numFloat2Len+1);
+          }
+          return [carry, res]
+        }
+        
+        function run(a, b){
+          var [number1, float1] = a.toString().split('.');
+          var [number2, float2] = b.toString().split('.');
+          var [carry, res] = addFloat(float1, float2)
+          var resNum = addString(number1, number2, carry)
+          return resNum+'.'+ res;
+        }
+        
+        run(343.585459, 11441.888);
+        
+        run(343.77, 11441.888);
+        
+        run(343.77, 11441.22);
+        /* 
+          11785.473459
+          11785.658
+          11784.99
+        */
+    </script>
+  </body>
+</html>

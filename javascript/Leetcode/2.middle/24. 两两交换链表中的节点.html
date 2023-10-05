@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var swapPairs = function (head) {
+            if (head === null || head.next === null) {
+                return head;
+            }
+            const node = head.next;
+            head.next = swapPairs(node.next);
+            node.next = head;
+            return node;
+        };
+
+        var swapPairs = function (head) {
+            let node = new ListNode(0, head);
+            let pre = node;
+            while (pre.next != null && pre.next.next != null) {
+                let l1 = pre.next,
+                    l2 = pre.next.next;
+                let next = l2.next;
+                l1.next = next;
+                l2.next = l1;
+                pre.next = l2;
+                pre = l1;
+            }
+            return node.next;
+        };
+    </script>
+</body>
+
+</html>

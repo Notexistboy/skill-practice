@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        /* 
+            给定一个非空二叉树, 返回一个由每层节点平均值组成的数组。
+        */
+        /**
+         * @param {TreeNode} root
+         * @return {number[]}
+         */
+        var averageOfLevels = function(root) {
+            // 初始化队列，将 root 加入队列
+            let q = []
+            let averageList = [];  
+            if (root == null) return averageList;
+            q.push(root);
+            while (q.length) {
+                let sum = 0;
+                let currLevelLength = q.length;
+                for(i=0; i<currLevelLength; i++){
+                  let cur = q.shift();
+                  sum += cur.val;
+                  /* 需要区分当前循环插入的和之前插入的 */
+                  /* 层级遍历代码位置 */
+                  if (cur.left != null) {
+                      q.push(cur.left);
+                  }
+                  if (cur.right != null) {
+                      q.push(cur.right);
+                  }
+                }
+                let average = (sum/currLevelLength);
+                averageList.push(average)
+            }
+            return averageList;
+        };
+
+    </script>
+  </body>
+</html>

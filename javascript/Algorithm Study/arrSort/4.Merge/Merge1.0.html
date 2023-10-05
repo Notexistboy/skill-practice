@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+  <html >
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      var arr = [9,12,7,27,5,24,6,10]
+      function mergeSort(arr){
+        // 设置终止的条件，
+        if (arr.length < 2) {
+          return arr;
+        }
+        debugger
+        //设立中间值
+        var middle = Math.floor(arr.length / 2);
+        //第1个和middle个之间为左子列
+        var left = arr.slice(0, middle);
+        //第middle+1到最后为右子列
+        var right = arr.slice(middle);
+        debugger
+        return merge(mergeSort(left), mergeSort(right));
+      }
+
+      function merge(a, b){
+        var result = [];
+        debugger
+        while (a.length && b.length) {
+          debugger
+          if(a[0] <= b[0]){
+            result.push(a.shift());
+            debugger
+            //把left的左子树推出一个，然后push进result数组里
+          }else{
+            result.push(b.shift());
+            debugger
+            //把right的右子树推出一个，然后push进result数组里
+          }
+        }
+        //result数组是按序排列
+        debugger
+        //经过上面一次循环，只能左子列或右子列一个不为空，或者都为空
+        while (a.length){
+          result.push(a.shift());
+          debugger
+        } 
+        while (b.length){
+          result.push(b.shift());
+          debugger
+        }
+        return result;
+      }
+
+      var result = mergeSort(arr)
+      console.log(result)
+    </script>
+  </body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body>
+	<div>
+
+	</div>
+	<script type="text/javascript">
+		/* 
+        快速排序就是个二叉树的前序遍历
+        快速排序的逻辑是，若要对nums[lo..hi]进行排序，我们先找一个分界点p，通过交换元素使得nums[lo..p-1]都小于等于nums[p]，且nums[p+1..hi]都大于nums[p]，然后递归地去nums[lo..p-1]和nums[p+1..hi]中寻找新的分界点，最后整个数组就被排序了。
+        快速排序的代码框架如下：
+      */
+		// let sort = function(nums,  lo,  hi) {
+		//   /****** 前序遍历位置 ******/
+		//   // 通过交换元素构建分界点 p
+		//   let p = partition(nums, lo, hi);
+		//   /************************/
+
+		//   sort(nums, lo, p - 1);
+		//   sort(nums, p + 1, hi);
+		// };
+		/* 先构造分界点，然后去左右子数组构造分界点 */
+		/* 
+		  1. 基本算法
+		    归并排序将数组分为两个子数组分别排序，并将有序的子数组归并使得整个数组排序；
+		    快速排序通过一个切分元素将数组分为两个子数组，左子数组小于等于切分元素，右子数组大于等于切分元素，将这两个子数组排序也就将整个数组排序了。                  
+		*/
+		let quickSort0 = function (arr) {
+			if (arr.length <= 1) return;
+			//取数组最接近中间的数位基准
+			let pivotIndex = Math.floor(arr.length / 2);
+			let pivot = arr.splice(pivotIndex, 1)[0];
+			//左右区间，用于存放排序后的数
+			let left = [];
+			let right = [];
+			console.log('基准为：' + pivot + ' 时');
+			for (let i = 0; i < arr.length; i++) {
+				console.log('分区操作的第 ' + (i + 1) + ' 次循环：');
+				//小于基准，放于左区间，大于基准，放于右区间
+				if (arr[i] < pivot) {
+					left.push(arr[i]);
+					console.log('左边：' + (arr[i]))
+				} else {
+					right.push(arr[i]);
+					console.log('右边：' + (arr[i]))
+				}
+			}
+			console.log('左边：' + left)
+			console.log('右边：' + right)
+
+			return quickSort0(left).concat([pivot], quickSort0(right));
+		};
+		console.log(quickSort0([2, 1, 3, 5, 4]));
+		/* 
+		  需要O(n)的空间复杂度
+		*/
+		// in-place
+		// 快速排序一般是用递归实现，最关键是partition分割函数，它将数组划分为两部分，一部分小于pivot，另一部分大于pivot。
+		let quickSort = function (nums) {
+			// 交换
+			function swap(arr, a, b) {
+				let temp = arr[a];
+				arr[a] = arr[b];
+				arr[b] = temp;
+			}
+
+			// 分区
+			function partition(arr, left, right) {
+				/* 开始时不知最终pivot的存放位置，可以先将pivot交换到后面去，这里直接定义最右边的元素为基准 */
+				let pivot = arr[right];
+				/* 存放小于pivot的元素时，是紧挨着上一元素的，否则空隙里存放的可能是大于pivot的元素，故声明一个storeIndex变量，并初始化为left来依次紧挨着存放小于pivot的元素。*/
+				let storeIndex = left;
+				for (let i = left; i < right; i++) {
+					if (arr[i] < pivot) {
+						/* 遍历数组，找到小于的pivot的元素，（大于pivot的元素会跳过），将循环i次时得到的元素，通过swap交换放到storeIndex处，并对storeIndex递增1，表示下一个可能要交换的位置 */
+						swap(arr, storeIndex, i);
+						storeIndex++;
+					}
+				}
+				// 最后： 将pivot交换到storeIndex处，基准元素放置到最终正确位置上
+				swap(arr, right, storeIndex);
+				return storeIndex;
+			}
+
+			function sort(arr, left, right) {
+				if (left > right) return;
+				let storeIndex = partition(arr, left, right);
+				sort(arr, left, storeIndex - 1);
+				sort(arr, storeIndex + 1, right);
+			}
+
+			sort(arr, 0, arr.length - 1);
+			return arr;
+		};
+		/*方法说明：快速排序
+		@param  array 待排序数组*/
+		//方法一
+		function quickSort(array, left, right) {
+			if (Object.prototype.toString.call(array).slice(8, -1) === 'Array' && typeof left === 'number' && typeof right === 'number') {
+				if (left < right) {
+					var x = array[right], i = left - 1, temp;
+					for (var j = left; j <= right; j++) {
+						if (array[j] <= x) {
+							i++;
+							temp = array[i];
+							array[i] = array[j];
+							array[j] = temp;
+						}
+					}
+					quickSort(array, left, i - 1);
+					quickSort(array, i + 1, right);
+				}
+				return array;
+			} else {
+				return 'array is not an Array or left or right is not a number!';
+			}
+		}
+
+		//方法二
+		var quickSort2 = function(arr) {
+			if (arr.length <= 1) {
+				return arr;
+			}
+
+			const pivotIndex = Math.floor(arr.length / 2);
+			const pivot = arr[pivotIndex];
+			const less = [];
+			const greater = [];
+
+			for (let i = 0; i < arr.length; i++) {
+				if (i === pivotIndex) {
+					continue;
+				}
+
+				if (arr[i] < pivot) {
+					less.push(arr[i]);
+				} else {
+					greater.push(arr[i]);
+				}
+			}
+
+			return [...quickSort2(less), pivot, ...quickSort2(greater)];
+		};
+
+		var arr=[3,44,38,5,47,15,36,26,27,2,46,4,19,50,48];
+		console.log(quickSort(arr,0,arr.length-1));//[2, 3, 4, 5, 15, 19, 26, 27, 36, 38, 44, 46, 47, 48, 50]
+		console.log(quickSort2(arr));//[2, 3, 4, 5, 15, 19, 26, 27, 36, 38, 44, 46, 47, 48, 50]
+	</script>
+</body>
+
+</html>
