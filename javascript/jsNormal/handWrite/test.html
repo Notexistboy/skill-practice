@@ -7,54 +7,51 @@
 </head>
 <body>
     <script>
-        // 先定义三个常量表示状态
-        var PENDING = 'pending';
-        var FULFILLED = 'fulfilled';
-        var REJECTED = 'rejected';
-
-
-        class MyPromise {
-            constructor(ext) {
-                this.status = PENDING;
-                this.value = null;
-                this.reason = null;
-                this.onFullfiledCallback = [];
-                this.onRejectedCallback = [];
-
-                const resolve = (value) => {
-                    this.value = value;
-                    this.status = FULFILLED;
-                    this.onFullfiledCallback.forEach(fn => fn())
-                }
-                const reject = (reason) => {
-                    this.reason = reason;
-                    this.status = REJECTED;
-                    this.onRejectedCallback.forEach(fn => fn())
-                }
-
-                try{
-                    ext(resolve,reject)
-                } catch(e) {
-                    reject(e)
+        /* 函数防抖 */
+        function debounce(fn, wait, immediate) {
+            let time = null;
+            return function() {
+                let context = this;
+                let args = arguments;
+                if(time) clearTimeout(time)
+                if(immediate) {
+                    let callNow = !time;
+                    time = setTimeout(() => {
+                        time = null
+                    }, wait)
+                    if(callNow) fn.apply(context, args)
+                } else {
+                    time = setTimeout(() => {
+                        fn.apply(context, args)
+                    }, wait)
                 }
             }
-
-            then(onResolved, onRejected) {
-                if(this.status === PENDING) {
-                if(typeof onFulfilled !== 'function') {
-                    onFulfilled = () => this.value
+        }
+        /* 函数节流 */
+        function throttle(fn, time) {
+            let previous = null;
+            return function() {
+                let now = new Date();
+                let target = this;
+                let args = arguments;
+                if(now - previous > time) {
+                    fn.apply(target, arguments);
+                    previous = now
                 }
-                if(typeof onRejected !== 'function') {
-                    onRejected = () => this.reason
-                }
-                this.onFullfiiledCallback.push(() => onFulfilled(this.value))
-                this.onRejectedCallback.push(() => onRejected(this.resolve))
-                }
-                if(this.status === FULFILLED) onResolved(this.value)
-                if(this.status === REJECTED) onRejected(this.reason)
-                
             }
-
+        }
+        function throttle1(fn, time) {
+            let time = null;
+            return function () {
+                let targettarget = this;
+                let args = arguments;
+                if(!time) {
+                    time = setTimeout(() => {
+                        fn.apply(target, args);
+                        time = null;
+                    }, wait)
+                }
+            }
         }
     </script>
 </body>

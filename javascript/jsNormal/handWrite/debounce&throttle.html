@@ -79,7 +79,7 @@
             if(callNow) func.apply(context,args)
           }else{
             time = setTimeout(() => {
-              func.apply
+              func.apply(context,args)
             },wait)
           }
         }
