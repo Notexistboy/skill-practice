@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function isObject(obj) {
+            const type = typeof obj;
+            return obj !== null || (type === 'object' || type === 'function')
+        };
+        function deepClone(obj, map = new WeakMap()) {
+            if(!isObject(obj)) return obj;
+            if(map.has(obj)) return map.get(obj);
+            const obj_ = Array.isArray(obj) ? [] : {};
+            map.set(obj, obj_)
+            for(let i in obj) {
+                obj_[i] = deepClone(obj[i], map);
+            }
+            return obj_;
+        };
+    </script>
+</body>
+</html>
