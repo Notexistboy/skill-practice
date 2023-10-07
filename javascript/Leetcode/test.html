@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var trap = function(heights) {
+            let sum = 0;
+            let currMax = 0;
+            let leftHeight = [];
+            let rightHeigt = [];
+            for (let i = 0; i <= heights.length; i++) {
+                if(heights[i] > currMax) {
+                    currMax = heights[i]
+                }
+                leftHeight[i] = Math.max(currMax, heights[i]);
+            }
+            currMax = 0;
+            for(let i = heights.length - 1; i >= 0; i--) {
+                if(heights[i] > currMax){
+                    currMax = heights[i]
+                }
+                rightHeigt[i] = Math.max(currMax, heights[i]);
+            }
+            for(let i = 0; i <= heights.length - 1; i++) {
+                sum += Math.min(rightHeigt[i], leftHeight[i]) - heights[i]
+            }
+            debugger;
+            return sum;
+        };
+        trap([1,2,3,2,1,4]);
+    </script>
+</body>
+</html>
