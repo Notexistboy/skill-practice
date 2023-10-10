@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      function TreeNode(val) {
+        this.val = val;
+        this.left = this.right = null;
+      }
+
+      /* 二叉树遍历框架 */
+      var traverse = function (root) {
+        if (root == null) return;
+        traverse(root.left);
+        traverse(root.right);
+      }
+
+      /* 可以用 serialize 方法将二叉树序列化成字符串，用 deserialize 方法将序列化的字符串反序列化成二叉树. */
+
+      /* 1.前序遍历 */
+      /* 在递归遍历两棵子树之前写的代码就是前序遍历代码 */
+      var traverse = function (root) {
+          if (root == null) return;
+
+          // 前序遍历的代码
+          
+          traverse(root.left);
+          traverse(root.right);
+      }
+      /* 在递归遍历两棵子树之前写的代码就是前序遍历代码，
+      那么看一下如下伪码： */
+      const res = [];
+      var traverse = function (root) {
+        if (root == null) {
+          // 暂且用数字 -1 代表空指针 null
+          res.push(-1);
+          return;
+        }
+
+        /****** 前序遍历位置 ******/
+        res.push(root.val);
+        /***********************/
+        traverse(root.left);
+        traverse(root.right);
+      }
+      
+      // 实现将二叉树打平到了一个列表中 将二叉树打平到一个字符串中也是完全一样的
+      
+      /* 1.1二叉树前序遍历转换字符串 */
+      
+      // 代表分隔符的字符
+      let SEP = ",";
+      // 代表 null 空指针的字符
+      let NULL = "#";
+      let string = ''
+      var traverse = function (root, string) {
+        if (root == null) {
+          // 暂且用数字 -1 代表空指针 null
+          //res.push(-1);
+          string = string + NULL + SEP;
+          return;
+        }
+        /****** 前序遍历位置 ******/
+        //res.push(root.val);
+        string = string + root.val + SEP;
+        /***********************/
+        traverse(root.left);
+        traverse(root.right);
+      }
+      //用','作为分隔符，用'#'表示空指针null
+      
+      /* 1.2序列化函数 serialize */
+      /* 主函数，将二叉树序列化为字符串 */
+      var serialize = function (root) {
+          let string = '';
+          serializeTraverse(root, string);
+          return string;
+      }
+      /* 辅助函数，将二叉树存入 string */
+      var serializeTraverse = function (root, string) {
+        if (root == null) {
+          // 暂且用数字 -1 代表空指针 null
+          //res.push(-1);
+          string = string + NULL + SEP;
+          return;
+        }
+
+        /****** 前序遍历位置 ******/
+        //res.push(root.val);
+        string = string + root.val + SEP;
+        /***********************/
+        traverse(root.left);
+        traverse(root.right);
+      }
+
+      // 通过 deserialize 将字符串反过来构造二叉树
+      // let nodes = data.split(",") // 一棵打平的二叉树
+
+      /* 那么，反序列化过程也是一样，先确定根节点 root，然后遵循前序遍历的规则，递归生成左右子树即可 */
+      
+      /* 1.3反序列化函数 deserialize */
+      /* 主函数，将字符串反序列化为二叉树结构 */
+      var deserialize = function (data) {
+          // 将字符串转化成列表
+          let nodes = data.split(",");
+          return deserializeTraverse(nodes);
+      }
+
+      /* 辅助函数，通过 nodes 列表构造二叉树 */
+      var deserializeTraverse = function (nodes) {
+        if (!nodes.length) return null;
+        /****** 前序遍历位置 ******/
+        // 列表最左侧就是根节点
+        let first = nodes.shift();
+        if (first === NULL) return null;
+        let root = new TreeNode(Number.parseInt(first));
+        /***********************/
+
+        root.left = deserializeTraverse(nodes);
+        root.right = deserializeTraverse(nodes);
+
+        return root;
+      }
+      console.log(deserialize([6,4,5]))
+
+      /* 2.后序遍历 */
+      /* 明白了前序遍历的解法，后序遍历就比较容易理解了，
+      首先实现 serialize 序列化方法，只需要稍微修改辅助方法即可： */
+      var traverse = function (root) {
+        if (root == null) return;
+
+        traverse(root.left);
+        traverse(root.right);
+
+        // 后序遍历的代码
+
+      }
+      /* 在递归遍历两棵子树之后写的代码就是后序遍历代码，
+      那么看一下如下伪码： */
+      const res = [];
+      var traverse = function (root) {
+        if (root == null) {
+          // 暂且用数字 -1 代表空指针 null
+          res.push(-1);
+          return;
+        }
+        /***********************/
+        traverse(root.left);
+        traverse(root.right);
+        /****** 后序遍历位置 ******/
+        res.push(root.val);
+
+      }
+
+      /* 2.1二叉树后序遍历转换字符串 */
+
+      // 代表分隔符的字符
+      let SEP = ",";
+      // 代表 null 空指针的字符
+      let NULL = "#";
+      let string = ''
+      var traverse = function (root, string) {
+        if (root == null) {
+          // 暂且用数字 -1 代表空指针 null
+          //res.push(-1);
+          string = string + NULL + SEP;
+          return;
+        }
+        /***********************/
+        traverse(root.left);
+        traverse(root.right);
+        /****** 后序遍历位置 ******/
+        //res.push(root.val);
+        string = string + root.val + SEP;
+      }
+      //用','作为分隔符，用'#'表示空指针null
+            
+      /* 2.2序列化函数 serialize */
+      /* 主函数，将二叉树序列化为字符串 */
+      var serialize = function (root) {
+          let string = '';
+          serializeTraverse(root, string);
+          return string;
+      }
+      /* 辅助函数，将二叉树存入 string */
+      var serializeTraverse = function (root, string) {
+        if (root == null) {
+          // 暂且用数字 -1 代表空指针 null
+          //res.push(-1);
+          string = string + NULL + SEP;
+          return;
+        }
+
+        /***********************/
+        traverse(root.left);
+        traverse(root.right);
+        /****** 前序遍历位置 ******/
+        //res.push(root.val);
+        string = string + root.val + SEP;
+      }
+      // 把对 string 的拼接操作放到了后续遍历的位置，后序遍历导致结果的顺序发生变化
+
+     // 通过 deserialize 将字符串反过来构造二叉树
+      // let nodes = data.split(",") // 一棵打平的二叉树
+
+      /* 那么，反序列化过程也是一样，先确定根节点 root，然后遵循前序遍历的规则，递归生成左右子树即可 */
+      
+      /* 2.3反序列化函数 deserialize */
+      /* 主函数，将字符串反序列化为二叉树结构 */
+      var deserialize = function (data) {
+          // 将字符串转化成列表
+          let nodes = data.split(",");
+          return deserializeTraverse(nodes);
+      }
+
+      /* 后序遍历的反序列化 */
+      /* 反序列化需要先寻找root节点的值,然后递归计算左右字节点,那么我们这里也应该顺着这个基本思路走,
+      后续遍历中,root 的值是列表的最后一个元素。我们应该从后往前取出列表元素，先用最后一个元素构造 root，
+      然后递归调用生成 root 的左右子树。*/
+      //通过 deserialize 将字符串翻过来构造二叉树
+      let deserializeTraverse = function(nodes) {
+        if (!nodes) return null;
+        /****** 后序遍历位置 ******/
+        // 列表最右侧就是根节点
+        let last = nodes.pop();
+        if (first === NULL) return null;
+        let root = new TreeNode(Number.parseInt(last));
+        /***********************/
+        root.right = deserializeTraverse(nodes);
+        root.left = deserializeTraverse(nodes);
+        return root;
+      }
+      console.log(deserialize([6,4,5]))
+
+      /* 3.1中序遍历 */
+      /* 在递归遍历两棵子树之间写的代码就是前序遍历代码 */
+      var traverse = function (root) {
+          if (root == null) return;
+
+          traverse(root.left);
+          // 中序遍历的代码
+          traverse(root.right);
+      }
+      /* 中序遍历的方式行不通，因为无法实现反序列化方法 deserialize。
+      序列化方法 serialize 依然容易，
+      只要把字符串的拼接操作放到中序遍历的位置就行了 */
+      var traverse = function (root) {
+        if (root == null) {
+          // 暂且用数字 -1 代表空指针 null
+          res.push(-1);
+          return;
+        }
+        /***********************/
+        traverse(root.left);
+
+        /****** 中序遍历位置 ******/
+        res.push(root.val);
+
+        traverse(root.right);
+      }
+      /* 在递归遍历两棵子树之前写的代码就是前序遍历代码，
+      那么看一下如下伪码： */
+      const res = [];
+      var traverse = function (root) {
+        if (root == null) {
+          // 暂且用数字 -1 代表空指针 null
+          res.push(-1);
+          return;
+        }
+
+        /***********************/
+        traverse(root.left);
+        /****** 中序遍历位置 ******/
+        res.push(root.val);
+        traverse(root.right);
+      }
+      
+      // 实现将二叉树打平到了一个列表中 将二叉树打平到一个字符串中也是完全一样的
+      
+      /* 3.1二叉树中序遍历转换字符串 */
+      
+      // 代表分隔符的字符
+      let SEP = ",";
+      // 代表 null 空指针的字符
+      let NULL = "#";
+      let string = ''
+      var traverse = function (root, string) {
+        if (root == null) {
+          // 暂且用数字 -1 代表空指针 null
+          //res.push(-1);
+          string = string + NULL + SEP;
+          return;
+        }
+
+        /***********************/
+        traverse(root.left);
+        /****** 前序遍历位置 ******/
+        //res.push(root.val);
+        string = string + root.val + SEP;
+        traverse(root.right);
+      }
+      //用','作为分隔符，用'#'表示空指针null
+      
+      /* 1.2序列化函数 serialize */
+      /* 主函数，将二叉树序列化为字符串 */
+      var serialize = function (root) {
+          let string = '';
+          serializeTraverse(root, string);
+          return string;
+      }
+      /* 辅助函数，将二叉树存入 string */
+      var serializeTraverse = function (root, string) {
+        if (root == null) {
+          // 暂且用数字 -1 代表空指针 null
+          //res.push(-1);
+          string = string + NULL + SEP;
+          return;
+        }
+
+        /***********************/
+        traverse(root.left);
+        /****** 中序遍历位置 ******/
+        //res.push(root.val);
+        string = string + root.val + SEP;
+        traverse(root.right);
+      }
+
+      // 通过 deserialize 将字符串反过来构造二叉树
+      // let nodes = data.split(",") // 一棵打平的二叉树
+
+      /* 那么，反序列化过程也是一样，先确定根节点 root，然后遵循前序遍历的规则，递归生成左右子树即可 */
+      
+      /* 1.3反序列化函数 deserialize */
+      /* !!!中序遍历的方式行不通，因为无法实现反序列化方法 deserialize。 */
+
+      
+      /* 4.层级遍历(DFS) */
+      /* 首先，先写出层级遍历二叉树的代码框架： */
+      var traverse = function (root) {
+        if (root == null) return;
+        // 初始化队列，将 root 加入队列
+        let q = []
+        q.push(root);
+        while (!q.length) {
+          let cur = q.shift();
+
+          /* 层级遍历代码位置 */
+          /*****************/
+
+          if (cur.left != null) {
+            q.push(cur.left);
+          }
+
+          if (cur.right != null) {
+            q.push(cur.right);
+          }
+        }
+      }
+      /* 
+        上述代码是标准的二叉树层级遍历框架，从上到下，从左到右打印每一层二叉树节点的值，可以看到，队列 q 中不会存在 null 指针。
+        不过我们在反序列化的过程中是需要记录空指针 null 的，
+        所以可以把标准的层级遍历框架略作修改：
+       */
+      var traverse = function (root) {
+        if (root == null) return;
+        // 初始化队列，将 root 加入队列
+       let q = []
+        q.push(root);
+
+        while (!q.length) {
+          let cur = q.shift();
+
+          /* 层级遍历代码位置 */
+          if (cur == null) continue;
+          /*****************/
+
+          q.push(cur.left);
+          q.push(cur.right);
+        }
+      }
+      /* 这样也可以完成层级遍历，只不过我们把对空指针的检验从将元素加入队列的时候改成了从队列取出元素的时候。
+        那么我们完全仿照这个框架即可写出序列化方法： */
+      /* 4.1二叉树前序遍历转换字符串 */
+      
+      // 代表分隔符的字符
+      let SEP = ",";
+      // 代表 null 空指针的字符
+      let NULL = "#";
+      var serialize = function(root) {
+        if (root == null) return "";
+        let sb = ''
+        // 初始化队列，将 root 加入队列
+        let q = []
+        q.push(root);
+
+        while (!q.length) {
+          let cur = q.shift();
+
+          /* 层级遍历代码位置 */
+          if (cur == null) {
+            sb = sb + NULL + SEP;
+            continue;
+          }
+          sb = sb + cur.val + SEP;
+          /*****************/
+
+          q.push(cur.left);
+          q.push(cur.right);
+        }
+
+        return sb;
+      }
+      /* 
+        可以看到，每一个非空节点都会对应两个子节点，那么反序列化的思路也是用队列进行层级遍历，
+        同时用索引 i 记录对应子节点的位置：
+       */
+      // 代表分隔符的字符
+      let SEP = ",";
+      // 代表 null 空指针的字符
+      let NULL = "#";
+      let deserialize = function (data) {
+          if (!data.length) return null;
+          let nodes = data.split(SEP);
+          // 第一个元素就是 root 的值
+          let root = new TreeNode(Number.parseInt(nodes[0]));
+
+          // 队列 q 记录父节点，将 root 加入队列        
+          let q = []
+
+          q.push(root);
+
+          for (let i = 1; i < nodes.length; ) {
+            // 队列中存的都是父节点
+            let parent = q.shift();
+            // 父节点对应的左侧子节点的值
+            let left = nodes[i++];
+            if (left === NULL) {
+              parent.left = new TreeNode(Number.parseInt(left));
+              q.push(parent.left);
+            } else {
+              parent.left = null;
+            }
+            // 父节点对应的右侧子节点的值
+            let right = nodes[i++];
+            if (right === NULL) {
+              parent.right = new TreeNode(Number.parseInt(right));
+              q.push(parent.right);
+            } else {
+              parent.right = null;
+            }
+          }
+          return root;
+        }
+        /* 仔细看一看 for 循环部分的代码，发现就是标准层级遍历的代码衍生出来的 */
+        while (!nodes.length) {
+            let cur = q.shift();
+
+            if (cur.left != null) {
+                q.push(cur.left);
+            }
+
+            if (cur.right != null) {
+                q.push(cur.right);
+            }
+        }
+    </script>
+  </body>
+</html>

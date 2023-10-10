@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function formatNumberWithCommas(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        const number = 1234567.123;
+        const formattedNumber = formatNumberWithCommas(number);
+        console.log(formattedNumber); // 输出 "1,234,567"
+
+        function formatNumberWithCommas1(number) {
+            let numberList = number.toString().split('');
+            let startIndex = numberList.indexOf('.') > -1 ? numberList.indexOf('.') - 3 : numberList.length - 3;
+            for(let i = startIndex; i>0;) {
+                numberList.splice(i, 0, ',')
+                i -= 3;
+            }
+            return numberList.join('')
+        }
+        const formattedNumber1 = formatNumberWithCommas1(number);
+        console.log(formattedNumber1); // 输出 "1,234,567"
+    </script>
+</body>
+</html>

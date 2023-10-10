@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        /**
+         * Definition for singly-linked list.
+         * function ListNode(val, next) {
+         *     this.val = (val===undefined ? 0 : val)
+         *     this.next = (next===undefined ? null : next)
+         * }
+         */
+        /**
+         * @param {ListNode} head
+         * @return {ListNode}
+         */
+        // 递归
+        var deleteDuplicates = function(head) {
+            if (head == null || head.next == null) return head;
+            head.next = deleteDuplicates(head.next);
+            return head.val === head.next.val ? head.next : head;
+        };
+        // 迭代
+        var deleteDuplicates = function(head) {
+            let curr = head;
+            while(curr && curr.next){
+                if(curr.val === curr.next.val){
+                    curr.next = curr.next.next;
+                }else {
+                    curr = curr.next;
+                }
+            }
+        };
+
+    </script>
+  </body>
+</html>
