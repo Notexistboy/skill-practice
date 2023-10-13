@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /**
+       * @param {TreeNode} root
+       * @return {number}
+       */
+      /* 计算给定二叉树的所有左叶子之和。 */
+      var sumOfLeftLeaves = function(root) {
+        return leftLeaves(root);
+      };
+      var leftLeaves = function(root) {
+        if(root === null) return 0;
+        let ret = 0;
+        ret += leftLeaves(root.left) + leftLeaves(root.right);
+        if(root.left && root.left.val && !root.left.left && !root.left.right) ret+= root.left.val;
+        return ret;
+      }
+      /* DFS cs-note */
+      var sumOfLeftLeaves = function(root) {
+          if (root == null) return 0;
+          if (isLeaf(root.left)) return root.left.val + sumOfLeftLeaves(root.right);
+          return sumOfLeftLeaves(root.left) + sumOfLeftLeaves(root.right);
+      }
+      var isLeaf = function(node){
+          if (node == null) return false;
+          return node.left == null && node.right == null;
+      }
+      /* DFS-offical */
+      var sumOfLeftLeaves = function(root) {
+        return root != null ? dfs(root) : 0;
+      }
+      var dfs = function(node) {
+        let ans = 0;
+        if (node.left != null) ans += isLeafNode(node.left) ? node.left.val : dfs(node.left);
+        if (node.right != null && !isLeafNode(node.right)) ans += dfs(node.right);
+        return ans;
+      }
+      var isLeaf = function(node){
+          if (node == null) return false;
+          return node.left == null && node.right == null;
+      }
+      /* bfs */
+      var sumOfLeftLeaves = function(root) {
+        if (root == null) return 0;
+        let queue = [];
+        queue.push(root);
+        let ans = 0;
+        while (queue.length) {
+          let node = queue.shift();
+          if (node.left != null) {
+                if (isLeafNode(node.left)) {
+                    ans += node.left.val;
+                } else {
+                    queue.push(node.left);
+                }
+          }
+          if (node.left != null) {
+                if (!isLeafNode(node.right)) {
+                    queue.push(node.right);
+                }
+          }
+        }
+        return ans;
+      }
+      var isLeaf = function(node){
+        return node.left == null && node.right == null;
+      }
+    </script>
+  </body>
+</html>

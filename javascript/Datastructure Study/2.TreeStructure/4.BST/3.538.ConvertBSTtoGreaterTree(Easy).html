@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        /**
+         * @param {TreeNode} root
+         * @return {TreeNode}
+         */
+        /* 
+          BST 的每个节点左小右大，这似乎是一个有用的信息，既然累加和是计算大于等于当前值的所有元素之和
+          只需更改一下中序遍历递归的顺序
+        */
+        /* 1038.binary-search-tree-to-greater-sum-tree */
+        let sum = 0;
+        var convertBST = function(root) {
+          traverse(root);
+          return root;
+        };
+        var traverse = function(root){
+          if(root === null) return null;
+          traverse(root.right);
+          // 维护累加和
+          sum += root.val;
+          // 将 BST 转化成累加树
+          root.val = sum;
+          traverse(root.left);
+        };
+
+    </script>
+  </body>
+</html>

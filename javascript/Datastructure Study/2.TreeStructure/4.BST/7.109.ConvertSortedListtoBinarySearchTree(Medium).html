@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        /* 
+            给定一个单链表，其中的元素按升序排序，将其转换为高度平衡的二叉搜索树。
+            本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
+        */
+        /**
+         * Definition for singly-linked list.
+         * function ListNode(val, next) {
+         * this.val = (val===undefined ? 0 : val)
+         * this.next = (next===undefined ? null : next)
+         * }
+         */
+        /**
+         * Definition for a binary tree node.
+         * function TreeNode(val, left, right) {
+         * this.val = (val===undefined ? 0 : val)
+         * this.left = (left===undefined ? null : left)
+         * this.right = (right===undefined ? null : right)
+         * }
+         */
+        /* 
+            找出链表中位数节点的方法多种多样，其中较为简单的一种是「快慢指针法」。
+            初始时，快指针fast 和慢指针slow 均指向链表的左端点
+            left。我们将快指针fast 向右移动两次的同时，将慢指针slow
+            向右移动一次，直到快指针到达边界（即快指针到达右端点或快指针的下一个节点是右端点）。
+            此时，慢指针对应的元素就是中位数。
+            在找出了中位数节点之后，我们将其作为当前根节点的元素，
+            并递归地构造其左侧部分的链表对应的左子树，以及右侧部分的链表对应的右子树。
+        */
+        /**
+        * @param {ListNode} head
+        * @return {TreeNode}
+        */
+        var sortedListToBST = function(head) {
+            if (head == null) return null;
+            if (head.next == null) return new TreeNode(head.val);
+            let preMid = toBST(head); // 获取链表中间 拿到根节点
+            let mid = preMid.next; // 进行遍历右子树操作
+            preMid.next = null; // 断开链表
+            let t = new TreeNode(mid.val);
+            t.left = sortedListToBST(head);
+            t.right = sortedListToBST(mid.next);
+            return t;
+        };
+        /* 分治 利用双指针遍历 */
+        var toBST = function(head) {
+            let slow = head, fast = head.next;
+            let pre = head;
+            while (fast != null && fast.next != null) {
+                pre = slow;
+                slow = slow.next;
+                fast = fast.next.next;
+            }
+            return pre;
+        };
+        /* 
+            可以将分治和中序遍历结合起来，减少时间复杂度。
+            具体地，设当前链表的左端点编号为left，右端点编号为right，包含关系为「双闭」，即left 和
+            right 均包含在链表中。链表节点的编号为 [0, n)。中序遍历的顺序是「左子树 - 根节点 -
+            右子树」，那么在分治的过程中，我们不用急着找出链表的中位数节点，而是使用一个占位节点，
+            等到中序遍历到该节点时，再填充它的值。
+            如果 left>right，
+            那么遍历到的位置对应着一个空节点，否则对应着二叉搜索树中的一个节点。
+            这样一来，我们其实已经知道了这棵二叉搜索树的结构，并且题目给定了它的中序遍历结果，
+            那么我们只要对其进行中序遍历，就可以还原出整棵二叉搜索树了。
+        */
+        var globalHead;
+
+        var sortedListToBST = function(head) {
+            globalHead = head;
+            let length = getLength(head);
+            return buildTree(0, length - 1);
+        }
+
+        var getLength = function(head) {
+            let ret = 0;
+            while (head != null) {
+                ++ret;
+                head = head.next;
+            }
+            return ret;
+        }
+
+        var buildTree = function(left, right) {
+            if (left > right) {
+                return null;
+            }
+            let mid = (left + right + 1) / 2;
+            let root = new TreeNode();
+            root.left = buildTree(left, mid - 1);
+            root.val = globalHead.val;
+            globalHead = globalHead.next;
+            root.right = buildTree(mid + 1, right);
+            return root;
+        }
+    </script>
+  </body>
+</html>

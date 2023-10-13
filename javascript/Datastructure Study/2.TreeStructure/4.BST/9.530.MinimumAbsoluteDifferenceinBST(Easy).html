@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        /* 
+            给你一棵所有节点为非负值的二叉搜索树，请你计算树中任意两节点的差的绝对值的最小值。
+        */
+        /*  
+            利用二叉查找树的中序遍历为有序的性质，计算中序遍历中临近的两个节点之差的绝对值，取最小值。
+       */
+        /**
+        * @param {TreeNode} root
+        * @return {number}
+        */
+        let minDiff = Number.MAX_SAFE_INTEGER;
+        let preNode = null;
+        var getMinimumDifference = function(root) {
+            inOrder(root);
+            return minDiff;
+        }
+        var inOrder = function(node) {
+            if (node == null) return;
+            inOrder(node.left);
+            if (preNode != null) minDiff = Math.min(minDiff, node.val - preNode.val);
+            preNode = node;
+            inOrder(node.right);
+        }
+    </script>
+  </body>
+</html>

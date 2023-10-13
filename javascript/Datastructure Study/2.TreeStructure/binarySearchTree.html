@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+    /* 
+        1、对于 BST 的每一个节点node，左子树节点的值都比node的值要小，右子树节点的值都比node的值大。
+        2、对于 BST 的每一个节点node，它的左侧子树和右侧子树都是 BST。
+        二叉搜索树并不算复杂，但我觉得它构建起了数据结构领域的半壁江山，直接基于 BST 的数据结构有 AVL 树，红黑树等等，
+        拥有了自平衡性质，可以提供 logN 级别的增删查改效率；还有 B+ 树，线段树等结构都是基于 BST 的思想来设计的。
+        从做算法题的角度来看 BST，除了它的定义，还有一个重要的性质：BST 的中序遍历结果是有序的（升序）。
+    */
+    /* 
+        利用「BST 中序遍历就是升序排序结果」这个性质，每次寻找第k小的元素都要中序遍历一次，最坏的时间复杂度是O(N)，N是 BST 的节点个数。
+        要知道 BST 性质是非常牛逼的，像红黑树这种改良的自平衡 BST，增删查改都是O(logN)的复杂度，让你算一个第k小元素，时间复杂度竟然要O(N)，有点低效了。
+        所以说，计算第k小元素，最好的算法肯定也是对数级别的复杂度，不过这个依赖于 BST 节点记录的信息有多少。
+        我们想一下 BST 的操作为什么这么高效？就拿搜索某一个元素来说，BST 能够在对数时间找到该元素的根本原因还是在 BST 的定义里，左子树小右子树大嘛，所以每个节点都可以通过对比自身的值判断去左子树还是右子树搜索目标值，从而避免了全树遍历，达到对数级复杂度。
+        那么回到这个问题，想找到第k小的元素，或者说找到排名为k的元素，如果想达到对数级复杂度，关键也在于每个节点得知道他自己排第几。
+        比如说你让我查找排名为k的元素，当前节点知道自己排名第m，那么我可以比较m和k的大小：
+        1、如果m == k，显然就是找到了第k个元素，返回当前节点就行了。
+        2、如果k < m，那说明排名第k的元素在左子树，所以可以去左子树搜索第k个元素。
+        3、如果k > m，那说明排名第k的元素在右子树，所以可以去右子树搜索第k - m - 1个元素。
+        这样就可以将时间复杂度降到O(logN)了。
+        那么，如何让每一个节点知道自己的排名呢？
+        这就是我们之前说的，需要在二叉树节点中维护额外信息。每个节点需要记录，以自己为根的这棵二叉树有多少个节点。
+    */
+    
+    /* BST代码框架 */
+    var BST = function (root,  target) {
+      if (root.val == target)
+          // 找到目标，做点什么
+      if (root.val < target) 
+          BST(root.right, target);
+      if (root.val > target)
+          BST(root.left, target);
+    }
+    /* 
+      判断合法性
+      BST 的每个节点应该要小于右边子树的所有节点，大于左边子树的所有节点
+      根据BST左小右大的特性,BST的遍历框架
+    */
+    /* 限定以 root 为根的子树节点必须满足 max.val > root.val > min.val */
+    var isValidBST = function (root) {
+      if (root == null) return true;
+      // 若 root.val 不符合 max 和 min 的限制，说明不是合法 BST
+      if (root.left != null && root.val <= root.left.val)
+          return false;
+      // 限定左子树的最大值是 root.val，右子树的最小值是 root.val
+      if (root.right != null && root.val >= root.right.val)
+          return false;
+
+      return isValidBST(root.left) && isValidBST(root.right);
+    }
+    /* 在 BST 中搜索一个数 */
+    var isInBST = function (root, target) {
+        if (root == null) return false;
+        if (root.val == target) return true;
+        // 当前节点没找到就递归地去左右子树寻找
+        return isInBST(root.left, target)
+            || isInBST(root.right, target);
+    }
+    var isInBST = function (root, target) {
+        if (root == null) return false;
+        if (root.val == target)
+            return true;
+        if (root.val < target) 
+            return isInBST(root.right, target);
+        if (root.val > target)
+            return isInBST(root.left, target);
+        // root 该做的事做完了，顺带把框架也完成了，妙
+    }
+    /* 在 BST 中插入一个数 */
+    /* 
+      对数据结构的操作无非遍历 + 访问，遍历就是「找」，访问就是「改」。
+      具体到这个问题，插入一个数，就是先找到插入位置，然后进行插入操作。
+
+      上一个问题，我们总结了 BST 中的遍历框架，就是「找」的问题。
+      直接套框架，加上「改」的操作即可。一旦涉及「改」，
+      函数就要返回TreeNode类型，并且对递归调用的返回值进行接收。
+    */
+    var insertIntoBST = function ( root,  val) {
+      // 找到空位置插入新节点
+      if (root == null) return new TreeNode(val);
+      // if (root.val == val)
+      // BST 中一般不会插入已存在元素
+      if (root.val < val) 
+          root.right = insertIntoBST(root.right, val);
+      if (root.val > val) 
+          root.left = insertIntoBST(root.left, val);
+      return root;
+    };
+    /* 在 BST 中删除一个数 */
+    /* 恰好是末端节点，两个子节点都为空，可以直接删除 */
+    if (root.left == null && root.right == null)
+    return null;
+    /* 只有一个非空子节点，那么它要让这个孩子接替自己的位置。 */
+    // 排除了情况 1 之后
+    if (root.left == null) return root.right;
+    if (root.right == null) return root.left;
+    /* 
+      有两个子节点，麻烦了，为了不破坏 BST 的性质，
+      必须找到左子树中最大的那个节点，
+      或者右子树中最小的那个节点来接替自己。
+    */
+    if (root.left != null && root.right != null) {
+      // 找到右子树的最小节点
+      let minNode = getMin(root.right);
+      // 把 root 改成 minNode
+      root.val = minNode.val;
+      // 转而去删除 minNode
+      root.right = deleteNode(root.right, minNode.val);
+    }
+    var deleteNode = function(root, key) {
+        if (root == null) return null;
+        if (root.val == key) {
+            // 恰好是末端节点，两个子节点都为空，可以直接删除
+            // 只有一个非空子节点，那么它要让这个孩子接替自己的位置
+            if (root.left == null) return root.right;
+            if (root.right == null) return root.left;
+            // 找到右子树的最小节点
+            let minNode = getMin(root.right);
+            // 把 root 改成 minNode
+            root.val = minNode.val;
+            // 转而去删除 minNode
+            root.right = deleteNode(root.right, minNode.val);
+        } else if (root.val > key) {
+            root.left = deleteNode(root.left, key);
+        } else if (root.val < key) {
+            root.right = deleteNode(root.right, key);
+        }
+        return root;
+    }
+
+    var getMin = function(node) {
+        // BST 最左边的就是最小的
+        while (node.left != null) node = node.left;
+        return node;
+    }
+    var getMax = function(node) {
+        // BST 最右边的就是最大的
+        while (node.right != null) node = node.right;
+        return node;
+    }
+    /* 穷举 */
+    /* 主函数 */
+    var numTrees = function(n) {
+        // 计算闭区间 [1, n] 组成的 BST 个数
+        return count(1, n);
+    }
+
+    /* 计算闭区间 [lo, hi] 组成的 BST 个数 */
+    var count = function(lo, hi) {
+        // base case
+        if (lo > hi) return 1;
+
+        let res = 0;
+        for (let i = lo; i <= hi; i++) {
+            // i 的值作为根节点 root
+            let left = count(lo, i - 1);
+            let right = count(i + 1, hi);
+            // 左右子树的组合数乘积是 BST 的总数
+            res += left * right;
+        }
+        return res;
+    }
+    </script>
+  </body>
+</html>
