@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 定义一个工厂函数
+        function createPerson(name, age) {
+            // 创建一个新对象
+            const person = {};
+
+            // 设置对象的属性和方法
+            person.name = name;
+            person.age = age;
+
+            person.sayHello = function() {
+                console.log(`Hello, my name is ${this.name} and I am ${this.age} years old.`);
+            };
+
+            // 返回创建的对象
+            return person;
+        }
+
+    </script>
+</body>
+</html>

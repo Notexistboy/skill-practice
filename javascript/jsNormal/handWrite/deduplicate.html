@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 一行搞定
+        const unique = (array) => [...newSet(array)];
+
+        const unique2 = (array) => {
+            if(!Array.isArray(array)) return [];
+            const a = [...array];
+            const b = [];
+            while(a.length){
+                const item = a.pop();
+                // const item = a.shift();
+                if(b.includes(item)) continue;
+                b.push(item);
+            }
+            return b;
+        };
+
+
+        const unique3 = (array) => {
+            if(!Array.isArray(array)) return [];
+            const a = [...array];
+            const b = new Map();
+            while(a.length){
+                const item = a.pop();
+                // const item = a.shift();
+                b.set(item,1);
+            }
+            return [...b.keys()];
+        };
+
+        console.log(unique3([1,1,1,1,2,3,4,345,345]));
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        在 JavaScript 中，当一个对象需要转换为原始值时，会按照以下优先级顺序调用方法：
+
+        1. 如果对象具有 `Symbol.toPrimitive` 方法，那么将调用它并传递一个表示期望的转换类型的参数。可以是 `"number"`、`"string"` 或 `"default"`。这个方法具有最高的优先级，可以完全控制对象转换为原始值的行为。
+
+        2. 如果对象没有 `Symbol.toPrimitive` 方法，或者 `Symbol.toPrimitive` 方法返回一个不合法的值（非原始类型），则会调用 `valueOf` 方法。
+
+        3. 如果对象没有 `Symbol.toPrimitive` 方法，或者 `Symbol.toPrimitive` 方法返回一个不合法的值，以及 `valueOf` 方法不存在或者返回一个不合法的值，那么会调用 `toString` 方法。
+
+        4. 如果对象没有 `Symbol.toPrimitive` 方法，或者 `Symbol.toPrimitive` 方法返回一个不合法的值，以及 `valueOf` 和 `toString` 方法都不存在，那么会抛出错误。
+
+        这个优先级顺序确保了 JavaScript 可以根据对象上存在的方法来进行合适的转换。
+
+        下面是一个示例，展示了这些方法的优先级：
+
+
+        const obj = {
+            [Symbol.toPrimitive](hint) {
+                if (hint === "number") {
+                return 42;
+                }
+                if (hint === "string") {
+                return "Hello";
+                }
+                return "Default";
+            },
+            valueOf() {
+                return 10;
+            },
+            toString() {
+                return "World";
+            }
+        };
+
+        console.log(Number(obj));  // 输出: 42
+        console.log(String(obj));  // 输出: Hello
+        console.log(obj);          // 输出: Default
+
+
+        在上述示例中，`obj` 对象定义了 `Symbol.toPrimitive`、`valueOf` 和 `toString` 方法。根据优先级顺序，首先调用 `Symbol.toPrimitive` 方法并返回期望的原始值，然后调用 `valueOf` 方法并返回值为 10 的原始值，最后调用 `toString` 方法并返回字符串 "World"。
+
+        这只是一种一般情况下的优先级顺序。实际行为可能会受到对象的具体实现和使用环境的影响。
+
+
+    </script>
+</body>
+</html>

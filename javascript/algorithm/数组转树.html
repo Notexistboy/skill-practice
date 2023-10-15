@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let arraySource = [{
+            id: 1,
+            pid: 0,
+            name: 'body',
+        }, {
+            id: 2,
+            pid: 1,
+            name: 'title',
+        }, {
+            id: 3,
+            pid: 2,
+            name: 'div',
+        }, {
+            id: 4,
+            pid: 0,
+            name: 'html',
+        }, {
+            id: 5,
+            pid: 4,
+            name: 'div',
+        }, {
+            id: 6,
+            pid: 5,
+            name: 'span',
+        }, {
+            id: 7,
+            pid: 5,
+            name: 'img',
+        }];
+        /* [{
+            id: 1,
+            pid: 0,
+            name: 'body',
+            children: [{
+                id: 2,
+                pid: 1,
+                name: 'title',
+                children: [{
+                    id: 3,
+                    pid: 2,
+                    name: 'div'
+                }],
+            }, ],
+        }, {
+            id: 4,
+            pid: 0,
+            name: 'html',
+            children: [{
+                id: 5,
+                pid: 4,
+                name: 'div',
+                children: [{
+                    id: 7,
+                    pid: 5,
+                    name: 'img'
+                }],
+            }, ],
+        }]; */
+        function arrayToTree(array) {
+            let tree = {
+                0: {
+                    id: 0,
+                    pid: null,
+                    children: [],
+                }
+            };
+            const _queue = [...array];
+
+            while(_queue.length) {
+                const queueItem = _queue.shift();
+                tree[queueItem.id] ??= queueItem;
+
+                const itemParent = tree[queueItem.pid];
+
+                if(itemParent) {
+                    if(tree[itemParent.id].children) {
+                        tree[itemParent.id].children.push(queueItem);
+                    } else {
+                        tree[itemParent.id].children = [queueItem];
+                    }
+                } else {
+                    // 还没循环到 从后面塞进去
+                    _queue.push(queueItem)
+                }
+            }
+            debugger;
+            return tree[0].children;
+        }
+        arrayToTree(arraySource);
+    </script>
+</body>
+</html>

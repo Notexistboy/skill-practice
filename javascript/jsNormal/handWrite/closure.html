@@ -10,7 +10,19 @@
 
     </div>
     <script type="text/javascript">
-
+		function _G (f, alreadyCollectedParams = []) {
+			if(typeof f !== "function") throw new Error('f must be a function!');
+			return function (...rest) {
+				const currentParams = [...alreadyCollectedParams, ...rest];
+				const currentLength = currentParams.length;
+				if(currentLength >= f.length) return f.apply(this, currentParams);
+				return _G(f, currentParams);
+			}
+		}
+		// 极简版
+		// const __G = (f, alreadyCollectedParams = []) => (...rest) => [...alreadyCollectedParams, ...rest].length >=
+		f.length ? f.apply(this, [...alreadyCollectedParams, ...rest]) : _G(f, currentParams);
+		const __G = (f, a = []) => (...r) => (_ = [...a, ...r], _.length >= f.length ? f.apply(this, _) : __G(f, _));
     </script>
   </body>
 </html>

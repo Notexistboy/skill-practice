@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function shallowCopy (source) {
+            if( Object(source) !== source ) return source;
+            const _tmp = Array.isArray(source) ? [] : {};
+            for (let key in source) {
+                if (source.hasOwnProperty(key)) _tmp[key] = source[key]; 
+            }
+            return _tmp;
+        }
+
+    </script>
+</body>
+</html>

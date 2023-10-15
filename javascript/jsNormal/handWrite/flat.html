@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function _flat (targetArray, container = []) {
+            if(!Array.isArray(targetArray)) return container;
+            targetArray.forEach(
+                item => {
+                    if (!Array.isArray(item)) {
+                        container.push(item);
+                    } else {
+                        _flat(item, container);
+                    }
+                }
+            )
+            return container;
+        }
+
+        const rst = _flat([[[[[[1],2],3],4],5,6],7]);
+        // const rst = _flat('[[[[[[1],2],3],4],5,6],7]');
+        console.log('rst: ', rst);
+
+        function _flat2 (targetArray) {
+            if(!Array.isArray(targetArray)) return [];
+            let _loop = targetArray;
+            while(1){
+                const beforeFlat = _loop.length;
+                const _Arr = _loop.flat();
+                const afterFlat = _Arr.length;
+                if(beforeFlat == afterFlat) return _Arr;
+                _loop = _Arr;
+            }
+        }
+
+        const rst2 = _flat2([[[[[[1],2],3],4],5,6],7]);
+        console.log('rst2: ', rst2);
+
+        function _flat3 (targetArray) {
+            if(!Array.isArray(targetArray)) return [];
+            while(1){
+                const arrItemIndex = targetArray.findIndex(
+                    item => Array.isArray(item)
+                )
+                if(arrItemIndex === -1) return targetArray;
+                targetArray.splice(arrItemIndex, 1, ...targetArray[arrItemIndex]);
+            }
+        }
+
+        const rst3 = _flat3([[[[[[1],2],3],4],5,6],7]);
+        console.log('rst3: ', rst3);
+        
+        function _flat4 (targetArray) {
+            if(!Array.isArray(targetArray)) return [];
+            // 原始数组全部入a栈
+            const a = [...targetArray];
+            const b = [];
+            while(a.length){
+                const _tmp = a.pop();
+                if (Array.isArray(_tmp)) {
+                    a.push(..._tmp); // 这里不要遍历push，显得很low，a.concat(_tmp)也可
+                } else {
+                    b.push(_tmp);
+                }
+            }
+            return b;
+        }
+
+        const rst4 = _flat4([[[[[[1],2],3],4],5,6],7]);
+        console.log('rst4: ', rst4);
+
+    </script>
+</body>
+</html>

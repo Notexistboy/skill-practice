@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        Object.prototype.myCreate = function() {
+            if (Object(proto) !== proto) {
+                throw new TypeError('Object prototype may only be an Object or null');
+            }
+            // 创建一个空函数
+            function F() {}
+            // 指定此函数的原型
+            F.prototype = proto;
+            // 创建待返回实例
+            const obj = new F();
+            // 往实例对象上添加属性
+            if (propertiesObject !== undefined) {
+                Object.defineProperties(obj, propertiesObject);
+            }
+            // 返回实例对象
+            return obj;
+        };
+    </script>
+</body>
+</html>

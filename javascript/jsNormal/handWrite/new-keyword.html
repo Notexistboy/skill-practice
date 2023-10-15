@@ -13,6 +13,15 @@
             instabnce.__proto__ = obj.prototype;
             return result instanceof Object ? result : instabnce;
         };
+
+        function myConstructor(obj, cons) {
+            if(Object(obj)!==obj) return false;
+            let _p = obj.__proto__;
+            while(_p!==null){
+                if(_p==cons.prototype) return true;
+                _p = _p.__proto__;
+            }
+        };
     </script>
 </body>
 </html>
