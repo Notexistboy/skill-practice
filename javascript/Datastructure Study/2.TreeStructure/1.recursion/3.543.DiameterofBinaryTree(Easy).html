@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /**
+       * @param {TreeNode} root
+       * @return {number}
+       */
+      /* 
+        给定一棵二叉树，你需要计算它的直径长度。
+        一棵二叉树的直径长度是任意两个结点路径长度中的最大值。
+        这条路径可能穿过也可能不穿过根结点。
+       */
+      let longest = 0;
+      var diameterOfBinaryTree = function(root) {
+        maxDepth(root);
+        return longest;
+      };
+      var maxDepth = function(root){
+        if(root === null) return 0;
+        let leftLength = maxDepth(root.left);
+        let rightLength = maxDepth(root.right);
+        longest = Math.max(longest, leftDepth + rightDepth);
+        return 1+ Math.max(leftHigh, rightHigh);
+      }
+    </script>
+  </body>
+</html>

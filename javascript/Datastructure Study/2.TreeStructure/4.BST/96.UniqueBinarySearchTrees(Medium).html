@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        /**
+         * @param {number} n
+         * @return {number}
+         */
+        var numTrees = function(n) {
+          // 计算闭区间 [1, n] 组成的 BST 个数
+          return count(1, n);
+        }
+        let memo = {}
+        /* 计算闭区间 [lo, hi] 组成的 BST 个数 */
+        var count = function(lo, hi) {
+          // base case
+          if (lo > hi) return 1;
+          // 查备忘录
+          if (memo[lo] && memo[lo][hi] != 0) {
+              return memo[lo][hi];
+          }
+          let res = 0;
+          for (let i = lo; i <= hi; i++) {
+            // i 的值作为根节点 root
+            let left = count(lo, i - 1);
+            let right = count(i + 1, hi);
+            // 左右子树的组合数乘积是 BST 的总数
+            res += left * right;
+          }
+          // 将结果存入备忘录
+          if(!memo[lo]) memo[lo] = {}
+          memo[lo][hi] = res;
+          return res;
+        }
+    </script>
+  </body>
+</html>
