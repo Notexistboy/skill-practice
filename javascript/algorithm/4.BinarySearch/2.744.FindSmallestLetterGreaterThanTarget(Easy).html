@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+
+  </div>
+  <script type="text/javascript">
+    /* 
+      给你一个排序后的字符列表 letters ，列表中只包含小写英文字母。
+      另给出一个目标字母 target，请你寻找在这一有序列表里比目标字母大的最小字母。
+      在比较时，字母是依序循环出现的。举个例子：
+      如果目标字母 target = 'z' 并且字符列表为 letters = ['a', 'b']，则答案返回 'a'
+      */
+    /* 
+    我们想要在有序数组中查找比目标字母大的最小字母，可以使用二分查找：
+    让我们找到最右边的位置将 target 插入 letters 中，以便它保持排序。
+    二分查找分几轮进行，在每一轮中我们保持循环始终在区间 [lo，hi]。
+    让 mi = (lo + hi) / 2。若 letters[mi] <= target，
+    则我们修改查找区间为 [mi + 1, hi]，否则，我们修改为 [lo, mi]
+    最后，如果插入位置是最后一个位置 letters.length，
+    则返回 letters[0]。这就是模运算的运用。
+     */
+    var nextGreatestLetter = function (letters, target) {
+      let left = 0,
+        right = letters.length;
+      debugger
+      while (left < right) {
+        let mid = left + ((right - left) >> 1);
+        debugger
+        if (letters[mid] <= target) {
+          debugger
+          left = mid + 1;
+        } else {
+          debugger
+          right = mid;
+        }
+      }
+      debugger
+      /* 判断插入位 */
+      return letters[left % letters.length]
+    };
+    nextGreatestLetter(["c", "f", "j"], "j")
+    //nextGreatestLetter(["c", "f", "j"],"a")
+  </script>
+</body>
+
+</html>

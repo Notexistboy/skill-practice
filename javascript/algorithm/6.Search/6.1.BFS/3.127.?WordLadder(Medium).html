@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * @param {string} beginWord
+         * @param {string} endWord
+         * @param {string[]} wordList
+         * @return {number}
+         */
+        var ladderLength = function (beginWord, endWord, wordList) {
+            wordList.push(beginWord);
+            let n = wordList.length;
+            let start = n - 1;
+            let end = 0;
+            while (end < n && !wordList[end] === endWord) {
+                end++;
+            }
+            if (end == n) {
+                return 0;
+            }
+            let graphic = buildGraphic(wordList);
+            debugger;
+            return getShortestPath(graphic, start, end);
+        };
+        let buildGraphic = function (wordList) {
+            let n = wordList.length;
+            let graphic = new Array(n);
+            for (let i = 0; i < n; i++) {
+                graphic[i] = [];
+                for (let j = 0; j < n; j++) {
+                    if (isConnect(wordList[i], wordList[j])) {
+                        graphic[i].push(j);
+                    }
+                }
+            }
+            return graphic;
+        };
+        let isConnect = function (s1, s2) {
+            let diffCnt = 0;
+            for (let i = 0; i < s1.length && diffCnt <= 1; i++) {
+                if (s1.charAt(i) != s2.charAt(i)) {
+                    diffCnt++;
+                }
+            }
+            return diffCnt == 1;
+        }
+
+        let getShortestPath = function (graphic, start, end) {
+            let queue = [];
+            let marked = {};
+            queue.push(start);
+            marked[start] = true;
+            let path = 1;
+            debugger;
+            while (queue.length) {
+                let length = queue.length;
+                path++;
+                while (length-- > 0) {
+                    let curr = queue.shift();
+                    debugger
+                    for (let next of graphic[curr]) {
+                        if (next == end) {
+                            return path;
+                        }
+                        if (marked[next]) {
+                            continue;
+                        }
+                        marked[next] = true;
+                        queue.push(next);
+                    }
+                }
+            }
+            return 0;
+        };
+        ladderLength('hit', 'cog', ["hot", "dot", "dog", "lot", "log", "cog"]);
+    </script>
+</body>
+
+</html>

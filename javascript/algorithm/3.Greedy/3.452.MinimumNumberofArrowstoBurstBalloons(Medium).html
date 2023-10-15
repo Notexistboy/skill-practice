@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * @param {number[][]} points
+         * @return {number}
+         */
+        /* greedy */
+        var findMinArrowShots = function (points) {
+            if (points.length == 0) return 0;
+            points.sort((a, b) => a[0] - b[0]);
+            let curr = 0;
+            let end = points[0][1];
+            for (let i = 1; i < points.length; i++) {
+                if (points[i][0] > value) {
+                    end = points[i][1];
+                    curr++;
+                }
+            }
+            return curr;
+        };
+        /* DynamicProgramming */
+        var findMinArrowShots = function (points) {
+            if (points.length == 0) return 0;
+            points.sort((a, b) => a[0] - b[0]);
+            const n = points.length;
+            const f = new Array(n).fill(1);
+            for (let i = 1; i < n; i++) {
+                for (let j = 0; j < i; j++) {
+                    /*  */
+                    if (points[j][1] < points[i][0]) {
+                        f[i] = Math.max(f[i], f[j] + 1);
+                    }
+                }
+            }
+            return Math.max(...f);
+        };
+        findMinArrowShots([
+            [10, 16],
+            [2, 8],
+            [1, 6],
+            [7, 12]
+        ]);
+        findMinArrowShots([
+            [1, 2],
+            [3, 4],
+            [5, 6],
+            [7, 8]
+        ]);
+        findMinArrowShots([
+            [1, 2],
+            [2, 3],
+            [3, 4],
+            [4, 5]
+        ]);
+    </script>
+</body>
+
+</html>

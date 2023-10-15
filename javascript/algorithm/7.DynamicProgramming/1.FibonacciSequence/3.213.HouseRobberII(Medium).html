@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      /* 
+        你是一个专业的小偷，计划偷窃沿街的房屋，
+        每间房内都藏有一定的现金。
+        这个地方所有的房屋都围成一圈，
+        这意味着第一个房屋和最后一个房屋是紧挨着的。
+        同时，相邻的房屋装有相互连通的防盗系统，
+        如果两间相邻的房屋在同一晚上被小偷闯入，
+        系统会自动报警。
+
+        给定一个代表每个房屋存放金额的非负整数数组，
+        计算你在不触动警报装置的情况下，
+        能够偷窃到的最高金额。
+
+        如果偷窃第一家 不能偷窃最后一家
+       */
+      /* 
+        只需要比较1~倒数第二 和 2~倒数第一哪个大
+      
+       */
+      /**
+      * @param {number[]} nums
+      * @return {number}
+      */
+      /* 算不出来 */
+      // var rob = function(nums) {
+      //   let len = nums.length
+      //   if (len == 1) return nums[0];
+      //   let memo = Array(len).fill(-1)
+      //   let dp = function(start,end){
+      //     if(start > end) return 0
+      //     //if(memo[start] != -1) return memo[start];
+      //     let res = Math.max(dp(start+1,end), nums[start]+dp(start+2,end))
+      //     console.log(start,end,res,memo)
+      //     return memo[start] = res
+      //   }
+      //   return Math.max(dp( 0, len - 2), dp( 1, len - 1));
+      // };
+      /* 返向遍历 dp方程 */
+      // let rob = function(nums) {
+      //   let n = nums.length;
+      //   if (n == 1) {
+      //       return nums[0];
+      //   } else if (n == 2) {
+      //       return Math.max(nums[0], nums[1]);
+      //   }
+      //   let robRange = function(start, end) {
+      //     let dp = new Array(n+2).fill(0)
+      //     for (let i = end; i >= start; i--) {
+      //       dp[i] = Math.max(dp[i + 1], nums[i] + dp[i + 2]);
+      //     }
+      //     return dp[0];
+      //   }
+      //   return Math.max(robRange(0, n - 2), robRange(1, n - 1));
+      // }
+      /* 正向遍历 dp方程 */
+      let rob = function(nums) {
+        let n = nums.length;
+        if (n == 1) {
+            return nums[0];
+        } else if (n == 2) {
+            return Math.max(nums[0], nums[1]);
+        }
+        let robRange = function(start, end) {
+          let dp = []
+          dp[0] = nums[start]
+          dp[1] = Math.max(nums[start],nums[start+1])
+          for( let i = start+2; i<=end; i++){
+            dp[dp.length] = Math.max(dp[dp.length-1],dp[dp.length-2]+nums[i])
+          }
+          return dp[dp.length - 1]
+        }
+        debugger;
+        return Math.max(robRange(0, n - 2), robRange(1, n - 1));
+      }
+      /* 返向遍历 参数交换 */
+      // let rob = function(nums) {
+      //   let n = nums.length;
+      //   if (n == 1) {
+      //       return nums[0];
+      //   } else if (n == 2) {
+      //       return Math.max(nums[0], nums[1]);
+      //   }
+      //   let robRange = function(start, end) {
+      //     let dp_i_1 = 0, dp_i_2 = 0;
+      //     let dp_i = 0;
+      //     for (let i = end; i >= start; i--) {
+      //       dp_i = Math.max(dp_i_1, nums[i] + dp_i_2);
+      //       dp_i_2 = dp_i_1;
+      //       dp_i_1 = dp_i;
+      //     }
+      //     return dp_i;
+      //   }
+      //   return Math.max(robRange(0, n - 2), robRange(1, n - 1));
+      // };
+      /* 正向遍历 参数交换 */
+      // let rob = function(nums) {
+      //   let n = nums.length;
+      //   if (n == 1) {
+      //       return nums[0];
+      //   } else if (n == 2) {
+      //       return Math.max(nums[0], nums[1]);
+      //   }
+      //   let robRange = function(start, end) {
+      //     let prev = nums[start], curr = Math.max(nums[start], nums[start + 1]);
+      //     for(let i = start + 2; i <= end; i++){
+      //       let temp = Math.max(prev + nums[i], curr);
+      //       prev = curr;
+      //       curr = temp;
+      //     }
+      //     return curr;
+      //   }
+      //   return Math.max(robRange(0, n - 2), robRange(1, n - 1));
+      // }
+
+
+      console.log(rob([1,2,1,1]));
+    </script>
+  </body>
+</html>

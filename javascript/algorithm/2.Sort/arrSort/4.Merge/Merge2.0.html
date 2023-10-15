@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+  <html >
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      var arr = [9,12,7,27,5,24,6,10]
+      function Merger(a, b){
+        var n = a && a.length;
+        var m = b && b.length;
+        var c = [];
+        var i = 0, j = 0;
+        debugger
+        while (i < n && j < m)
+        {
+          debugger
+          if (a[i] < b[j])
+            {
+            c.push(a[i++]);
+            debugger
+            }
+          else
+            {
+            c.push(b[j++]);
+            debugger
+          }
+        }
+        debugger
+        while (i < n)
+          {
+            c.push(a[i++]);
+            debugger
+          }
+        while (j < m)
+          {
+            c.push(b[j++]);
+            debugger
+          }
+        console.log("将数组",a,'和',b,'合并为',c)
+        return c;
+      }
+      function merge_sort(arr){
+        console.log(arr)
+        if(arr.length < 2)
+            return arr
+        debugger
+        var mid = Math.floor(arr.length/2)
+        var left = arr.slice(0,mid)
+        var right = arr.slice(mid)
+        debugger
+        return Merger(merge_sort(left),merge_sort(right)); //合并左右部分,//嵌套循环,直到判断结束
+      }
+      var result = merge_sort(arr)
+      console.log(result)
+    </script>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+  <title>Document</title>
+</head>
+
+<body>
+
+  <script>
+    /*
+    1，算法简介
+      选择排序是一个简单直观的排序方法，它的工作原理很简单，首先从未排序序列中找到最大的元素，
+    放到已排序序列的末尾，重复上述步骤，直到所有元素排序完毕。
+    2，算法描述
+      1）假设未排序序列的第一个是最大值，记下该元素的位置，从前往后比较 minIndex = i
+      2）若某个元素比该元素大，覆盖之前的位置
+      3）重复第二个步骤，直到找到未排序的末尾
+      4）将未排序元素的第一个元素和最大元素交换位置
+      5）重复前面几个步骤，直到所有元素都已经排序。
+    3，算法分析
+      选择排序的交换操作次数最好情况已经有序为0次，最坏情况逆序n-1次，因此交换操作次数位于0~(n-1)次之间；
+    比较操作次数（n-1+…+2+1+0）为n(n-1)/2次；交换元素赋值操作为3次，逆序需要n-1趟交换，
+    因此，赋值操作位于0~3(n-1)次之间。由于需要交换位置，所以肯定是不稳定的。
+    时间复杂度均为o(n^2)    空间复杂度为o(1)  不稳定
+    */
+    var arr = [9, 12, 7, 27, 5, 24, 6, 10]
+
+    function arrSort(arr) {
+      var minIndex;
+      for (var i = 0; i < arr.length; i++) {
+        minIndex = i;
+        for (var j = i; j < arr.length; j++) {
+          if (arr[j] < arr[minIndex]) {
+            minIndex = j;
+          }
+        }
+        if(minIndex!=i){
+          [ arr[i],arr[minIndex] ] = [ arr[minIndex],arr[i] ]
+        }
+      }
+      return arr;
+    }
+    
+    arrSort(arr)
+    console.log(arr)
+  </script>
+</body>
+
+</html>

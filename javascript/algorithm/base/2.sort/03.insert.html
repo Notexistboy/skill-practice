@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        /* 
+            每次都将当前元素插入到左侧已经排序的数组中，使得插入之后左侧数组依然有序。
+            对于数组 {3, 5, 2, 4, 1}，它具有以下逆序：
+            (3, 2), (3, 1), (5, 2), (5, 4), (5, 1), (2, 1), (4, 1)，
+            插入排序每次只能交换相邻元素，令逆序数量减少 1，因此插入排序需要交换的次数为逆序数量。
+            插入排序的时间复杂度取决于数组的初始顺序，如果数组已经部分有序了，那么逆序较少，需要的交换次数也就较少，时间复杂度较低。
+            平均情况下插入排序需要 ~N2/4 比较以及 ~N2/4 次交换；
+            最坏的情况下需要 ~N2/2 比较以及 ~N2/2 次交换，最坏的情况是数组是倒序的；
+            最好的情况下需要 N-1 次比较和 0 次交换，最好的情况就是数组已经有序了。
+        */
+        function insert(nums){
+            var len = nums.length;
+            for(var i = 0; i<len; i++){
+                for(var j = i; j>0 && (nums[j] < nums[j-1]); j--){
+                    var temp = nums[j]
+                    nums[j] = nums[j-1]
+                    nums[j-1] = temp
+                }
+            }
+            return nums
+        }
+        function insertionSort(array) {
+            if (Object.prototype.toString.call(array).slice(8, -1) === 'Array') {
+                console.time('插入排序耗时：');
+                for (var i = 1; i < array.length; i++) {
+                    var key = array[i];
+                    var j = i - 1;
+                    while (j >= 0 && array[j] > key) {
+                        array[j + 1] = array[j];
+                        j--;
+                    }
+                    array[j + 1] = key;
+                }
+                console.timeEnd('插入排序耗时：');
+                return array;
+            } else {
+                return 'array is not an Array!';
+            }
+        }
+        function binaryInsertionSort(array) {
+            if (Object.prototype.toString.call(array).slice(8, -1) === 'Array') {
+                console.time('二分插入排序耗时：');
+
+                for (var i = 1; i < array.length; i++) {
+                    var key = array[i], left = 0, right = i - 1;
+                    while (left <= right) {
+                        var middle = parseInt((left + right) / 2);
+                        if (key < array[middle]) {
+                            right = middle - 1;
+                        } else {
+                            left = middle + 1;
+                        }
+                    }
+                    for (var j = i - 1; j >= left; j--) {
+                        array[j + 1] = array[j];
+                    }
+                    array[left] = key;
+                }
+                console.timeEnd('二分插入排序耗时：');
+
+                return array;
+            } else {
+                return 'array is not an Array!';
+            }
+        }
+        var arr=[3,44,38,5,47,15,36,26,27,2,46,4,19,50,48];
+        console.log(binaryInsertionSort(arr));//[2, 3, 4, 5, 15, 19, 26, 27, 36, 38, 44, 46, 47, 48, 50]
+        insert([2,1,3,5,4]);
+    </script>
+  </body>
+</html>

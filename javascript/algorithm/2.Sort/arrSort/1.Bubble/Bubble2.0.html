@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script>
+      var arr = [9,12,7,27,5,24,6,10]
+      function arrSort(arr) {
+        //比较轮数
+        var len = arr.length-1
+        while(len>0){
+          let posi
+          for ( var i=0; i<len; i++ ){
+            if (arr[i] > arr[i + 1]) {
+              [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]]
+              posi = i
+              
+            }//end if
+          } //end for 轮数
+          if (len == arr.length) {
+            return
+          }
+          len = posi 
+        }
+        return arr
+      }
+      arrSort(arr)
+      //如果输入的本来就是一个有序序列，其实只需要一次循环就够了，所以我们需要针对特殊情况进行优化
+      //设置一标志性变量posi,用于记录每趟排序中最后一次进行交换的位置。
+      //由于posi位置之后的记录均已交换到位,故在进行下一趟排序时只要扫描到posi位置即可。
+      console.log(arr)
+    </script>
+  </body>
+
+</html>

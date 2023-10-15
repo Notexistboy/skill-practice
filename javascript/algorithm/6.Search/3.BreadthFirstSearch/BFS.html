@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body>
+	<div>
+
+	</div>
+	<script type="text/javascript">
+		/* 
+				（1）BFS的问题一般都会选用队列方式实现；
+				（2）代码模板如下：
+				定义队列;
+				定义备忘录，用于记录已经访问的位置；
+				判断边界条件，是否能直接返回结果的。
+				将起始位置加入到队列中，同时更新备忘录。
+		
+				while (队列不为空) {
+						获取当前队列中的元素个数。
+						for (元素个数) {
+								取出一个位置节点。
+								判断是否到达终点位置。
+								获取它对应的下一个所有的节点。
+								条件判断，过滤掉不符合条件的位置。
+								新位置重新加入队列。
+						}
+				}
+		 */
+		// 计算从起点 start 到终点 target 的最近距离
+		let BFS = function (root) {
+			if(root == null) return 0;
+			let list = []; // 核心数据结构
+			/* visited的主要作用是防止走回头路，大部分时候都是必须的，
+			但是像一般的二叉树结构，没有子节点到父节点的指针，
+			不会走回头路就不需要visited。 */
+			let visited = []; // 避免走回头路
+
+			list.push(root); // 将起点加入队列
+			visited.push(root);
+
+			let step = 0; // 记录扩散的步数
+			let currNoderNode = null //记录当前节点
+
+			while (list.length) {
+				/* 先获取数据长度 */
+				let size = list.length;
+				/* 将当前队列中的所有节点向四周扩散 */
+				for (let i = 0; i < size; i++) {
+					currNode = list.shift();
+					/* 划重点：这里判断是否到达终点 */
+					/* 划重点：更新步数在这里 */
+					step++;
+					/* if(!currNode.left && !currNode.right) return depth */
+					if (currNode == target) return step;
+					/* currNode.adj()泛指currNode相邻的节点 */
+					/* 将 currNode 的相邻节点加入队列 */
+					for (let x; x < currNode.adj(); x++)
+						list.push(x);
+						/*  */
+						if (visited.indexOf(x) == -1) {
+							list.push(x);
+							visited.push(x);
+						}
+				}
+				
+			}
+		}
+	</script>
+</body>
+
+</html>

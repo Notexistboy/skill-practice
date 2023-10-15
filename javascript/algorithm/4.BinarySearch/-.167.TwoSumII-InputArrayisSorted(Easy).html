@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+
+  </div>
+  <script type="text/javascript">
+    /* 
+        给定一个已按照升序排列 的有序数组，找到两个数使得它们相加之和等于目标数。
+        函数应该返回这两个下标值 index1 和 index2，其中 index1 必须小于 index2。
+        说明:
+        返回的下标值（index1 和 index2）不是从零开始的。
+        你可以假设每个输入只对应唯一的答案，而且你不可以重复使用相同的元素。
+      */
+    /**
+     * @param {number[]} numbers
+     * @param {number} target
+     * @return {number[]}
+     */
+    /* 第一种解法利用二分查找 */
+    /* 
+    在数组中找到两个数，使得它们的和等于目标值，
+    可以首先固定第一个数，然后寻找第二个数，
+    第二个数等于目标值减去第一个数的差。
+    利用数组的有序性质，可以通过二分查找的方法寻找第二个数。
+    为了避免重复寻找，在寻找第二个数时，只在第一个数的右侧寻找。
+    时间复杂度：O(n \log n)O(nlogn)，其中 nn 是数组的长度。
+    需要遍历数组一次确定第一个数，时间复杂度是 O(n)O(n)，
+    寻找第二个数使用二分查找，时间复杂度是 O(\log n)O(logn)，
+    因此总时间复杂度是 O(n \log n)O(nlogn)。
+
+    空间复杂度：O(1)O(1)。
+     */
+    /* 第二种解法是通过双指针实现 */
+    var twoSum = function (numbers, target) {
+      let len = numbers.length
+      for (let i = 0; i < len; i++) {
+        let left = i //左侧指针
+        let right = len - 1 //右侧指针
+        while (left <= right) {
+          let mid = Math.ceil((right + left) / 2)
+          /* //left + ((right - left) >>> 1) */
+          debugger
+          let res = numbers[mid] + numbers[i]
+          /* 值变大 查找点继续左移 */
+          if (res > target) {
+            right = mid - 1
+          } else if (res < target) {
+            left = mid + 1
+          } else {
+            return [left + 1, mid + 1]
+          }
+        }
+      }
+      return [-1, -1]
+    };
+    twoSum([2, 7, 11, 15], 9)
+  </script>
+</body>
+
+</html>

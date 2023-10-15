@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        /**
+         * @param {number[]} g
+         * @param {number[]} s
+         * @return {number}
+         */
+        var findContentChildren = function (g, s) {
+            if (g.length === 0 || s.length === 0) return 0;
+            grid = grid.sort((a, b) => a - b);
+            size = size.sort((a, b) => a - b);
+            let gi = 0,
+                si = 0;
+            while (gi < g.length && si < s.length) {
+                if (g[gi] <= s[si]) {
+                    gi++;
+                }
+                si++;
+            }
+            return gi;
+        };
+        findContentChildren([1, 2, 3], [1, 1]);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script>
+      var arr = [9,12,7,27,5,24,6,10]
+      function arrSort(arr) {
+        var len = arr.length
+        //比较轮数
+        for (var i=0;i<len-1; i++){
+          //每轮比较次数，次数=长度-1-此时的轮数
+          for (var j = 0; j < len-1-i; j++) {
+            if(arr[j] > arr[j+1]){
+              [ arr[j], arr[j+1] ] = [ arr[j+1],arr[j] ]
+            } //end if
+          }//end for 次数
+        } //end for 轮数
+      }
+      arrSort(arr)
+      console.log(arr)
+    </script>
+  </body>
+
+</html>

@@ -33,7 +33,7 @@
         箭头函数
             1.箭头函数中的this指向外层函数（非箭头函数）的作用域中的this指向。
       */
-    var myName2 = "bar";
+    var myName = "bar";
 
     function myNew(fn, ...args) {
       let obj = null;
@@ -47,7 +47,7 @@
     }
 
     function func() {
-        this.myName2 = "foo";
+        this.myName = "foo";
 
         const getName = () => {
             console.log('myName', this);
@@ -61,8 +61,8 @@
         getName();
         getName1();
     }
-    // func();  undefined window undefined
-    // new func(); // 箭头函数this指向func 函数表达式window 只有被new的func才是构造函数，他的this指向new出来的对象，他里面的函数的this还是指向window。
+    // func(); // window bar window bar
+    // new func(); // func foo window bar 箭头函数this指向func 函数表达式window 只有被new的func才是构造函数，他的this指向new出来的对象，他里面的函数的this还是指向window。
 
     // 箭头函数在申明时this确定为当前作用域的this
     // 在这里就是func的作用域，跟func的this一样指向new出来的实例。

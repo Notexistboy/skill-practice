@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+      <script>
+        /**
+        * @param {number[]} nums
+        * @return {number}
+        */
+        /* 
+          第一间房屋 S0 = H0
+          前两间房屋 S1 = max(S0,H1)
+          前三间房屋 S2 = max(S1,H2)
+          前四间房屋 S3 = max(S2,H3)
+          递推公式 Sn = max(Sn-1,Sn-2+Hn)
+         */
+        /* 
+        首先考虑最简单的情况。
+        如果只有一间房屋，
+        则偷窃该房屋，
+        可以偷窃到最高总金额。
+        如果只有两间房屋，
+        则由于两间房屋相邻，
+        不能同时偷窃，
+        只能偷窃其中的一间房屋，
+        因此选择其中金额较高的房屋进行偷窃，
+        可以偷窃到最高总金额。
+
+        如果房屋数量大于两间，
+        应该如何计算能够偷窃到的最高总金额呢？对于第k~(k>2)间房屋，有两个选项：
+
+        偷窃第 k 间房屋，那么就不能偷窃第 k-1 间房屋，
+        偷窃总金额为前 k-2 间房屋的最高总金额与第 k 间房屋的金额之和。
+        不偷窃第 k 间房屋，偷窃总金额为前 k-1 间房屋的最高总金额。
+        在两个选项中选择偷窃总金额较大的选项，
+        该选项对应的偷窃总金额即为前 kk 间房屋能偷窃到的最高总金额。
+        用 dp[i] 表示前 i 间房屋能偷窃到的最高总金额，那么就有如下的状态转移方程：
+        dp[i]=max(dp[i−2]+nums[i],dp[i−1])
+        边界条件为：
+        dp[0]=nums[0] 只有一间房屋，则偷窃该房屋
+        dp[1]=max(nums[0],nums[1])只有两间房屋，选择其中金额较高的房屋进行偷窃 
+        
+        最终的答案即为 dp[n−1]，其中 n 是数组的长度。
+         */
+        /* var rob = function(nums) {
+          let len = nums.length
+          if(len == 0) return 0
+          let dp = []
+          dp[0] = 0
+          dp[1] = nums[0]
+          for(let i=2;i<=len;i++){
+            dp[i] = Math.max(dp[i-1],dp[i-2]+nums[i-1])
+          }
+          return dp[len]
+        }; */ 
+        var rob = function(nums) {
+          let len = nums.length
+          if(len == 0) return 0
+          let dp = []
+          let first = dp[0] = 0
+          let second = dp[1] = nums[0]
+          for(let i=2;i<=len;i++){
+            let temp = second
+            second = Math.max(first+nums[i-1],second)
+            first = temp
+          }
+          return second
+        }
+        rob([2,7,9,3,1])
+      </script>
+  </body>
+</html>

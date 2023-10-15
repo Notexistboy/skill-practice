@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+  <head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script>
+      //重新赋值比数值交换效率更高一些
+      var arr = [9, 12, 7, 27, 5, 24, 6, 10]
+      function arrSort(arr) {
+        var len = arr.length
+        for( var i = 1; i <= len; i++ ){
+          debugger
+          var j = i-1
+          while( j > 0 && arr[j] < arr[j-1] ){
+            debugger
+            [arr[j], arr[j-1]] = [arr[j-1], arr[j]]
+            debugger
+            j--
+          }
+        }
+        return arr
+      }
+      
+      arrSort(arr)
+      console.log(arr)
+    </script>
+  </body>
+
+</html>

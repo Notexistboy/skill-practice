@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+    /**
+     * @param {number[]} nums
+     */
+    var NumArray = function(nums) {
+        this.sums = new Array(nums.length + 1).fill(0);
+        for(let i = 1; i <= nums.length; i++) {
+            this.sums[i] = this.sums[i-1]+nums[i-1]
+        }
+    };
+
+    /** 
+     * @param {number} left 
+     * @param {number} right
+     * @return {number}
+     */
+    NumArray.prototype.sumRange = function(i, j) {
+        return this.sums[j + 1] - this.sums[i];
+    };
+    /**
+     * Your NumArray object will be instantiated and called as such:
+     * var obj = new NumArray(nums)
+     * var param_1 = obj.sumRange(left,right)
+     */
+    </script>
+  </body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var permuteUnique = function (nums) { // 回溯
+            let res = [];
+            /** 用于去除排列后的重复项 */
+            let set = new Set();
+            /**
+             * 回溯
+             *
+             * @param nums 待全排列的数组
+             * @param idxList 索引列表：用于判断当前元素是否已经排列过
+             */
+            var backtrack = function (nums, idxList) {
+                // 如果所有元素都排列过，处理结果
+                if (idxList.length == nums.length) {
+                    let list = [];
+                    // 通过索引list，构建元素list
+                    for (let index = 0; index < idxList.length; i++) {
+                        list.push(nums[index]);
+                    }
+                    // 因为数组中含有重复元素，所以全排列后可能会有重复，需要去重
+                    if (!set.contains(list.toString())) {
+                        set.add(list.toString());
+                        res.push(list);
+                    }
+                    return;
+                }
+                for (let i = 0; i < nums.length; i++) {
+                    // 如果nums[i]已经排序过，则跳过
+                    if (idxList.contains(i)) continue;
+                    idxList.push(i);
+                    backtrack(nums, idxList);
+                    idxList.pop();
+                }
+            }
+            backtrack(nums, []);
+            return res;
+        };
+
+
+        var permuteUnique = function (nums) {
+            let res = [];
+            let cache = {};
+            const vis = new Array(nums.length).fill(false);
+            const backtrack = (idx, perm) => {
+                if (idx === nums.length) {
+                    res.push(perm.slice());
+                    return;
+                }
+                for (let i = 0; i < nums.length; ++i) {
+                    if (vis[i] || (i > 0 && nums[i] === nums[i - 1] && !vis[i - 1])) {
+                        continue;
+                    }
+                    perm.push(nums[i]);
+                    vis[i] = true;
+                    backtrack(idx + 1, perm);
+                    vis[i] = false;
+                    perm.pop();
+                }
+            }
+            nums.sort((x, y) => x - y);
+            backtrack(0, []);
+            return res;
+        };
+
+        var permute = function (nums) {
+            // 记录「路径」
+            let res = [];
+            let cache = {};
+            // 路径：记录在 track 中
+            // 选择列表：nums 中不存在于 track 的那些元素
+            // 结束条件：nums 中的元素全都在 track 中出现
+            var backtrack = function (track) {
+                // 触发结束条件
+                if (track.length === nums.length) {
+                    res.push([...track]);
+                    return;
+                }
+
+                for (let i = 0; i < nums.length; i++) { // 排除不合法的选择 
+                    if (cache[nums[i]]) continue;
+                    // 做选择
+                    track.push(nums[i]); // 进入下一层决策树
+                    cache[nums[i]] = true;
+                    backtrack(track);
+                    // 取消选择
+                    cache[nums[i]] = false;
+                    track.pop();
+                }
+            };
+            backtrack([]);
+            return res;
+        };
+    </script>
+</body>
+
+</html>

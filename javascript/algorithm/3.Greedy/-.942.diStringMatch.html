@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /**
+        * @param {string} s
+        * @return {number[]}
+        */
+       /* 
+        考虑 perm[0] 的值，根据题意：
+        如果 s[0]=‘I’，那么令 perm[0]=0，则无论 perm[1] 为何值都满足 perm[0]<perm[1]；
+        如果 s[0]=‘D’，那么令 perm[0]=n，则无论 perm[1] 为何值都满足 perm[0]>perm[1]；
+       */
+        var diStringMatch = function(s) {
+            let len = s.length, lo = 0, hi = len;
+            const arr = Array.from(len+1).fill(0);
+            for(let i = 0; i< len; i++){
+                arr[i] = s[i] === 'I' ? lo++ : hi--;
+            }
+            arr[len] = lo;
+            return arr;
+        };
+        diStringMatch("IDID");
+    </script>
+</body>
+</html>

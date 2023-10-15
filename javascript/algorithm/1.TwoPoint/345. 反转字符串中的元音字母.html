@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+        /* 
+            编写一个函数，以字符串作为输入，反转该字符串中的元音字母。
+            使用双指针，一个指针从头向尾遍历，一个指针从尾到头遍历，当两个指针都遍历到元音字符时，交换这两个元音字符。
+            为了快速判断一个字符是不是元音字符，我们将全部元音字符添加到集合 HashSet 中，从而以 O(1) 的时间复杂度进行该操作。
+            时间复杂度为 O(N)：只需要遍历所有元素一次
+            空间复杂度 O(1)：只需要使用两个额外变量
+        */
+        /**
+         * @param {string} s
+         * @return {string}
+         */
+        var reverseVowels = function(s) {
+            const enums = ['a','e','i','o','u','A','E','I','O','U'];
+            const cList = s.split('');
+            const cListLen = cList.length;
+            let i = 0;
+            let j = cListLen - 1;
+            while(i<j){
+              if(enums.includes(cList[i]) && enums.includes(cList[j])){
+                const temp = cList[i];
+                cList[i] = cList[j];
+                cList[j] = temp;
+                i++;
+                j--;
+              }
+              if(!enums.includes(cList[i])){
+                i++;
+              };
+              if(!enums.includes(cList[j])){
+                j--;
+              };
+            }
+            return cList.join()
+        };
+        reverseVowels("hello");
+    </script>
+  </body>
+</html>

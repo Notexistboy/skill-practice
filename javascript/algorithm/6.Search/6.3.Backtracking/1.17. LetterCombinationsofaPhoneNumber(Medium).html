@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+
+  </div>
+  <script type="text/javascript">
+
+
+    /**
+     * @param {string} digits
+     * @return {string[]}
+     */
+    /* 
+    回溯是一种通过穷举所有可能情况来找到所有解的算法。
+    如果一个候选解最后被发现并不是可行解，回溯算法会舍弃它，
+    并在前面的一些步骤做出一些修改，并重新尝试找到可行解。
+
+    给出如下回溯函数 backtrack(combination, next_digits) ，
+    它将一个目前已经产生的组合 combination 和接下来准备要输入的数字 next_digits 作为参数。
+
+    如果没有更多的数字需要被输入，那意味着当前的组合已经产生好了。
+    如果还有数字需要被输入：
+    遍历下一个数字所对应的所有映射的字母。
+    将当前的字母添加到组合最后，也就是 combination = combination + letter 。
+    重复这个过程，输入剩下的数字： backtrack(combination + letter, next_digits[1:]) 。
+     */
+    var letterCombinations = function (digits) {
+      var phone = {
+        2: ['a', 'b', 'c'],
+        3: ['d', 'e', 'f'],
+        4: ['g', 'h', 'i'],
+        5: ['j', 'k', 'l'],
+        6: ['m', 'n', 'o'],
+        7: ['p', 'q', 'r', 's'],
+        8: ['t', 'u', 'v'],
+        9: ['w', 'x', 'y', 'z'],
+      }
+      debugger
+      var output = []
+      debugger
+      function backtrack(combination, next_digits) {
+        // 如果没有更多的数字去检查
+        if (next_digits.length === 0) {
+          // combination已经完成
+          debugger
+          output.push(combination)
+          // 如果还有数字则去检查
+        }else{
+          // 迭代map中所有的字母
+          // 下一个可用的数字
+          debugger
+          /* 进行按钮与对应数组的匹配 */
+          for (let letter of phone[next_digits[0]]) {
+            // 把当前的字母插入到combination中
+            // 并且继续到下一个数字
+            backtrack(combination + letter, next_digits.substring(1))
+          }
+        }
+      }
+      /* 如果有值则调用递归 初始值组合为空 */
+      if (digits) {
+        backtrack('', digits)
+      }
+      debugger
+      return output
+    };
+    letterCombinations("23")
+  </script>
+</body>
+
+</html>

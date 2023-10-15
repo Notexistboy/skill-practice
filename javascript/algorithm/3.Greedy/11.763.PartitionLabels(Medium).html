@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * @param {string} s
+         * @return {number[]}
+         */
+        var partitionLabels = function (s) {
+            let lastIndexsOfChar = new Array(26);
+            const codePointA = 'a'.codePointAt(0);
+            for (let i = 0; i < s.length; i++) {
+                lastIndexsOfChar[s.codePointAt(i) - codePointA] = i;
+            }
+            let partitions = [];
+            let firstIndex = 0;
+
+            while (firstIndex < s.length) {
+                let lastIndex = firstIndex;
+                for (let i = firstIndex; i < s.length && i <= lastIndex; i++) {
+                    let index = lastIndexsOfChar[s.codePointAt(i) - codePointA];
+                    if (index > lastIndex) {
+                        lastIndex = index;
+                    }
+                }
+                partitions.push(lastIndex - firstIndex + 1);
+                firstIndex = lastIndex + 1;
+            }
+            return partitions;
+        };
+        partitionLabels('ababcbacadefegdehijhklij');
+    </script>
+</body>
+
+</html>

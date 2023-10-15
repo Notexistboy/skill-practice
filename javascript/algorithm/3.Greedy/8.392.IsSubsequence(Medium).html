@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * @param {string} s
+         * @param {string} t
+         * @return {boolean}
+         */
+        /* 双指针 */
+        var isSubsequence = function (s, t) {
+            let i = 0;
+            let j = 0;
+            debugger;
+            while (i < s.length && j < t.length) {
+                if (s[i] === t[j]) {
+                    i++;
+                }
+                j++;
+            }
+            return i === s.length;
+        };
+
+        var isSubsequence = function (s, t) {
+            debugger;
+            let str = t;
+            let index = 0;
+            while (index < s.length) {
+                let i = str.indexOf(s[index]);
+                if (i > -1) {
+                    str = str.substr(i);
+                } else {
+                    return false;
+                }
+                index++;
+            }
+            return true
+        };
+
+        console.log(isSubsequence("acb", "ahbgdc"));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+
+    </div>
+    <script type="text/javascript">
+      let gcd = function(a,b){
+        return b == 0 ? a:gcb(b,a%b)
+      }
+      /* 最小公倍数为两数的乘积除以最大公约数。 */
+      let lcm = function(a, b) {
+        return a * b / gcd(a, b);
+      }
+    </script>
+  </body>
+</html>
