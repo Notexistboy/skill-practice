@@ -7,48 +7,53 @@
 </head>
 <body>
     <script>
-        const request1 = () => new Promise(resolve => setTimeout(() => resolve(1), 4000))
-        const request2 = () => new Promise(resolve => setTimeout(() => resolve(2), 1000))
-        const request3 = () => new Promise(resolve => setTimeout(() => resolve(3), 2000))
-        const request4 = () => new Promise(resolve => setTimeout(() => resolve(4), 1500))
+        // 1
+        Children.prototype = new Parent();
 
-        const schedulerCallback = scheduler(2)
-        schedulerCallback(request1).then(res => console.log(res))
-        schedulerCallback(request2).then(res => console.log(res))
-        schedulerCallback(request3).then(res => console.log(res))
-        schedulerCallback(request4).then(res => console.log(res))
-        // 打印顺序如下
-        // 2, 3, 1, 4
-function scheduler(max) {
-    let queue = [];
-    let first = true;
-    let currnetInvoke = 0;
-    let currentIndex = 0;
-    function run() {
-        if(currentIndex > queue.length) return;
-        while(currnetInvoke < max) {
-            const cb = () => {
-                currnetInvoke--;
-                run();
-            }
-            queue[currentIndex](cb);
-            currnetInvoke++;
-        }
-    }
-    return function schedulerCallback(request) {
-        return new Promise((resolve) => {
-            queue.push(async (cb) => {
-                const res = await request();
-                cb();
-                resolve(res);
-            })
-            if(first) {
-                first = false;
-                Promise.resolve().then(run)
-            }
-        })
-    }
-}
+        // 2
+        function Children() {
+            Parent.call(this)
+        };
+
+        // 3 
+        function Children() {
+            Parent.call(this)
+        };
+        Children.prototype = new Parent();
+
+        // 4
+
+        function objCopy(children) {
+            function Func() {};
+            Func.prototype = children;
+            return new Func();
+        };
+
+
+        // 5
+
+
+        function objCopy(children) {
+            function Func() {};
+            Func.prototype = children;
+            return new Func();
+        };
+        function createAnother(original) { // 创建一个增强函数
+            let clone = objCopy(original);
+            return clone;
+        };
+
+        // 6
+        function objCopy(children) {
+            function Func() {};
+            Func.prototype = children;
+            return new Func();
+        };
+        function inhert(children, parent) {
+            const prototype = objCopy(parent.prototype);
+            prototype.constructor = children;
+            children.prototype = prototype;
+        };
     </script>
 </body>
 </html>

@@ -35,28 +35,21 @@
             let currentIndex = 0;
 
             function run() {
-                if (currentIndex >= queue.length) return;
-                while (currnetInvoke < max) {
-                    const cb = () => {
+                if (currnetInvoke < max && queue.length) {
+                    const [request, resolve] = queue.shift();
+                    currnetInvoke++;
+                    Promise.resolve(request()).then((result) => {
+                        resolve(result);
                         currnetInvoke--;
                         run();
-                    }
-                    queue[currentIndex](cb);
-                    currnetInvoke++;
-                    currentIndex++;
-                }
+                    })
+
+                };
             }
             return function schedulerCallback(request) {
                 return new Promise((resolve) => {
-                    queue.push(async (cb) => {
-                        const res = await request();
-                        cb();
-                        resolve(res);
-                    })
-                    if (first) {
-                        first = false;
-                        Promise.resolve().then(run)
-                    }
+                    queue.push([request, resolve]);
+                    if (currnetInvoke < max && queue.length) run();
                 })
             }
         }

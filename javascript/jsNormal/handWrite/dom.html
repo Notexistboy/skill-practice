@@ -10,11 +10,10 @@
     <script>
         const div = document.querySelector('#div');
         div.addEventListener('click',() => {
-            debugger;
-            console.log(this)
+            console.log(this, '()=>'); // window
         });
         div.addEventListener('click',function () {
-            console.log(this)
+            console.log(this) // 调用者
         });
     </script>
 </body>

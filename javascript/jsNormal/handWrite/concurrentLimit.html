@@ -25,7 +25,7 @@
                         result[currentCounter] = e
                     } finally {
                         successCounter++;
-                        if(finished === urlsLength) {
+                        if(successCounter === urlsLength) {
                             resolve(result)
                             return;
                         }

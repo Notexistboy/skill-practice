@@ -55,14 +55,12 @@
     // 调用函数
     let that = this;
     function callback(...arg1) {
-      debugger;
       if(this instanceof callback) {
         that.apply(this, [...args, ...arg1])
       }else{
         that.apply(target, [...args, ...arg1])
       }
     }
-    debugger;
     // 实现继承（原型式继承）
     function Fun () { };//创建一个空函数
     Fun.prototype = that.prototype;
