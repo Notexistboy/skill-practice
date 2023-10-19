@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 排序 */
+        var majorityElement = function (nums) {
+            nums.sort((a, b) => a - b);
+            return nums[Math.floor(nums.length / 2)];
+        };
+        /* 哈希 */
+        var majorityElement = function (nums) {
+            let half = nums.length / 2;
+            let map = new Map;
+
+            for (let num of nums) {
+                if (map.has(num)) {
+                    let currNum = map.get(num);
+                    map.set(num, currNum + 1);
+                } else {
+                    map.set(num, 1);
+                }
+
+                if (map.get(num) > half) return num;
+            }
+        };
+        /* 摩尔投票 */
+        const majorityElement = nums => {
+            let count = 1;
+            // 将第一个数赋予 majority
+            let majority = nums[0];
+
+            for (let i = 1; i < nums.length; i++) {
+                if (count === 0) {
+                    majority = nums[i];
+                }
+
+                if (nums[i] === majority) {
+                    count++;
+                } else {
+                    count--;
+                }
+            }
+
+            return majority;
+        };
+        /* 分治 */
+        var majorityElement = function (nums) {
+            return majorityElementRec(nums, 0, nums.length - 1);
+        };
+
+        function majorityElementRec(nums, lo, hi) {
+            //大小为1的数组中唯一的元素是多数
+            if (lo === hi) {
+                return nums[0];
+            }
+            //在这个切片的左半部递归
+            let mid = Math.floor((hi + lo) / 2)
+            let left = majorityElementRec(nums, lo, mid);
+            let right = majorityElementRec(nums, mid + 1, hi);
+            //如果两半同意多数元素，则返回它。
+            if (left === right) {
+                return left;
+            }
+            //否则，计算每个元素并返回“winner”。
+            /* 先计算出左侧和右侧谁的子元素个数多 */
+            let leftCount = countInRange(nums, left, lo, hi);
+            let rightCount = countInRange(nums, right, lo, hi);
+            return leftCount > rightCount ? left : right;
+        };
+
+        function countInRange(nums, num, lo, hi) {
+            let count = 0
+            for (let i = lo; i <= hi; i++) {
+                if (nums[i] === num) {
+                    count++
+                }
+            }
+            return count
+        };
+    </script>
+</body>
+
+</html>

@@ -168,39 +168,39 @@
     var person1 = new Person('person1')
     var person2 = new Person('person2')
     debugger;
-    person1.foo1();
-    person1.foo1.call(person2);
+    person1.foo1(); // person1
+    person1.foo1.call(person2); // person2
     debugger;
-    person1.foo2();
-    person1.foo2.call(person2);
+    person1.foo2(); // person1
+    person1.foo2.call(person2); // person1
     debugger;
-    person1.foo3()();
-    person1.foo3.call(person2)();
-    person1.foo3().call(person2); 
+    person1.foo3()(); // window
+    person1.foo3.call(person2)(); // window
+    person1.foo3().call(person2); // windo2
     debugger;
-    person1.foo4()();
-    person1.foo4.call(person2)();
-    person1.foo4().call(person2);
+    person1.foo4()(); // person1
+    person1.foo4.call(person2)(); // person2
+    person1.foo4().call(person2); // person1
     debugger;    
-    person1.foo5()();
-    person1.foo5.call(person2)();
-    person1.foo5().call(person2); 
+    person1.foo5()(); // window
+    person1.foo5.call(person2)(); // window
+    person1.foo5().call(person2); // person2
     debugger;
-    person1.foo6()();
-    person1.foo6.call(person2)();
-    person1.foo6().call(person2);
+    person1.foo6()(); // person1
+    person1.foo6.call(person2)(); // person1
+    person1.foo6().call(person2); // person1
     debugger;
-    person1.foo7();
-    person1.foo7.call(person2);
+    person1.foo7(); // person1 window
+    person1.foo7.call(person2); // person2 window
     debugger;
-    person1.foo8();
-    person1.foo8.call(person2);
+    person1.foo8(); // person1 person1
+    person1.foo8.call(person2); // person2 person2
     debugger;
-    person1.foo9();
-    person1.foo9.call(person2);
+    person1.foo9(); // person1 window
+    person1.foo9.call(person2); // person1 window
     debugger;
-    person1.foo10();
-    person1.foo10.call(person2);
+    person1.foo10(); // person1 person1
+    person1.foo10.call(person2); // person1 person1
     </script>
 </body>
 

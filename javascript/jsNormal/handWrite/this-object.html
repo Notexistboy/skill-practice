@@ -53,11 +53,8 @@
                 console.log(this, this.myName1);
             },
             funct: function () {
-                debugger;
-                console.log(this, this.myName1);
                 return {
                     getName: () => {
-                        debugger;
                         console.log(this, this.myName1);
                     },
                     getName1: function () {
@@ -77,33 +74,34 @@
             }
         };
 
-        // obj2.fun();
-        // obj2.func();
-        // obj2.fun.call(obj1);
-        // obj2.func.call(obj1);
-        // var anotherFun = obj2.fun;
-        // anotherFun();
-        // var anotherFunc = obj2.func;
-        // anotherFunc();
-        // obj2.funct().getName();
-        // obj2.funct().getName1();
-        // obj2.functi().getName();
-        // obj2.functi().getName1();
-
-        // var anotherFunct0 = obj2.funct;
-        // var anotherFunct1 = obj2.functi;
-        // anotherFunct0().getName();
-        // anotherFunct0().getName1();
-        // anotherFunct1().getName();
-        // anotherFunct1().getName1();
-        // var anotherFunct2 = obj2.funct().getName; 
-        // var anotherFunct3 = obj2.funct().getName1; 
-        // var anotherFunct4 = obj2.functi().getName;
-        // var anotherFunct5 = obj2.functi().getName1;
-        // anotherFunct2();
-        // anotherFunct3();
-        // anotherFunct4();
-        // anotherFunct5();
+        obj2.fun(); // window undefined
+        obj2.func(); // obj2 obj2
+        obj2.fun.call(obj1); // window undefined
+        obj2.func.call(obj1); // obj1 obj1
+        var anotherFun = obj2.fun;
+        anotherFun(); // window undefined
+        var anotherFunc = obj2.func;
+        anotherFunc(); // window undefined
+        obj2.funct().getName(); // obj2 obj2 
+        obj2.funct().getName1(); // {} undefined
+        obj2.functi().getName(); // window undefined
+        obj2.functi().getName1(); // {} undefined
+        debugger;
+        var anotherFunct0 = obj2.funct;
+        var anotherFunct1 = obj2.functi;
+        anotherFunct0().getName(); // window undefined
+        anotherFunct0().getName1(); // {} undefined
+        anotherFunct1().getName(); // window undefined
+        anotherFunct1().getName1(); // {} undefined
+        debugger;
+        var anotherFunct2 = obj2.funct().getName; 
+        var anotherFunct3 = obj2.funct().getName1; 
+        var anotherFunct4 = obj2.functi().getName;
+        var anotherFunct5 = obj2.functi().getName1;
+        anotherFunct2(); // obj2 obj2
+        anotherFunct3(); // window undefined
+        anotherFunct4(); // window undefined
+        anotherFunct5(); // window undefined
         var name = 'window';
 
         var person1 = {
@@ -171,39 +169,39 @@
             name: 'person2'
         }
 
-        person1.foo1();
-        person1.foo1.call(person2);
+        person1.foo1(); // person1
+        person1.foo1.call(person2); // person2
         debugger;
-        person1.foo2();
-        person1.foo2.call(person2);
+        person1.foo2(); // window
+        person1.foo2.call(person2); // window
         debugger;
-        person1.foo3()();
-        person1.foo3.call(person2)();
-        person1.foo3().call(person2);
+        person1.foo3()(); // window
+        person1.foo3.call(person2)(); // window
+        person1.foo3().call(person2); // person2
         debugger;
-        person1.foo4()();
-        person1.foo4.call(person2)();
-        person1.foo4().call(person2);
+        person1.foo4()(); // person1
+        person1.foo4.call(person2)(); // person2
+        person1.foo4().call(person2); // person1
         debugger;
-        person1.foo5()();
-        person1.foo5.call(person2)();
-        person1.foo5().call(person2);
+        person1.foo5()(); // window
+        person1.foo5.call(person2)(); // window
+        person1.foo5().call(person2); // person2
         debugger;
-        person1.foo6()();
-        person1.foo6.call(person2)();
-        person1.foo6().call(person2);
+        person1.foo6()(); // window
+        person1.foo6.call(person2)(); // window
+        person1.foo6().call(person2); // window
         debugger;
-        person1.foo7();
-        person1.foo7.call(person2);
+        person1.foo7(); // person1 window
+        person1.foo7.call(person2); // person2 window
         debugger;
-        person1.foo8();
-        person1.foo8.call(person2);
+        person1.foo8(); // person1 person1
+        person1.foo8.call(person2); // person2 person2
         debugger;
-        person1.foo9();
-        person1.foo9.call(person2);
+        person1.foo9(); // window window
+        person1.foo9.call(person2); // window window
         debugger;
-        person1.foo10();
-        person1.foo10.call(person2);
+        person1.foo10(); // window window
+        person1.foo10.call(person2); // window window
     </script>
 </body>
 
